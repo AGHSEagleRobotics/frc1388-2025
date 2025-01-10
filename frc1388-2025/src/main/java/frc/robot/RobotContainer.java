@@ -6,11 +6,20 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import au.grapplerobotics.LaserCan;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,6 +29,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  public class Subsystems {
+    public final ElevatorSubsystem m_elevator;
+  public Subsystems(ElevatorSubsystem elevator){ 
+    m_elevator = elevator;
+
+    }       
+ }
+  
+ Subsystems m_subsystems;
+ 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -30,7 +49,30 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-  }
+    m_subsystems = new Subsystems(
+      new ElevatorSubsystem(
+        new SparkMax(7, MotorType.kBrushless),
+        new SparkMax(8, MotorType.kBrushless),
+        new LaserCan(29),
+        new DigitalInput(9),
+        new DigitalInput(8)
+      )
+    );
+    
+
+ElevatorCommand m_elevatorCommand = new ElevatorCommand(
+        m_subsystems,
+        () -> m_driverController.getLeftY()
+    );
+      
+    m_subsystems.m_elevator.setDefaultCommand(m_elevatorCommand);
+
+  // Bottom sparkmax canid: 8 on left side looking at the motor
+  // Top sparkmax canid: 7 on the right side
+  //positive goes up negative goes down
+  // bottom limit switch is DIO 8 top is 9
+
+}
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the

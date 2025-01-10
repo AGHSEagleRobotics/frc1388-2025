@@ -7,16 +7,18 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
+import au.grapplerobotics.LaserCan;
 
 
-public class ElevatorSubsytem extends SubsystemBase {
-  /** Creates a new ElevatorSubsytem. */
+public class ElevatorSubsystem extends SubsystemBase {
+  /** Creates a new ElevatorSubsystem. */
 
   // Bottom sparkmax canid: 8 on left side looking at the motor
   // Top sparkmax canid: 7 on the right side
@@ -28,13 +30,14 @@ public class ElevatorSubsytem extends SubsystemBase {
   DigitalInput m_bottomLimitSwitch;
   LaserCan m_laserCan;
 
-  public ElevatorSubsystem(SparkMax rightMotor, SparkMax leftMotor, LaserCan laserCan, DigitalInput topLimitSwitch, DigitalInput bottomLimitSwitch) {
+  public ElevatorSubsystem(SparkMax rightMotor, SparkMax leftMotor, DigitalInput topLimitSwitch, DigitalInput bottomLimitSwitch, LaserCan laserCan) {
     m_rightMotor = rightMotor;
     m_leftMotor = leftMotor;
     m_topLimitSwitch = topLimitSwitch;
     m_bottomLimitSwitch = bottomLimitSwitch;
     m_laserCan = laserCan;
   }
+
   public void moveElevator(double power) {
     if((m_topLimitSwitch.get() == true) || (m_bottomLimitSwitch.get() == true)) {
       m_rightMotor.set(0);
