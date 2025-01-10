@@ -4,13 +4,20 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.DriveTrainConstants;
+import frc.robot.commands.DriveCommand;
+import frc.robot.subsystems.DriveTrainSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,15 +26,49 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+    private final DriveTrainSubsystem m_driveTrain = new DriveTrainSubsystem(
+          new SwerveModule(
+              new TalonFX(DriveTrainConstants.FRONT_RIGHT_DRIVE_MOTOR_CANID),
+              new TalonFX(DriveTrainConstants.FRONT_RIGHT_ROTATION_MOTOR_CANID),
+              new CANcoder(DriveTrainConstants.FRONT_RIGHT_CANCODER),
+              Preferences.getDouble(DriveTrainConstants.FRONT_RIGHT_ENCODER_OFFSET_KEY, 0)),
+          new SwerveModule(
+              new TalonFX(DriveTrainConstants.FRONT_LEFT_DRIVE_MOTOR_CANID),
+              new TalonFX(DriveTrainConstants.FRONT_LEFT_ROTATION_MOTOR_CANID),
+              new CANcoder(DriveTrainConstants.FRONT_LEFT_CANCODER),
+                            Preferences.getDouble(DriveTrainConstants.FRONT_LEFT_ENCODER_OFFSET_KEY, 0)),
+          new SwerveModule(
+              new TalonFX(DriveTrainConstants.BACK_LEFT_DRIVE_MOTOR_CANID),
+              new TalonFX(DriveTrainConstants.BACK_LEFT_ROTATION_MOTOR_CANID),
+              new CANcoder(DriveTrainConstants.BACK_LEFT_CANCODER),
+                            Preferences.getDouble(DriveTrainConstants.BACK_LEFT_ENCODER_OFFSET_KEY, 0)),
+          new SwerveModule(
+              new TalonFX(DriveTrainConstants.BACK_RIGHT_DRIVE_MOTOR_CANID),
+              new TalonFX(DriveTrainConstants.BACK_RIGHT_ROTATION_MOTOR_CANID),
+              new CANcoder(DriveTrainConstants.BACK_RIGHT_CANCODER),
+              Preferences.getDouble(DriveTrainConstants.BACK_RIGHT_ENCODER_OFFSET_KEY, 0)),
+          new Pigeon2(0)
+      );
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+      private final CommandXboxController m_driverController = new CommandXboxController(ControllerConstants.DRIVER_CONTROLLER_PORT);
+
+      private final CommandXboxController m_operatorController = new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    DriveCommand m_driveCommand = new DriveCommand(
+        m_driveTrain,
+        () -> m_driverController.getLeftY(),
+        () -> m_driverController.getLeftX(),
+      () -> m_driverController.getRightX()
+    );
+      
+    m_driveTrain.setDefaultCommand(m_driveCommand);
+
+
+    
     // Configure the trigger bindings
     configureBindings();
   }
@@ -42,22 +83,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+  public void setAllEncoderOffsets() {
+    m_driveTrain.setAllEncoderOffsets();
   }
+
 }
