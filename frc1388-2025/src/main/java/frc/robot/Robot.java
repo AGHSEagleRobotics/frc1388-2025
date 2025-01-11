@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotController.RadioLEDState;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -21,6 +22,9 @@ public class Robot extends TimedRobot {
   private int m_userButtonCounter = 0;
 
   private final RobotContainer m_robotContainer;
+
+  private Timer m_neutralModeTimer = new Timer();
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -73,10 +77,18 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_neutralModeTimer.restart();
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (m_neutralModeTimer.hasElapsed(5)) {
+      m_robotContainer.setBrakeMode(false);
+      m_neutralModeTimer.reset();
+      m_neutralModeTimer.stop();
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -93,6 +105,8 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+
+    m_robotContainer.setBrakeMode(true);
   }
 
   /** This function is called periodically during operator control. */

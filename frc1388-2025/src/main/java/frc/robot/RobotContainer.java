@@ -5,6 +5,7 @@
 package frc.robot;
 
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -30,21 +31,25 @@ public class RobotContainer {
           new SwerveModule(
               new TalonFX(DriveTrainConstants.FRONT_RIGHT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.FRONT_RIGHT_ROTATION_MOTOR_CANID),
+              new TalonFXConfiguration(), 
               new CANcoder(DriveTrainConstants.FRONT_RIGHT_CANCODER),
               Preferences.getDouble(DriveTrainConstants.FRONT_RIGHT_ENCODER_OFFSET_KEY, 0)),
           new SwerveModule(
               new TalonFX(DriveTrainConstants.FRONT_LEFT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.FRONT_LEFT_ROTATION_MOTOR_CANID),
+              new TalonFXConfiguration(), 
               new CANcoder(DriveTrainConstants.FRONT_LEFT_CANCODER),
                             Preferences.getDouble(DriveTrainConstants.FRONT_LEFT_ENCODER_OFFSET_KEY, 0)),
           new SwerveModule(
               new TalonFX(DriveTrainConstants.BACK_LEFT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.BACK_LEFT_ROTATION_MOTOR_CANID),
+              new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.BACK_LEFT_CANCODER),
                             Preferences.getDouble(DriveTrainConstants.BACK_LEFT_ENCODER_OFFSET_KEY, 0)),
           new SwerveModule(
               new TalonFX(DriveTrainConstants.BACK_RIGHT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.BACK_RIGHT_ROTATION_MOTOR_CANID),
+              new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.BACK_RIGHT_CANCODER),
               Preferences.getDouble(DriveTrainConstants.BACK_RIGHT_ENCODER_OFFSET_KEY, 0)),
           new Pigeon2(0)
@@ -87,6 +92,10 @@ public class RobotContainer {
 
   public void setAllEncoderOffsets() {
     m_driveTrain.setAllEncoderOffsets();
+  }
+
+  public void setBrakeMode(boolean brakeMode) {
+    m_driveTrain.setBrakeMode(brakeMode);
   }
 
 }

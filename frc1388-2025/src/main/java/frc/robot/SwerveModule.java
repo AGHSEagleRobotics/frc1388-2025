@@ -1,8 +1,10 @@
 package frc.robot;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
@@ -20,9 +22,10 @@ public class SwerveModule {
   private double m_encoderOffset;
 
   private final TalonFX m_rotationMotor;
+  private final TalonFXConfiguration m_rotationMotorSettings;
   private final PIDController m_rotationPID;
 
-  public SwerveModule(TalonFX driveMotor, TalonFX rotationMotor, CANcoder cancoder, double encoderOffset) {
+  public SwerveModule(TalonFX driveMotor, TalonFX rotationMotor, TalonFXConfiguration rotationMotorSettings, CANcoder cancoder, double encoderOffset) {
       m_driveMotor = driveMotor;
       m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
       Slot0Configs driveConfig = new Slot0Configs();
@@ -32,7 +35,9 @@ public class SwerveModule {
       m_driveMotor.getConfigurator().apply(driveConfig);
 
       m_rotationMotor = rotationMotor;
+      m_rotationMotorSettings = rotationMotorSettings;
       m_rotationMotor.setNeutralMode(NeutralModeValue.Brake);
+    m_rotationMotorSettings.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
 
       m_encoderOffset = encoderOffset;
 
@@ -45,6 +50,7 @@ public class SwerveModule {
 
       m_cancoder = cancoder;
       MagnetSensorConfigs cancoderConfig = new MagnetSensorConfigs();
+      cancoderConfig.AbsoluteSensorDiscontinuityPoint = 1;
       cancoderConfig.MagnetOffset = 0;
       cancoderConfig.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
       m_cancoder.getConfigurator().apply(cancoderConfig);
@@ -52,9 +58,9 @@ public class SwerveModule {
   
   public void setSwerveModuleStates(SwerveModuleState inputState) {
       Rotation2d rotation = new Rotation2d(Math.toRadians(getRotationAngle()));
-      SwerveModuleState swerveModuleState = new SwerveModuleState();
-      setDriveSpeed(swerveModuleState.speedMetersPerSecond);
-      setRotationPosition(swerveModuleState.angle.getDegrees());
+      inputState.optimize(rotation);
+      setDriveSpeed(inputState.speedMetersPerSecond);
+      setRotationPosition(inputState.angle.getDegrees());
   }
 
   public SwerveModulePosition getPosition() {
