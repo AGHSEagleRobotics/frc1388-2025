@@ -27,6 +27,7 @@ import frc.robot.subsystems.DriveTrainSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private final Dashboard m_dashboard = new Dashboard();
     private final DriveTrainSubsystem m_driveTrain = new DriveTrainSubsystem(
           new SwerveModule(
               new TalonFX(DriveTrainConstants.FRONT_RIGHT_DRIVE_MOTOR_CANID),
@@ -59,9 +60,13 @@ public class RobotContainer {
 
       private final CommandXboxController m_operatorController = new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
 
+      private final AutoMethod m_autoMethod;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+
+    m_autoMethod = new AutoMethod(m_driveTrain, m_dashboard);
 
     DriveCommand m_driveCommand = new DriveCommand(
         m_driveTrain,

@@ -5,11 +5,15 @@
 package frc.robot;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
@@ -19,11 +23,10 @@ public final class Constants {
     public static final int OPERATOR_CONTROLLER_PORT = 1;
   }
 
-
   public static class SwerveModuleConstants {
     public static final double DIST_PER_TICK = (1.0 / 6.75) * (0.3192); // ask calvin about the math
 
-    public static final double DIST_PER_MOTOR_ROTATION  = 5.65 / 131.14; // calvins magic numbers
+    public static final double DIST_PER_MOTOR_ROTATION = 5.65 / 131.14; // calvins magic numbers
 
     public static final double DRIVE_MOTOR_P = 0.001;
     public static final double DRIVE_MOTOR_I = 0;
@@ -35,7 +38,6 @@ public final class Constants {
 
     public static final double ROTATION_TOLERANCE = 5;
   }
-
 
   public static class RobotConstants {
     public static final double ROBOT_WIDTH = 0.9144;
@@ -69,5 +71,24 @@ public final class Constants {
     public static final double MANUAL_CONTROL_ANGLE_DEADBAND = 0.5;
     public static final double LEFT_STICK_SCALE = 2.5;
     public static final double RIGHT_STICK_SCALE = 5;
+  }
+
+  public class AutoConstants {
+
+    public enum Objective {
+      SITSTILL("LookPretty");
+
+      public static final Objective Default = SITSTILL;
+
+      private String m_dashboardDescript; // This is what will show on dashboard
+
+      private Objective(String dashboardDescript) {
+        m_dashboardDescript = dashboardDescript;
+      }
+
+      public String getDashboardDescript() {
+        return m_dashboardDescript;
+      }
+    }
   }
 }
