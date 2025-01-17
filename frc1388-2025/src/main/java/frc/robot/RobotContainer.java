@@ -29,44 +29,33 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public class Subsystems {
-    public final ElevatorSubsystem m_elevator;
-  public Subsystems(ElevatorSubsystem elevator){ 
-    m_elevator = elevator;
-
-    }       
- }
-  
- Subsystems m_subsystems;
- 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+      private final CommandXboxController m_operatorController =
+      new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    m_subsystems = new Subsystems(
-      new ElevatorSubsystem(
+     ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(
         new SparkMax(7, MotorType.kBrushless),
         new SparkMax(8, MotorType.kBrushless),
-        new LaserCan(29),
         new DigitalInput(9),
-        new DigitalInput(8)
-      )
-    );
+        new DigitalInput(8),
+        new LaserCan(29)
+      );
     
 
 ElevatorCommand m_elevatorCommand = new ElevatorCommand(
-        m_subsystems,
-        () -> m_driverController.getLeftY()
+        m_elevatorSubsystem,
+        () -> m_operatorController.getLeftY(),
+        () -> m_operatorController.getHID().getAButton()
     );
-      
-    m_subsystems.m_elevator.setDefaultCommand(m_elevatorCommand);
-
+    m_elevatorSubsystem.setDefaultCommand(m_elevatorCommand);
   // Bottom sparkmax canid: 8 on left side looking at the motor
   // Top sparkmax canid: 7 on the right side
   //positive goes up negative goes down

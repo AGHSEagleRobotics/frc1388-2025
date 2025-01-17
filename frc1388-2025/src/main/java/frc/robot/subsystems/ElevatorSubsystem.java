@@ -5,7 +5,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Constants;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,6 +31,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   DigitalInput m_topLimitSwitch;
   DigitalInput m_bottomLimitSwitch;
   LaserCan m_laserCan;
+  private double m_targetPosition;
+
+  private final PIDController m_elevatorController = new PIDController(0.0325, 0, 0);
 
   public ElevatorSubsystem(SparkMax rightMotor, SparkMax leftMotor, DigitalInput topLimitSwitch, DigitalInput bottomLimitSwitch, LaserCan laserCan) {
     m_rightMotor = rightMotor;
@@ -36,20 +41,61 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_topLimitSwitch = topLimitSwitch;
     m_bottomLimitSwitch = bottomLimitSwitch;
     m_laserCan = laserCan;
+    m_targetPosition = getElevatorHeight();
+    m_elevatorController.setSetpoint(m_targetPosition);
+    
+    m_elevatorController.setTolerance(0.5);
   }
 
   public void moveElevator(double power) {
-    if((m_topLimitSwitch.get() == true) || (m_bottomLimitSwitch.get() == true)) {
-      m_rightMotor.set(0);
-      m_leftMotor.set(0);
+    if ((m_topLimitSwitch.get() && power > 0)) {
+      power = 0;
+    } else if (m_bottomLimitSwitch.get() && power < 0) {
+      power = 0;
     } else {
-      m_leftMotor.set(-power); //invert power so negative goes up and positive goes down
-      m_rightMotor.set(-power); //same
+      power = MathUtil.clamp(power, -0.4, 0.4);
+      m_leftMotor.set(power); 
+      m_rightMotor.set(power); 
+      System.out.println("power = " + power);
     }
   }
 
+  public void setTargetPosition(double position) {
+    m_targetPosition = position;
+    m_elevatorController.setSetpoint(position);
+  }
+
+  public double getTargetPosition() {
+    return m_targetPosition;
+  }
+
+
+  /**
+   * returns height of elevator
+   * @return height in inches
+   */
+  public double getElevatorHeight() {
+    return getLaserCanHeight();
+  }
+
+  // public double getMotorEncoderHeight() {
+    
+  // }
+
+  public double getLaserCanHeight() {
+    return (m_laserCan.getMeasurement().distance_mm) * Constants.ElevatorSubsystemConstants.kInchesPerMillimeters;
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    double speed = m_elevatorController.calculate(getElevatorHeight());
+    if (m_elevatorController.atSetpoint()) {
+      speed = 0;
+    }
+    moveElevator(speed);
+    System.out.println("speed =" + speed +
+        " height =" + getElevatorHeight() + " setpoint =" + m_targetPosition + " error"
+        + (m_targetPosition - getElevatorHeight()));
   }
 }
