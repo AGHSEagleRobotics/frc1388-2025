@@ -19,6 +19,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.vision.Limelight;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -27,6 +28,9 @@ import frc.robot.subsystems.DriveTrainSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+  private final Limelight m_limeLight = new Limelight("limelight-shooter", "limelight-intake");
+  
     private final DriveTrainSubsystem m_driveTrain = new DriveTrainSubsystem(
           new SwerveModule(
               new TalonFX(DriveTrainConstants.FRONT_RIGHT_DRIVE_MOTOR_CANID),
@@ -52,7 +56,7 @@ public class RobotContainer {
               new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.BACK_RIGHT_CANCODER),
               Preferences.getDouble(DriveTrainConstants.BACK_RIGHT_ENCODER_OFFSET_KEY, 0)),
-          new Pigeon2(0)
+          new Pigeon2(20), m_limeLight
       );
 
       private final CommandXboxController m_driverController = new CommandXboxController(ControllerConstants.DRIVER_CONTROLLER_PORT);
@@ -67,8 +71,8 @@ public class RobotContainer {
         m_driveTrain,
         () -> m_driverController.getLeftY(),
         () -> m_driverController.getLeftX(),
-      () -> m_driverController.getRightX()
-    );
+        () -> m_driverController.getRightX(),
+        () -> m_driverController.getHID().getAButton());
       
     m_driveTrain.setDefaultCommand(m_driveCommand);
 

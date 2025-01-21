@@ -6,27 +6,46 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Robot;
-import frc.robot.SwerveModule; 
+import frc.robot.SwerveModule;
+import frc.robot.vision.Limelight;
+import frc.robot.vision.LimelightHelpers;
+import frc.robot.vision.VisionAcceptor; 
 
 public class DriveTrainSubsystem extends SubsystemBase {
 
+  StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose2d.struct).publish();
+
   private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(); 
+
+  private VisionAcceptor visionAcceptorGyro = new VisionAcceptor(false);
+  private VisionAcceptor visionAcceptorMegaTag2 = new VisionAcceptor(true);
+  private VisionAcceptor visionAcceptor = new VisionAcceptor(false);
 
   private ChassisSpeeds m_robotRelativeSpeeds = new ChassisSpeeds();
 
@@ -53,15 +72,21 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backRightTranslation
   };
 
+   private static final Vector<N3> stateStdDevs = VecBuilder.fill(Math.pow(1, 10), Math.pow(1, 1),
+      Units.degreesToRadians(50));
+
+  private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(Math.pow(2, 1), Math.pow(2, 1),
+      Units.degreesToRadians(50));
+
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_swerveTranslation2d);
   /** The odometry object keeps track of the robots position */
   private SwerveDrivePoseEstimator m_odometry;
 
+  private final Limelight m_limelight;
   private final Pigeon2 m_pigeon2;
 
-
   /** Creates a new DriveTrainSubsystem. */
-  public DriveTrainSubsystem(SwerveModule frontRight, SwerveModule frontLeft, SwerveModule backLeft, SwerveModule backRight, Pigeon2 gyro) {
+  public DriveTrainSubsystem(SwerveModule frontRight, SwerveModule frontLeft, SwerveModule backLeft, SwerveModule backRight, Pigeon2 gyro, Limelight limelight) {
 
     m_frontRight = frontRight;
     m_frontLeft = frontLeft;
@@ -69,6 +94,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backRight = backRight;
 
     m_pigeon2 = gyro;
+    m_limelight = limelight;
     
     //gyro and odometry setup code I copied from a youtube video <br> https://www.youtube.com/watch?v=0Xi9yb1IMyA
     new Thread(() -> {
@@ -84,8 +110,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
                 m_backLeft.getPosition(),
                 m_backRight.getPosition()
             },
-            new Pose2d(0, 0, new Rotation2d()));
+            new Pose2d(0, 0, new Rotation2d()),
+            stateStdDevs, visionMeasurementStdDevs);
             
+      m_odometry.setVisionMeasurementStdDevs(visionMeasurementStdDevs);
       } catch (Exception e) {
         // e.printStackTrace();
         System.out.println(e.toString());
@@ -107,6 +135,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   /** the drive method takes in an x and y velocity in meters / second, and a rotation rate in radians / second */
   public void drive(double xVelocity, double yVelocity, double omega) {
     m_robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getGyroHeading());
+    m_robotRelativeSpeeds = ChassisSpeeds.discretize(xVelocity, yVelocity, omega, DriveTrainConstants.DT_SECONDS);
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_robotRelativeSpeeds);
 
     // optimises wheel heading direction changes.
@@ -116,8 +145,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backLeft.setSwerveModuleStates(states[2]);
     m_backRight.setSwerveModuleStates(states[3]);
     // do the divide by 3 speed here 
-
-   
         }
     /**
      * Applies offset to ALL swerve modules.
@@ -195,6 +222,84 @@ public class DriveTrainSubsystem extends SubsystemBase {
     return m_frontRight.getPosition().distanceMeters;
   }
 
+  public void limelightResetGyro() {
+    double[] botPose = m_limelight.getBotPose();
+    m_gyroOffset = botPose[5] - getRawGyroAngle();
+  }
+
+  public double calculateAngle(Pose2d positionOfTarget) {
+    double rX = getPose().getX();
+    double rY = getPose().getY();
+
+    return Math.toDegrees(Math.atan2(rY - positionOfTarget.getY(), rX - positionOfTarget.getX())) + 180;
+  }
+
+
+  public double calculateDistancePose(Pose2d distancePose) {
+    double rX = getPose().getX();
+    double tX = distancePose.getX();
+    double tAngle = calculateAngle(distancePose);
+
+    double adjacent = rX - tX;
+    double distanceFromPose = - (adjacent / Math.cos(Math.toRadians(tAngle)));
+    return distanceFromPose;
+  }
+
+  public Pose2d getClosestTargetPose() {
+
+    Pose2d[] SETPOINTS = new Pose2d[2];
+
+    SETPOINTS[0] = new Pose2d(15.15, 5.55, new Rotation2d(0));
+    SETPOINTS[1] = new Pose2d(13.75, 7.25, new Rotation2d(0));
+    
+    double distance;
+    double nextSetpointDistance;
+    Pose2d[] setpoints = SETPOINTS;
+    Pose2d closestPose = setpoints[0];
+    for (int i = 0; i < setpoints.length - 1; i++) {
+      distance = calculateDistancePose(setpoints[i]);
+      nextSetpointDistance = calculateDistancePose(setpoints[i + 1]);
+      if (distance < nextSetpointDistance) {
+        closestPose = setpoints[i];
+      }
+      else {
+        closestPose = setpoints[i + 1];
+      }
+    }
+    SmartDashboard.putNumber("drivetrain/Closest Target Pose X", closestPose.getX());
+    SmartDashboard.putNumber("drivetrain/Closest Target Pose Y", closestPose.getY());
+    SmartDashboard.putNumber("drivetrain/Closest Target Pose Degrees", closestPose.getRotation().getDegrees());
+    return closestPose;
+  }
+
+  public double getXVelocityAuto(double xSetpoint, PIDController goToPointController, SlewRateLimiter xAccLimiter) {
+    double m_lastXSpeed = 0;
+    double xSpeed = goToPointController.calculate(getPose().getX(), xSetpoint);
+    if (xSpeed > m_lastXSpeed) {
+      xSpeed = xAccLimiter.calculate(xSpeed);
+    }
+    m_lastXSpeed = xSpeed;
+    return xSpeed;
+  }
+
+  public double getYVelocityAuto(double ySetpoint, PIDController goToPointController, SlewRateLimiter xAccLimiter) {
+    double m_lastYSpeed = 0;
+    double ySpeed = goToPointController.calculate(getPose().getX(), ySetpoint);
+    if (ySpeed > m_lastYSpeed) {
+      ySpeed = xAccLimiter.calculate(ySpeed);
+    }
+    m_lastYSpeed = ySpeed;
+    return ySpeed;
+  }
+
+  public double getOmegaVelocityAuto(PIDController turnPidController) {
+    double rz = getAngle();
+    rz = rz < 0 ? rz + 360 : rz;
+    double speed = - (turnPidController.calculate(rz));
+    return speed;
+  }
+
+
   public double getAngle() {
     if (m_pigeon2.isConnected()) {
       double angle = (getRawGyroAngle() + m_gyroOffset) % 360;
@@ -239,6 +344,29 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backRight.setBrakeMode(brakeMode);
   }
 
+public boolean shouldResetPoseMegaTag2() {
+    boolean acceptMegaTag2 = false;
+    double[] odomTag2 = m_limelight.getMegaTag2();
+    Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
+        getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
+    Pose2d megaTag2 = new Pose2d(odomTag2[0], odomTag2[1], getGyroHeading());
+    if (m_limelight.getApriltagTargetFound()) {
+      acceptMegaTag2 = visionAcceptorMegaTag2.shouldAccept(megaTag2, robotSpeeds);
+    }
+    return acceptMegaTag2;
+  }
+
+  public boolean shouldResetGyro() {
+    boolean acceptPose = false;
+    double[] botPose = m_limelight.getBotPose();
+    Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
+        getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
+    Pose2d megaTag1 = new Pose2d(botPose[0], botPose[1], getGyroHeading());
+    if (m_limelight.getApriltagTargetFound()) {
+      acceptPose = visionAcceptor.shouldAccept(megaTag1, robotSpeeds);
+    }
+    return acceptPose;
+  }
 
 
   
@@ -259,17 +387,70 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backLeft.periodic();
     m_backRight.periodic();
 
-    if (m_odometry != null) {
-      m_odometry.updateWithTime(
-        Timer.getFPGATimestamp(),
-        getGyroHeading(),
-        new SwerveModulePosition[] {
-            m_frontRight.getPosition(),
-            m_frontLeft.getPosition(),
-            m_backLeft.getPosition(),
-            m_backRight.getPosition()
-        }
-      );
+    boolean acceptPose = false;
+    boolean acceptMegaTag2 = false;
+    boolean acceptGyro = false;
+    
+    double[] botPose = m_limelight.getBotPose();
+
+    double[] odomTag2 = m_limelight.getMegaTag2();
+    
+    Pose2d position1 = new Pose2d(botPose[0], botPose[1], getGyroHeading());
+
+    Pose2d megaTag2 = new Pose2d(odomTag2[0], odomTag2[1], getGyroHeading());
+
+    LimelightHelpers.SetRobotOrientation("limelight-shooter", getGyroHeading().getDegrees(), 0, 0, 0, 0, 0);
+
+    Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
+    getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
+
+    double timer = 1.5;
+    if (Timer.getFPGATimestamp() > 1.5 ) {
+      timer = Timer.getFPGATimestamp();
     }
+    if (m_limelight.getApriltagTargetFound()) {
+      acceptPose = visionAcceptorGyro.shouldAccept(position1, robotSpeeds);
+      acceptMegaTag2 = visionAcceptorMegaTag2.shouldAccept(megaTag2, robotSpeeds);
+      acceptGyro = visionAcceptorGyro.shouldResetGyro(robotSpeeds);
+    }
+
+    if (acceptGyro && acceptPose) {
+      limelightResetGyro();
+    }
+
+    if (m_odometry != null) {
+      if (acceptMegaTag2 && m_limelight.getApriltagTargetFound()) {
+        m_odometry.addVisionMeasurement(megaTag2, timer);
+      }
+
+      m_odometry.updateWithTime(
+          Timer.getFPGATimestamp(),
+          getGyroHeading(),
+          new SwerveModulePosition[] {
+              m_frontRight.getPosition(),
+              m_frontLeft.getPosition(),
+              m_backLeft.getPosition(),
+              m_backRight.getPosition()
+          });
+    }
+    SmartDashboard.putNumber("Limelight ODO X", odomTag2[0]);
+    SmartDashboard.putNumber("Limelight ODO Y", odomTag2[1]);
+
+    SmartDashboard.putNumber("drivetrain/odo x", getPose().getX());
+    SmartDashboard.putNumber("drivetrain/odo y", getPose().getY());
+    if (getRobotRelativeSpeeds() != null) {
+    SmartDashboard.putString("drivetrain/robot relative speeds", getRobotRelativeSpeeds().toString());
+    }
+
+    SmartDashboard.putNumber("drivetrain/gyro angle", getAngle());
+    SmartDashboard.putBoolean("VisionAcceptor/is Accepting Pose", acceptPose);
+    SmartDashboard.putBoolean("VissionAcceptor/is Accepting megatag2", acceptMegaTag2);
+
+    SmartDashboard.putNumber("drivetrain/closestPoseX", getClosestTargetPose().getX());
+    SmartDashboard.putNumber("drivetrain/closestPoseY", getClosestTargetPose().getY());
+    SmartDashboard.putNumber("drivetrain/closestPoseRotation", getClosestTargetPose().getRotation().getDegrees());
+
+    publisher.set(getPose());
+
   }
 }
