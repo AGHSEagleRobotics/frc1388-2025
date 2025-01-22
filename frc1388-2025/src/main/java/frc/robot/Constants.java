@@ -18,7 +18,17 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
   }
 
-  public static class ElevatorSubsystemConstants {
-    public static final double kInchesPerMillimeters = 1/25.4;
+public static class ElevatorSubsystemConstants {
+  public static final double kInchesPerMillimeters = 1/25.4;
+  public static final double kElevatorPowerLimit = 0.4;
+  public static final double kElevatorTolerance = 0.5;
   }
+
+public static final class RobotContainerConstants {
+  public static final int kElevatorMotorCANIDR = 7;
+  public static final int kElevatorMotorCANIDL = 8;
+  public static final int kElevatorTopLimitChannel = 9;
+  public static final int kElevatorBottomLimitChannel = 8;
+  public static final int kLaserCanCANID = 29;
+}  
 }

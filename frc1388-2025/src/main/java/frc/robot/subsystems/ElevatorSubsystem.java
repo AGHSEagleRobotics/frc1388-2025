@@ -44,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_targetPosition = getElevatorHeight();
     m_elevatorController.setSetpoint(m_targetPosition);
     
-    m_elevatorController.setTolerance(0.5);
+    m_elevatorController.setTolerance(Constants.ElevatorSubsystemConstants.kElevatorTolerance);
   }
 
   public void moveElevator(double power) {
@@ -53,10 +53,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     } else if (m_bottomLimitSwitch.get() && power < 0) {
       power = 0;
     } else {
-      power = MathUtil.clamp(power, -0.4, 0.4);
-      m_leftMotor.set(power); 
-      m_rightMotor.set(power); 
-      System.out.println("power = " + power);
+      power = MathUtil.clamp(power,
+        -(Constants.ElevatorSubsystemConstants.kElevatorPowerLimit),
+          Constants.ElevatorSubsystemConstants.kElevatorPowerLimit);
+      m_leftMotor.set(power);
+      m_rightMotor.set(power);
+      // System.out.println("power = " + power);
     }
   }
 
@@ -86,6 +88,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     return (m_laserCan.getMeasurement().distance_mm) * Constants.ElevatorSubsystemConstants.kInchesPerMillimeters;
   }
   
+  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -94,8 +98,8 @@ public class ElevatorSubsystem extends SubsystemBase {
       speed = 0;
     }
     moveElevator(speed);
-    System.out.println("speed =" + speed +
-        " height =" + getElevatorHeight() + " setpoint =" + m_targetPosition + " error"
-        + (m_targetPosition - getElevatorHeight()));
+    // System.out.println("speed =" + speed +
+    //     " height =" + getElevatorHeight() + " setpoint =" + m_targetPosition + " error"
+    //     + (m_targetPosition - getElevatorHeight()));
   }
 }

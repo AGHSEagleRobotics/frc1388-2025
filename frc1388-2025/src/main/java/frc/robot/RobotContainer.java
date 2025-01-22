@@ -42,11 +42,11 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
      ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(
-        new SparkMax(7, MotorType.kBrushless),
-        new SparkMax(8, MotorType.kBrushless),
-        new DigitalInput(9),
-        new DigitalInput(8),
-        new LaserCan(29)
+        new SparkMax(Constants.RobotContainerConstants.kElevatorMotorCANIDR, MotorType.kBrushless), //rightmotor
+        new SparkMax(Constants.RobotContainerConstants.kElevatorMotorCANIDL, MotorType.kBrushless), //leftmotor
+        new DigitalInput(Constants.RobotContainerConstants.kElevatorTopLimitChannel), //toplimitswitch
+        new DigitalInput(Constants.RobotContainerConstants.kElevatorBottomLimitChannel), //bottomlimitswitch
+        new LaserCan(Constants.RobotContainerConstants.kLaserCanCANID)
       );
     
 
