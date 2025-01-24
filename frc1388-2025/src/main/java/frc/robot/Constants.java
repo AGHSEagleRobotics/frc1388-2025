@@ -22,6 +22,9 @@ public static class ElevatorSubsystemConstants {
   public static final double kInchesPerMillimeters = 1/25.4;
   public static final double kElevatorPowerLimit = 0.4;
   public static final double kElevatorTolerance = 0.5;
+  public static final double kElevatorPIDP = 0.0325;
+
+
   }
 
 public static final class RobotContainerConstants {

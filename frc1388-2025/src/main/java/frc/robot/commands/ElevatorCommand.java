@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorSetPoints;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -16,13 +17,19 @@ public class ElevatorCommand extends Command {
     private final ElevatorSubsystem m_elevatorSubsystem;
     private final Supplier<Double> m_leftY; 
     private final Supplier<Boolean> m_a;
+    private final Supplier<Boolean> m_b;
+    private final Supplier<Boolean> m_x;
+    private final Supplier<Boolean> m_y;
     private boolean m_manualMode;
     private boolean m_autoMode;
   /** Creates a new ElevatorCommand. */
-  public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, Supplier<Double> leftY, Supplier<Boolean> a) {
+  public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, Supplier<Double> leftY, Supplier<Boolean> a, Supplier<Boolean> b, Supplier<Boolean> x, Supplier<Boolean> y) {
     m_elevatorSubsystem = elevatorSubsystem;
     m_leftY = leftY;
     m_a = a;
+    m_b = b;
+    m_x = x;
+    m_y = y;
     m_manualMode = false;
     m_autoMode = false;
 
@@ -44,7 +51,22 @@ public class ElevatorCommand extends Command {
     if (m_a.get()) {
       m_manualMode = false;
       m_autoMode = true;
-      m_elevatorSubsystem.setTargetPosition(20); // test value
+      m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL1);
+    }
+    else if (m_b.get()) {
+      m_manualMode = false;
+      m_autoMode = true;
+      m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL2);
+    }
+    else if (m_x.get()) {
+      m_manualMode = false;
+      m_autoMode = true;
+      m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL3);
+    }
+    else if (m_y.get()) {
+      m_manualMode = false;
+      m_autoMode = true;
+      m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL4);
     }
     else if (leftY > 0 || leftY < 0) {
       m_elevatorSubsystem.setTargetPosition(position);

@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorSubsystemConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -33,7 +34,29 @@ public class ElevatorSubsystem extends SubsystemBase {
   LaserCan m_laserCan;
   private double m_targetPosition;
 
-  private final PIDController m_elevatorController = new PIDController(0.0325, 0, 0);
+  private final PIDController m_elevatorController = new PIDController(ElevatorSubsystemConstants.kElevatorPIDP, 0, 0);
+
+  public enum ElevatorSetPoints {
+    // LEVEL1(18),
+    // LEVEL2(31.875);  //highest height is 47 inches on elevator
+    // LEVEL3(47.625),
+    // LEVEL4(72);
+
+    LEVEL1(5),
+    LEVEL2(15),
+    LEVEL3(25),
+    LEVEL4(35);
+
+    private double setpoint;
+
+    private ElevatorSetPoints(double setpoint) {
+      this.setpoint = setpoint;
+    }
+
+    public double getSetPoint() {
+      return this.setpoint;
+    }
+  }
 
   public ElevatorSubsystem(SparkMax rightMotor, SparkMax leftMotor, DigitalInput topLimitSwitch, DigitalInput bottomLimitSwitch, LaserCan laserCan) {
     m_rightMotor = rightMotor;
@@ -44,7 +67,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_targetPosition = getElevatorHeight();
     m_elevatorController.setSetpoint(m_targetPosition);
     
-    m_elevatorController.setTolerance(Constants.ElevatorSubsystemConstants.kElevatorTolerance);
+    m_elevatorController.setTolerance(ElevatorSubsystemConstants.kElevatorTolerance);
   }
 
   public void moveElevator(double power) {
@@ -53,9 +76,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     } else if (m_bottomLimitSwitch.get() && power < 0) {
       power = 0;
     } else {
-      power = MathUtil.clamp(power,
-        -(Constants.ElevatorSubsystemConstants.kElevatorPowerLimit),
-          Constants.ElevatorSubsystemConstants.kElevatorPowerLimit);
+      // power = MathUtil.clamp(power,
+      //   -(ElevatorSubsystemConstants.kElevatorPowerLimit),
+      //     ElevatorSubsystemConstants.kElevatorPowerLimit);
       m_leftMotor.set(power);
       m_rightMotor.set(power);
       // System.out.println("power = " + power);
@@ -71,6 +94,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     return m_targetPosition;
   }
 
+  public void setSetpoint(ElevatorSetPoints setpoint) {
+    setTargetPosition(setpoint.getSetPoint());
+  }
 
   /**
    * returns height of elevator
@@ -85,7 +111,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   // }
 
   public double getLaserCanHeight() {
-    return (m_laserCan.getMeasurement().distance_mm) * Constants.ElevatorSubsystemConstants.kInchesPerMillimeters;
+    return (m_laserCan.getMeasurement().distance_mm) * ElevatorSubsystemConstants.kInchesPerMillimeters;
   }
   
   

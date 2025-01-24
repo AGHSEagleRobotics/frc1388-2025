@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
+  private final boolean robot2025 = true;
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -53,7 +53,10 @@ public class RobotContainer {
 ElevatorCommand m_elevatorCommand = new ElevatorCommand(
         m_elevatorSubsystem,
         () -> m_operatorController.getLeftY(),
-        () -> m_operatorController.getHID().getAButton()
+        () -> m_operatorController.getHID().getAButton(),
+        () -> m_operatorController.getHID().getBButton(),
+        () -> m_operatorController.getHID().getXButton(),
+        () -> m_operatorController.getHID().getYButton()
     );
     m_elevatorSubsystem.setDefaultCommand(m_elevatorCommand);
   // Bottom sparkmax canid: 8 on left side looking at the motor
