@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import au.grapplerobotics.LaserCan;
 
@@ -33,6 +34,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   DigitalInput m_bottomLimitSwitch;
   LaserCan m_laserCan;
   private double m_targetPosition;
+  RelativeEncoder m_elevatorEncoder;
 
   private final PIDController m_elevatorController = new PIDController(ElevatorSubsystemConstants.kElevatorPIDP, 0, 0);
 
@@ -64,6 +66,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_topLimitSwitch = topLimitSwitch;
     m_bottomLimitSwitch = bottomLimitSwitch;
     m_laserCan = laserCan;
+    m_elevatorEncoder = rightMotor.getEncoder();
+    m_elevatorEncoder = leftMotor.getEncoder();
     m_targetPosition = getElevatorHeight();
     m_elevatorController.setSetpoint(m_targetPosition);
     
@@ -76,9 +80,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     } else if (m_bottomLimitSwitch.get() && power < 0) {
       power = 0;
     } else {
-      // power = MathUtil.clamp(power,
-      //   -(ElevatorSubsystemConstants.kElevatorPowerLimit),
-      //     ElevatorSubsystemConstants.kElevatorPowerLimit);
+      power = MathUtil.clamp(power,
+        -(ElevatorSubsystemConstants.kElevatorPowerLimit),
+          ElevatorSubsystemConstants.kElevatorPowerLimit);
       m_leftMotor.set(power);
       m_rightMotor.set(power);
       // System.out.println("power = " + power);
@@ -103,7 +107,10 @@ public class ElevatorSubsystem extends SubsystemBase {
    * @return height in inches
    */
   public double getElevatorHeight() {
-    return getLaserCanHeight();
+    // return getLaserCanHeight();
+    double height = m_elevatorEncoder.getPosition();
+    //  / ElevatorSubsystemConstants.kTicksPerInch;
+    return height;
   }
 
   // public double getMotorEncoderHeight() {
@@ -114,6 +121,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     return (m_laserCan.getMeasurement().distance_mm) * ElevatorSubsystemConstants.kInchesPerMillimeters;
   }
   
+  private void resetEncoder() {
+    m_elevatorEncoder.setPosition(0);
+  }
   
 
   @Override
@@ -124,6 +134,13 @@ public class ElevatorSubsystem extends SubsystemBase {
       speed = 0;
     }
     moveElevator(speed);
+
+    if(m_bottomLimitSwitch.get()) {
+      resetEncoder();
+    }
+
+    
+    SmartDashboard.putNumber("elevator/encoder", m_elevatorEncoder.getPosition());
     // System.out.println("speed =" + speed +
     //     " height =" + getElevatorHeight() + " setpoint =" + m_targetPosition + " error"
     //     + (m_targetPosition - getElevatorHeight()));

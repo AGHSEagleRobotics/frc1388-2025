@@ -21,11 +21,14 @@ public final class Constants {
 public static class ElevatorSubsystemConstants {
   public static final double kInchesPerMillimeters = 1/25.4;
   public static final double kElevatorPowerLimit = 0.4;
-  public static final double kElevatorTolerance = 0.5;
-  public static final double kElevatorPIDP = 0.0325;
+  public static final double kElevatorTolerance = 0.15;
 
-
+  public static final double kElevatorPIDP = 0.0525;
+  public static final double kElevatorPIDI = 0.005;
+  // public static final double kElevatorPIDP = 0.0325;
+  public static final double kTicksPerInch = 1;
   }
+
 
 public static final class RobotContainerConstants {
   public static final int kElevatorMotorCANIDR = 7;
@@ -34,4 +37,8 @@ public static final class RobotContainerConstants {
   public static final int kElevatorBottomLimitChannel = 8;
   public static final int kLaserCanCANID = 29;
 }  
+
+public static final class ElevatorCommandConstants {
+  public static final double kElevatorDeadband = 0.1;
+}
 }
