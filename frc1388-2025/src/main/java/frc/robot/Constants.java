@@ -40,15 +40,15 @@ public final class Constants {
 
 
   public static class RobotConstants {
-    public static final double ROBOT_WIDTH = 0.9144; //0.9144
-    public static final double ROBOT_LENGTH = 0.9144;
+    public static final double ROBOT_WIDTH = 0.552;  //0.9114
+    public static final double ROBOT_LENGTH = 0.552;
   }
 
   public static class DriveTrainConstants {
     public static final double ROBOT_MAX_SPEED = 4.0; // 5.76 l3+ meters per second
     public static final double DT_SECONDS = 0.02; // 20ms per tick
     public static final double DISTANCE_PER_TICK = ROBOT_MAX_SPEED * DT_SECONDS; // 20ms per tick
-
+ 
     public static final int FRONT_RIGHT_DRIVE_MOTOR_CANID = 1;
     public static final int FRONT_RIGHT_ROTATION_MOTOR_CANID = 5;
     public static final int FRONT_RIGHT_CANCODER = 9;

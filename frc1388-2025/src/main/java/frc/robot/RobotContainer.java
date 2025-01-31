@@ -12,11 +12,14 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriveTrainConstants;
+import frc.robot.commands.AutoAllign;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.vision.Limelight;
@@ -92,6 +95,13 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    double closestPoseX = m_driveTrain.getClosestTargetPose().getX();
+    double closestPoseY = m_driveTrain.getClosestTargetPose().getY();
+    double closestPoseRotation = m_driveTrain.getClosestTargetPose().getRotation().getDegrees();
+    SmartDashboard.putNumber("XPose", closestPoseX);
+    SmartDashboard.putNumber("YPose", closestPoseY);
+    SmartDashboard.putNumber("RotationPose", closestPoseRotation);
+    m_driverController.b().whileTrue(new AutoAllign(closestPoseX, closestPoseY, closestPoseRotation, m_driveTrain));
   }
 
   public void setAllEncoderOffsets() {

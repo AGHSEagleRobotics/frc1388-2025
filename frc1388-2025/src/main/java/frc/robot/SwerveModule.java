@@ -57,10 +57,11 @@ public class SwerveModule {
   }
   
   public void setSwerveModuleStates(SwerveModuleState inputState) {
-      Rotation2d rotation = new Rotation2d(Math.toRadians(getRotationAngle()));
-      inputState.optimize(rotation);
-      setDriveSpeed(inputState.speedMetersPerSecond);
-      setRotationPosition(inputState.angle.getDegrees());
+    Rotation2d rotation = new Rotation2d(Math.toRadians(getRotationAngle()));
+    inputState.optimize(rotation);
+    setDriveSpeed(inputState.speedMetersPerSecond);
+    setRotationPosition(inputState.angle.getDegrees());
+
   }
 
   public SwerveModulePosition getPosition() {

@@ -72,11 +72,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backRightTranslation
   };
 
-   private static final Vector<N3> stateStdDevs = VecBuilder.fill(Math.pow(1, 10), Math.pow(1, 1),
-      Units.degreesToRadians(50));
+   private static final Vector<N3> stateStdDevs = VecBuilder.fill(Math.pow(0.05, 1), Math.pow(0.05, 1),
+      Units.degreesToRadians(5));
 
-  private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(Math.pow(2, 1), Math.pow(2, 1),
-      Units.degreesToRadians(50));
+  private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(Math.pow(0.02, 1), Math.pow(0.02, 1),
+      Units.degreesToRadians(10));
 
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_swerveTranslation2d);
   /** The odometry object keeps track of the robots position */
@@ -135,7 +135,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   /** the drive method takes in an x and y velocity in meters / second, and a rotation rate in radians / second */
   public void drive(double xVelocity, double yVelocity, double omega) {
     m_robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getGyroHeading());
-    m_robotRelativeSpeeds = ChassisSpeeds.discretize(xVelocity, yVelocity, omega, DriveTrainConstants.DT_SECONDS);
+    // m_robotRelativeSpeeds = ChassisSpeeds.discretize(xVelocity, yVelocity, omega, DriveTrainConstants.DT_SECONDS);
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_robotRelativeSpeeds);
 
     // optimises wheel heading direction changes.
@@ -144,8 +144,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_frontLeft.setSwerveModuleStates(states[1]);
     m_backLeft.setSwerveModuleStates(states[2]);
     m_backRight.setSwerveModuleStates(states[3]);
-    // do the divide by 3 speed here 
-        }
+  }
     /**
      * Applies offset to ALL swerve modules.
      * <p>
@@ -250,7 +249,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     Pose2d[] SETPOINTS = new Pose2d[2];
 
     SETPOINTS[0] = new Pose2d(15.15, 5.55, new Rotation2d(0));
-    SETPOINTS[1] = new Pose2d(13.75, 7.25, new Rotation2d(0));
+    SETPOINTS[1] = new Pose2d(13.75, 7.25, new Rotation2d(45));
     
     double distance;
     double nextSetpointDistance;
@@ -266,9 +265,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
         closestPose = setpoints[i + 1];
       }
     }
-    SmartDashboard.putNumber("drivetrain/Closest Target Pose X", closestPose.getX());
-    SmartDashboard.putNumber("drivetrain/Closest Target Pose Y", closestPose.getY());
-    SmartDashboard.putNumber("drivetrain/Closest Target Pose Degrees", closestPose.getRotation().getDegrees());
     return closestPose;
   }
 
@@ -313,7 +309,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   public double getRawGyroAngle () {
     if (m_pigeon2.isConnected()) {
-      return -m_pigeon2.getYaw().getValueAsDouble();
+      return m_pigeon2.getYaw().getValueAsDouble();
     }
     return 0;
   }
@@ -449,6 +445,7 @@ public boolean shouldResetPoseMegaTag2() {
     SmartDashboard.putNumber("drivetrain/closestPoseX", getClosestTargetPose().getX());
     SmartDashboard.putNumber("drivetrain/closestPoseY", getClosestTargetPose().getY());
     SmartDashboard.putNumber("drivetrain/closestPoseRotation", getClosestTargetPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("Angle Rotation2d", getGyroHeading().getRadians());
 
     publisher.set(getPose());
 

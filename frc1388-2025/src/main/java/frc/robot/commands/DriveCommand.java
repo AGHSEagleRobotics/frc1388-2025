@@ -28,7 +28,7 @@ public class DriveCommand extends Command {
   private final PIDController m_xController = new PIDController(1.8, 0, 0);
   private final PIDController m_yController = new PIDController(1.8, 0, 0);
   
-  private PIDController m_rotationController = new PIDController(0.04, 0, 0);
+  private PIDController m_turnPidController = new PIDController(0.14, 0.000012, 0.000012);
   private final Supplier<Boolean> m_a;
 
   private final SlewRateLimiter m_xAccLimiter = new SlewRateLimiter(0.2);
@@ -49,7 +49,10 @@ public class DriveCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_turnPidController.setTolerance(2.5);
+    m_turnPidController.enableContinuousInput(0, 360);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -83,11 +86,11 @@ public class DriveCommand extends Command {
     }
 
     else if (m_lineUp) {
-      xVelocity = -m_driveTrain.getXVelocityAuto(m_driveTrain.getClosestTargetPose().getX(), m_xController,
+      xVelocity = m_driveTrain.getXVelocityAuto(m_driveTrain.getClosestTargetPose().getX(), m_xController,
           m_xAccLimiter) / 10;
-      yVelocity = -m_driveTrain.getYVelocityAuto(m_driveTrain.getClosestTargetPose().getY(), m_yController,
+      yVelocity = m_driveTrain.getYVelocityAuto(m_driveTrain.getClosestTargetPose().getY(), m_yController,
           m_yAccLimiter) / 10;
-      omega = m_driveTrain.getOmegaVelocityAuto(m_rotationController);
+      omega = m_driveTrain.getOmegaVelocityAuto(m_turnPidController);
     }
 
     m_driveTrain.drive(xVelocity, yVelocity, omega);
