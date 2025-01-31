@@ -36,11 +36,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double m_targetPosition;
   RelativeEncoder m_elevatorEncoder;
 
-  private final PIDController m_elevatorController = new PIDController(ElevatorSubsystemConstants.kElevatorPIDP, 0, 0);
+  // private final PIDController m_elevatorController = new PIDController(ElevatorSubsystemConstants.kElevatorPIDP, ElevatorSubsystemConstants.kElevatorPIDI, 0.0015);
+  private final PIDController m_elevatorController = new PIDController(0.185, 0, 0); //d 0.001 
 
   public enum ElevatorSetPoints {
     // LEVEL1(18),
-    // LEVEL2(31.875);  //highest height is 47 inches on elevator
+    // LEVEL2(31.875);  //highest height is 37 inches on elevator
     // LEVEL3(47.625),
     // LEVEL4(72);
 
@@ -79,14 +80,22 @@ public class ElevatorSubsystem extends SubsystemBase {
       power = 0;
     } else if (m_bottomLimitSwitch.get() && power < 0) {
       power = 0;
-    } else {
+    } else { 
+      double powerLimit;
+      double height = getElevatorHeight();
+      if ((height < ElevatorSubsystemConstants.kElevatorBottomEndRange && power < 0) || 
+          (height > ElevatorSubsystemConstants.kElevatorTopEndRange && power > 0)) {
+        powerLimit = ElevatorSubsystemConstants.kElevatorEndRangePowerLimit;
+      } else {
+        powerLimit = ElevatorSubsystemConstants.kElevatorPowerLimit;
+      }
       power = MathUtil.clamp(power,
-        -(ElevatorSubsystemConstants.kElevatorPowerLimit),
-          ElevatorSubsystemConstants.kElevatorPowerLimit);
+        -(powerLimit),
+          powerLimit);
       m_leftMotor.set(power);
       m_rightMotor.set(power);
       // System.out.println("power = " + power);
-    }
+    } 
   }
 
   public void setTargetPosition(double position) {
@@ -122,7 +131,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
   
   private void resetEncoder() {
-    m_elevatorEncoder.setPosition(0);
+    m_elevatorEncoder.setPosition(ElevatorSubsystemConstants.kElevatorLimitSwitchZero);
   }
   
 
@@ -138,6 +147,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     if(m_bottomLimitSwitch.get()) {
       resetEncoder();
     }
+
+    
 
     
     SmartDashboard.putNumber("elevator/encoder", m_elevatorEncoder.getPosition());
