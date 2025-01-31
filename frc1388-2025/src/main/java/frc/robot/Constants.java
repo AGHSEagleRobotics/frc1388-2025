@@ -30,8 +30,9 @@ public static class ElevatorSubsystemConstants {
 
   public static final double kElevatorTolerance = 0;
 
-  public static final double kElevatorPIDP = 0.0625;
-  public static final double kElevatorPIDI = 0.002;
+  public static final double kElevatorPIDP = 0.185;
+  public static final double kElevatorPIDI = 0;
+  public static final double kElevatorPIDD = 0;
   public static final double kElevatorLimitSwitchZero = 0.25; //starting point after encoder set to 0 due to limit switch variability
   // public static final double kElevatorPIDP = 0.0325;
   public static final double kTicksPerInch = 1;

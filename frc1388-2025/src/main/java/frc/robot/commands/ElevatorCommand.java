@@ -49,7 +49,7 @@ public class ElevatorCommand extends Command {
   @Override
   public void execute() {
     double leftY = MathUtil.applyDeadband(-m_leftY.get(), ElevatorCommandConstants.kElevatorDeadband);
-    double position = m_elevatorSubsystem.getElevatorHeight() + (leftY * 20);
+    double position = m_elevatorSubsystem.getElevatorHeight() + (leftY * 20); //TODO: tune later
     if (m_a.get()) {
       m_manualMode = false;
       m_autoMode = true;

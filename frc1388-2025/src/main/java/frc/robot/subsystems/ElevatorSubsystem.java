@@ -37,7 +37,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   RelativeEncoder m_elevatorEncoder;
 
   // private final PIDController m_elevatorController = new PIDController(ElevatorSubsystemConstants.kElevatorPIDP, ElevatorSubsystemConstants.kElevatorPIDI, 0.0015);
-  private final PIDController m_elevatorController = new PIDController(0.185, 0, 0); //d 0.001 
+  private final PIDController m_elevatorController = 
+   new PIDController(
+   ElevatorSubsystemConstants.kElevatorPIDP,
+   ElevatorSubsystemConstants.kElevatorPIDI, 
+   ElevatorSubsystemConstants.kElevatorPIDD);
 
   public enum ElevatorSetPoints {
     // LEVEL1(18),
@@ -83,8 +87,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     } else { 
       double powerLimit;
       double height = getElevatorHeight();
-      if ((height < ElevatorSubsystemConstants.kElevatorBottomEndRange && power < 0) || 
-          (height > ElevatorSubsystemConstants.kElevatorTopEndRange && power > 0)) {
+      if ((height < ElevatorSubsystemConstants.kElevatorBottomEndRange && power < 0) || //if the elevator is near the bottom & going down, clamp power
+          (height > ElevatorSubsystemConstants.kElevatorTopEndRange && power > 0)) {    //if the elevator is near the top & going up, clamp power
         powerLimit = ElevatorSubsystemConstants.kElevatorEndRangePowerLimit;
       } else {
         powerLimit = ElevatorSubsystemConstants.kElevatorPowerLimit;
@@ -92,6 +96,8 @@ public class ElevatorSubsystem extends SubsystemBase {
       power = MathUtil.clamp(power,
         -(powerLimit),
           powerLimit);
+          
+      //driving the motors
       m_leftMotor.set(power);
       m_rightMotor.set(power);
       // System.out.println("power = " + power);
