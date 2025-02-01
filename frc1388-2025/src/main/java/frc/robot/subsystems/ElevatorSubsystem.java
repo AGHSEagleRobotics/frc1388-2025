@@ -35,6 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   LaserCan m_laserCan;
   private double m_targetPosition;
   RelativeEncoder m_elevatorEncoder;
+  private boolean m_autoMode = false;
+  private double m_manualPower = 0;
 
   // private final PIDController m_elevatorController = new PIDController(ElevatorSubsystemConstants.kElevatorPIDP, ElevatorSubsystemConstants.kElevatorPIDI, 0.0015);
   private final PIDController m_elevatorController = 
@@ -104,6 +106,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     } 
   }
 
+  public void setManualPower(double power) {
+    m_manualPower = power;
+    m_autoMode = false;
+  }
+
   public void setTargetPosition(double position) {
     m_targetPosition = position;
     m_elevatorController.setSetpoint(position);
@@ -115,6 +122,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void setSetpoint(ElevatorSetPoints setpoint) {
     setTargetPosition(setpoint.getSetPoint());
+    m_autoMode = true;
   }
 
   /**
@@ -139,25 +147,37 @@ public class ElevatorSubsystem extends SubsystemBase {
   private void resetEncoder() {
     m_elevatorEncoder.setPosition(ElevatorSubsystemConstants.kElevatorLimitSwitchZero);
   }
+
+  private boolean isAtTopLimit() {
+    return m_topLimitSwitch.get();
+  }
+  
+  private boolean isAtBottomLimit() {
+    return m_bottomLimitSwitch.get();
+  }
   
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double speed = m_elevatorController.calculate(getElevatorHeight());
-    if (m_elevatorController.atSetpoint()) {
-      speed = 0;
+    double speed = 0;
+    if (m_autoMode) {
+      speed = m_elevatorController.calculate(getElevatorHeight());
+      if (m_elevatorController.atSetpoint()) {
+        speed = 0;
+      }
+    } else {
+      speed = m_manualPower;
     }
     moveElevator(speed);
 
     if(m_bottomLimitSwitch.get()) {
       resetEncoder();
     }
-
-    
-
-    
+//TODO: top and bottom limit only work after motor isnt running anymore/if the motor is running the limits dont work (fix this)
     SmartDashboard.putNumber("elevator/encoder", m_elevatorEncoder.getPosition());
+    SmartDashboard.putBoolean("elevator/bottomlimit", isAtBottomLimit());
+    SmartDashboard.putBoolean("elevator/toplimit", isAtTopLimit());
     // System.out.println("speed =" + speed +
     //     " height =" + getElevatorHeight() + " setpoint =" + m_targetPosition + " error"
     //     + (m_targetPosition - getElevatorHeight()));

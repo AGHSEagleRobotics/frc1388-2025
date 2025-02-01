@@ -4,7 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotController.RadioLEDState;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import au.grapplerobotics.CanBridge;
@@ -15,9 +19,13 @@ import au.grapplerobotics.CanBridge;
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+  private boolean m_lastUserButton = false;
+  private int m_userButtonCounter = 0;
 
   private final RobotContainer m_robotContainer;
+
+  private Timer m_neutralModeTimer = new Timer();
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -44,24 +52,49 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // Actions to perform when user button on RoboRio is pressed
+    if (RobotController.getUserButton()) {
+      // User button is pressed
+      m_userButtonCounter += 1;
+
+      if (m_userButtonCounter == 1) {
+        DataLogManager.log("### UserButtonPressed");
+        // RobotController.setRadioLEDState(RadioLEDState.kGreen);
+      } else if (m_userButtonCounter == 100) { // when held for 2 seconds (100 tics)
+        DataLogManager.log("### UserButtonHeld");
+        RobotController.setRadioLEDState(RadioLEDState.kOrange);
+        m_robotContainer.setAllEncoderOffsets();
+      }
+    } else {
+      // User button is not pressed
+      if (m_userButtonCounter > 0) {
+        // button has just been released
+        m_userButtonCounter = 0;
+        RobotController.setRadioLEDState(RadioLEDState.kOff);
+      }
+    }
   }
+  
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_neutralModeTimer.restart();
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (m_neutralModeTimer.hasElapsed(5)) {
+      m_robotContainer.setBrakeMode(false);
+      m_neutralModeTimer.reset();
+      m_neutralModeTimer.stop();
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
   }
 
   /** This function is called periodically during autonomous. */
@@ -74,9 +107,8 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+
+    m_robotContainer.setBrakeMode(true);
   }
 
   /** This function is called periodically during operator control. */

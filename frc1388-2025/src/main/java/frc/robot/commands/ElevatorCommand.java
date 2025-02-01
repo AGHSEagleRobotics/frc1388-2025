@@ -22,8 +22,7 @@ public class ElevatorCommand extends Command {
     private final Supplier<Boolean> m_b;
     private final Supplier<Boolean> m_x;
     private final Supplier<Boolean> m_y;
-    private boolean m_manualMode;
-    private boolean m_autoMode;
+    private boolean m_autoMode = false;
   /** Creates a new ElevatorCommand. */
   public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, Supplier<Double> leftY, Supplier<Boolean> a, Supplier<Boolean> b, Supplier<Boolean> x, Supplier<Boolean> y) {
     m_elevatorSubsystem = elevatorSubsystem;
@@ -32,8 +31,6 @@ public class ElevatorCommand extends Command {
     m_b = b;
     m_x = x;
     m_y = y;
-    m_manualMode = false;
-    m_autoMode = false;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_elevatorSubsystem);
@@ -49,30 +46,29 @@ public class ElevatorCommand extends Command {
   @Override
   public void execute() {
     double leftY = MathUtil.applyDeadband(-m_leftY.get(), ElevatorCommandConstants.kElevatorDeadband);
-    double position = m_elevatorSubsystem.getElevatorHeight() + (leftY * 20); //TODO: tune later
     if (m_a.get()) {
-      m_manualMode = false;
       m_autoMode = true;
       m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL1);
     }
     else if (m_b.get()) {
-      m_manualMode = false;
       m_autoMode = true;
       m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL2);
     }
     else if (m_x.get()) {
-      m_manualMode = false;
       m_autoMode = true;
       m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL3);
     }
     else if (m_y.get()) {
-      m_manualMode = false;
       m_autoMode = true;
       m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL4);
     }
     else if (leftY > 0 || leftY < 0) {
-      m_elevatorSubsystem.setTargetPosition(position);
+      m_autoMode = false;
+      m_elevatorSubsystem.setManualPower(leftY);
     } 
+    else if (!m_autoMode && leftY == 0) {
+      m_elevatorSubsystem.setManualPower(0);
+    }
 
     // m_elevatorSubsystem.moveElevator(leftY);
   }
