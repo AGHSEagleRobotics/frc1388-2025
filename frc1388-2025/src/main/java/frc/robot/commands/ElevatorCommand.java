@@ -67,7 +67,9 @@ public class ElevatorCommand extends Command {
       m_elevatorSubsystem.setManualPower(leftY);
     } 
     else if (!m_autoMode && leftY == 0) {
-      m_elevatorSubsystem.setManualPower(0);
+      m_autoMode = true;
+      // m_elevatorSubsystem.setManualPower(0);
+      m_elevatorSubsystem.setSetpointToCurrentPosition();
     }
 
     // m_elevatorSubsystem.moveElevator(leftY);

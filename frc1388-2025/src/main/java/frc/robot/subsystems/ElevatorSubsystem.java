@@ -82,11 +82,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void moveElevator(double power) {
-    if ((m_topLimitSwitch.get() && power > 0)) {
+    if ((isAtTopLimit() && power > 0)) {
       power = 0;
-    } else if (m_bottomLimitSwitch.get() && power < 0) {
+    } else if (isAtBottomLimit() && power < 0) {
       power = 0;
-    } else { 
+    } else {
       double powerLimit;
       double height = getElevatorHeight();
       if ((height < ElevatorSubsystemConstants.kElevatorBottomEndRange && power < 0) || //if the elevator is near the bottom & going down, clamp power
@@ -98,12 +98,12 @@ public class ElevatorSubsystem extends SubsystemBase {
       power = MathUtil.clamp(power,
         -(powerLimit),
           powerLimit);
-          
+    }
+      SmartDashboard.putNumber("elevator/moveElevatorPower", power);
       //driving the motors
       m_leftMotor.set(power);
       m_rightMotor.set(power);
       // System.out.println("power = " + power);
-    } 
   }
 
   public void setManualPower(double power) {
@@ -114,6 +114,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void setTargetPosition(double position) {
     m_targetPosition = position;
     m_elevatorController.setSetpoint(position);
+  }
+
+  public void setSetpointToCurrentPosition() {
+    setTargetPosition(getElevatorHeight());
+    m_autoMode = true;
   }
 
   public double getTargetPosition() {
@@ -178,6 +183,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("elevator/encoder", m_elevatorEncoder.getPosition());
     SmartDashboard.putBoolean("elevator/bottomlimit", isAtBottomLimit());
     SmartDashboard.putBoolean("elevator/toplimit", isAtTopLimit());
+    SmartDashboard.putNumber("elevator/speed", speed);
     // System.out.println("speed =" + speed +
     //     " height =" + getElevatorHeight() + " setpoint =" + m_targetPosition + " error"
     //     + (m_targetPosition - getElevatorHeight()));
