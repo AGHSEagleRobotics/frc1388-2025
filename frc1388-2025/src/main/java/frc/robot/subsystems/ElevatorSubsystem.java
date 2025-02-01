@@ -33,8 +33,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   DigitalInput m_topLimitSwitch;
   DigitalInput m_bottomLimitSwitch;
   LaserCan m_laserCan;
-  private double m_targetPosition;
+  private double m_targetPosition = 0;
   RelativeEncoder m_elevatorEncoder;
+  private boolean m_isInitialized = false;
   private boolean m_autoMode = false;
   private double m_manualPower = 0;
 
@@ -75,9 +76,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_laserCan = laserCan;
     m_elevatorEncoder = rightMotor.getEncoder();
     m_elevatorEncoder = leftMotor.getEncoder();
-    m_targetPosition = getElevatorHeight();
-    m_elevatorController.setSetpoint(m_targetPosition);
-    
+  
     m_elevatorController.setTolerance(ElevatorSubsystemConstants.kElevatorTolerance);
   }
 
@@ -161,22 +160,36 @@ public class ElevatorSubsystem extends SubsystemBase {
     return m_bottomLimitSwitch.get();
   }
   
-
+  public void resetElevatorSubsystem() {
+    m_isInitialized = false;
+    m_autoMode = false;
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     double speed = 0;
-    if (m_autoMode) {
-      speed = m_elevatorController.calculate(getElevatorHeight());
-      if (m_elevatorController.atSetpoint()) {
-        speed = 0;
+    if (m_isInitialized) {
+      if (m_autoMode) {
+        speed = m_elevatorController.calculate(getElevatorHeight());
+        if (m_elevatorController.atSetpoint()) {
+          speed = 0;
+        }
+      } else {
+        speed = m_manualPower;
       }
+      moveElevator(speed);
     } else {
-      speed = m_manualPower;
+      moveElevator(-ElevatorSubsystemConstants.kElevatorEndRangePowerLimit);
+      if (isAtBottomLimit()) {
+        moveElevator(0);
+        resetEncoder();
+        m_targetPosition = 0;
+        m_manualPower = 0;
+        setSetpointToCurrentPosition();
+        m_isInitialized = true;
+      }
     }
-    moveElevator(speed);
-
-    if(m_bottomLimitSwitch.get()) {
+    if (isAtBottomLimit()) {
       resetEncoder();
     }
 //TODO: top and bottom limit only work after motor isnt running anymore/if the motor is running the limits dont work (fix this)

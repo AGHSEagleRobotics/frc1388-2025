@@ -63,6 +63,18 @@ public class RobotContainer {
               Preferences.getDouble(DriveTrainConstants.BACK_RIGHT_ENCODER_OFFSET_KEY, 0)),
           new Pigeon2(0)
       );
+
+      ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(
+        new SparkMax(Constants.RobotContainerConstants.kElevatorMotorCANIDR, MotorType.kBrushless), //rightmotor
+        new SparkMax(Constants.RobotContainerConstants.kElevatorMotorCANIDL, MotorType.kBrushless), //leftmotor
+        new DigitalInput(Constants.RobotContainerConstants.kElevatorTopLimitChannel), //toplimitswitch
+        new DigitalInput(Constants.RobotContainerConstants.kElevatorBottomLimitChannel), //bottomlimitswitch
+        new LaserCan(Constants.RobotContainerConstants.kLaserCanCANID)
+      );
+
+      DriveCommand m_driveCommand;
+      ElevatorCommand m_elevatorCommand;
+
   private final boolean robot2025 = true;
       private final CommandXboxController m_driverController = new CommandXboxController(ControllerConstants.DRIVER_CONTROLLER_PORT);
       private final CommandXboxController m_operatorController =
@@ -71,37 +83,26 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    DriveCommand m_driveCommand = new DriveCommand(
+     m_driveCommand = new DriveCommand(
         m_driveTrain,
         () -> m_driverController.getLeftY(),
         () -> m_driverController.getLeftX(),
-      () -> m_driverController.getRightX()
-    );
-      
+        () -> m_driverController.getRightX());
+
     m_driveTrain.setDefaultCommand(m_driveCommand);
 
-
-    
-    // Configure the trigger bindings
-    configureBindings();
-     ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(
-        new SparkMax(Constants.RobotContainerConstants.kElevatorMotorCANIDR, MotorType.kBrushless), //rightmotor
-        new SparkMax(Constants.RobotContainerConstants.kElevatorMotorCANIDL, MotorType.kBrushless), //leftmotor
-        new DigitalInput(Constants.RobotContainerConstants.kElevatorTopLimitChannel), //toplimitswitch
-        new DigitalInput(Constants.RobotContainerConstants.kElevatorBottomLimitChannel), //bottomlimitswitch
-        new LaserCan(Constants.RobotContainerConstants.kLaserCanCANID)
-      );
-    
-
-ElevatorCommand m_elevatorCommand = new ElevatorCommand(
+    m_elevatorCommand = new ElevatorCommand(
         m_elevatorSubsystem,
         () -> m_operatorController.getLeftY(),
         () -> m_operatorController.getHID().getAButton(),
         () -> m_operatorController.getHID().getBButton(),
         () -> m_operatorController.getHID().getXButton(),
-        () -> m_operatorController.getHID().getYButton()
-    );
+        () -> m_operatorController.getHID().getYButton());
     m_elevatorSubsystem.setDefaultCommand(m_elevatorCommand);
+    // Configure the trigger bindings
+    configureBindings();
+
+
   // Bottom sparkmax canid: 8 on left side looking at the motor
   // Top sparkmax canid: 7 on the right side
   //positive goes up negative goes down
@@ -129,4 +130,8 @@ ElevatorCommand m_elevatorCommand = new ElevatorCommand(
     m_driveTrain.setBrakeMode(brakeMode);
   }
 
+  public void resetSubsystemsAndCommands() {
+    m_elevatorSubsystem.resetElevatorSubsystem();
+    m_elevatorCommand.resetElevatorCommand();
+  }
 }

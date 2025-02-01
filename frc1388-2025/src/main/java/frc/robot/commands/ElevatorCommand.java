@@ -23,6 +23,7 @@ public class ElevatorCommand extends Command {
     private final Supplier<Boolean> m_x;
     private final Supplier<Boolean> m_y;
     private boolean m_autoMode = false;
+    private boolean m_isInitialized = false;
   /** Creates a new ElevatorCommand. */
   public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, Supplier<Double> leftY, Supplier<Boolean> a, Supplier<Boolean> b, Supplier<Boolean> x, Supplier<Boolean> y) {
     m_elevatorSubsystem = elevatorSubsystem;
@@ -48,28 +49,35 @@ public class ElevatorCommand extends Command {
     double leftY = MathUtil.applyDeadband(-m_leftY.get(), ElevatorCommandConstants.kElevatorDeadband);
     if (m_a.get()) {
       m_autoMode = true;
+      m_isInitialized = true;
       m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL1);
     }
     else if (m_b.get()) {
       m_autoMode = true;
+      m_isInitialized = true;
       m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL2);
     }
     else if (m_x.get()) {
       m_autoMode = true;
+      m_isInitialized = true;
       m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL3);
     }
     else if (m_y.get()) {
       m_autoMode = true;
+      m_isInitialized = true;
       m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL4);
     }
     else if (leftY > 0 || leftY < 0) {
       m_autoMode = false;
+      m_isInitialized = true;
       m_elevatorSubsystem.setManualPower(leftY);
     } 
     else if (!m_autoMode && leftY == 0) {
-      m_autoMode = true;
-      // m_elevatorSubsystem.setManualPower(0);
-      m_elevatorSubsystem.setSetpointToCurrentPosition();
+      if (m_isInitialized) {
+        m_autoMode = true;
+        // m_elevatorSubsystem.setManualPower(0);
+        m_elevatorSubsystem.setSetpointToCurrentPosition();
+      }
     }
 
     // m_elevatorSubsystem.moveElevator(leftY);
@@ -83,5 +91,10 @@ public class ElevatorCommand extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  public void resetElevatorCommand() {
+    m_isInitialized = false;
+    m_autoMode = false;
   }
 }
