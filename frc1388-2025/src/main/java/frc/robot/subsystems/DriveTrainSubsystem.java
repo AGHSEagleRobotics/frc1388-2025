@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import choreo.trajectory.SwerveSample;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -38,6 +40,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
   private final double ROBOT_TRACK_WIDTH = RobotConstants.ROBOT_WIDTH;
 
   private double m_gyroOffset = 0;
+
+  private final PIDController xController = new PIDController(10.0, 0.0, 0.0);
+  private final PIDController yController = new PIDController(10.0, 0.0, 0.0);
+  private final PIDController headingController = new PIDController(7.5, 0.0, 0.0);
 
   // these are the translations from the center of rotation of the robot to the center of rotation of each swerve module
   private final Translation2d m_frontRightTranslation = new Translation2d(ROBOT_WHEEL_BASE / 2, -ROBOT_TRACK_WIDTH / 2);
@@ -174,6 +180,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
     return new Pose2d(0, 0, getGyroHeading());
   }
 
+  public void resetPose(Pose2d pose) {
+    if (m_odometry != null) {
+      m_odometry.resetPosition(getGyroHeading(), null, pose);
+    }
+  }
+
   public ChassisSpeeds getRobotRelativeSpeeds() {
     return m_robotRelativeSpeeds;
   }
@@ -181,6 +193,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   public void driveRobotRelative(ChassisSpeeds speeds) {
     // speeds.vxMetersPerSecond = -speeds.vxMetersPerSecond;
     // speeds.vyMetersPerSecond = -speeds.vyMetersPerSecond;
+    m_robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getGyroHeading());
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveTrainConstants.ROBOT_MAX_SPEED);
     //check desaturate constants
@@ -190,6 +203,35 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backRight.setSwerveModuleStates(states[3]);
 
     }
+
+    public void driveFieldRelative(ChassisSpeeds speeds) {
+      // speeds.vxMetersPerSecond = -speeds.vxMetersPerSecond;
+      // speeds.vyMetersPerSecond = -speeds.vyMetersPerSecond;
+      SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
+      SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveTrainConstants.ROBOT_MAX_SPEED);
+      //check desaturate constants
+      m_frontRight.setSwerveModuleStates(states[0]);
+      m_frontLeft.setSwerveModuleStates(states[1]);
+      m_backLeft.setSwerveModuleStates(states[2]);
+      m_backRight.setSwerveModuleStates(states[3]);
+  
+      }
+
+    public void followTrajectory(SwerveSample trajectory) {
+        // Get the current pose of the robot
+        Pose2d pose = getPose();
+
+        // Generate the next speeds for the robot
+        ChassisSpeeds speeds = new ChassisSpeeds(
+            trajectory.vx + xController.calculate(pose.getX(), trajectory.x),
+            trajectory.vy + yController.calculate(pose.getY(), trajectory.y),
+            trajectory.omega + headingController.calculate(pose.getRotation().getRadians(), trajectory.heading)
+        );
+
+        // Apply the generated speeds
+        driveFieldRelative(speeds);
+    }
+
 
   public double getDistTraveled() {
     return m_frontRight.getPosition().distanceMeters;
