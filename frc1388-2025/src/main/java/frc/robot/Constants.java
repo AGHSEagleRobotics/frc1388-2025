@@ -40,8 +40,8 @@ public final class Constants {
 
 
   public static class RobotConstants {
-    public static final double ROBOT_WIDTH = 0.552;  //0.9114
-    public static final double ROBOT_LENGTH = 0.552;
+    public static final double ROBOT_WIDTH = 0.5981;  //0.9114
+    public static final double ROBOT_LENGTH = 0.5981;
   }
 
   public static class DriveTrainConstants {
@@ -52,22 +52,22 @@ public final class Constants {
     public static final int FRONT_RIGHT_DRIVE_MOTOR_CANID = 1;
     public static final int FRONT_RIGHT_ROTATION_MOTOR_CANID = 5;
     public static final int FRONT_RIGHT_CANCODER = 9;
-    public static final String FRONT_RIGHT_ENCODER_OFFSET_KEY = "2024/frontRightEncoderOffset";
+    public static final String FRONT_RIGHT_ENCODER_OFFSET_KEY = "2025/frontRightEncoderOffset";
 
     public static final int FRONT_LEFT_DRIVE_MOTOR_CANID = 2;
     public static final int FRONT_LEFT_ROTATION_MOTOR_CANID = 6;
     public static final int FRONT_LEFT_CANCODER = 10;
-    public static final String FRONT_LEFT_ENCODER_OFFSET_KEY = "2024/frontLeftEncoderOffset";
+    public static final String FRONT_LEFT_ENCODER_OFFSET_KEY = "2025/frontLeftEncoderOffset";
 
     public static final int BACK_LEFT_DRIVE_MOTOR_CANID = 3;
     public static final int BACK_LEFT_ROTATION_MOTOR_CANID = 7;
     public static final int BACK_LEFT_CANCODER = 11;
-    public static final String BACK_LEFT_ENCODER_OFFSET_KEY = "2024/backLeftEncoderOffset";
+    public static final String BACK_LEFT_ENCODER_OFFSET_KEY = "2025/backLeftEncoderOffset";
 
     public static final int BACK_RIGHT_DRIVE_MOTOR_CANID = 4;
     public static final int BACK_RIGHT_ROTATION_MOTOR_CANID = 8;
     public static final int BACK_RIGHT_CANCODER = 12;
-    public static final String BACK_RIGHT_ENCODER_OFFSET_KEY = "2024/backRightEncoderOffset";
+    public static final String BACK_RIGHT_ENCODER_OFFSET_KEY = "2025/backRightEncoderOffset";
 
     public static final double CONTROLLER_DEADBAND = 0.1;
     public static final double MANUAL_CONTROL_ANGLE_DEADBAND = 0.5;

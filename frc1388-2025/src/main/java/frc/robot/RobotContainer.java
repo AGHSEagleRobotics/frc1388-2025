@@ -59,7 +59,7 @@ public class RobotContainer {
               new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.BACK_RIGHT_CANCODER),
               Preferences.getDouble(DriveTrainConstants.BACK_RIGHT_ENCODER_OFFSET_KEY, 0)),
-          new Pigeon2(20), m_limeLight
+          new Pigeon2(13), m_limeLight
       );
 
       private final CommandXboxController m_driverController = new CommandXboxController(ControllerConstants.DRIVER_CONTROLLER_PORT);

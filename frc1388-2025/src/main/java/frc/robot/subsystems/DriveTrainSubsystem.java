@@ -309,7 +309,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   public double getRawGyroAngle () {
     if (m_pigeon2.isConnected()) {
-      return m_pigeon2.getYaw().getValueAsDouble();
+      return -m_pigeon2.getYaw().getValueAsDouble();
     }
     return 0;
   }
@@ -446,6 +446,11 @@ public boolean shouldResetPoseMegaTag2() {
     SmartDashboard.putNumber("drivetrain/closestPoseY", getClosestTargetPose().getY());
     SmartDashboard.putNumber("drivetrain/closestPoseRotation", getClosestTargetPose().getRotation().getDegrees());
     SmartDashboard.putNumber("Angle Rotation2d", getGyroHeading().getRadians());
+
+    SmartDashboard.putNumber("drivetrain/frontRight encoder angle", m_frontRight.getRotationAngle());
+    SmartDashboard.putNumber("drivetrain/frontLeft encoder angle", m_frontLeft.getRotationAngle());
+    SmartDashboard.putNumber("drivetrain/backLeft encoder angle", m_backLeft.getRotationAngle());
+    SmartDashboard.putNumber("drivetrain/backRight encoder angle", m_backRight.getRotationAngle());
 
     publisher.set(getPose());
 
