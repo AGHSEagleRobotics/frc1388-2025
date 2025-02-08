@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,24 +26,37 @@ public class DriveCommand extends Command {
 
   private final PIDController m_xController = new PIDController(1.8, 0, 0);
   private final PIDController m_yController = new PIDController(1.8, 0, 0);
+  
+  private PIDController m_turnPidController = new PIDController(0.14, 0.000012, 0.000012);
+  private final Supplier<Boolean> m_a;
+
+  private final SlewRateLimiter m_xAccLimiter = new SlewRateLimiter(0.2);
+  private final SlewRateLimiter m_yAccLimiter = new SlewRateLimiter(0.2);
+  private boolean m_lastAButtonPressed = false; // used for edge detection 
+  private boolean m_lineUp = false;
 
   /** Creates a new DriveCommand. */
-  public DriveCommand(DriveTrainSubsystem driveTrain, Supplier<Double> leftY, Supplier<Double> leftX, Supplier<Double> rightX) {
+  public DriveCommand(DriveTrainSubsystem driveTrain, Supplier<Double> leftY, Supplier<Double> leftX, Supplier<Double> rightX, Supplier<Boolean> a) {
     m_driveTrain = driveTrain;
     m_leftY = leftY;
     m_leftX = leftX;
     m_rightX = rightX;
+    m_a =  a;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_driveTrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_turnPidController.setTolerance(2.5);
+    m_turnPidController.enableContinuousInput(0, 360);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     double leftX = MathUtil.applyDeadband(m_leftX.get(), DriveTrainConstants.CONTROLLER_DEADBAND);
     double leftY = MathUtil.applyDeadband(m_leftY.get(), DriveTrainConstants.CONTROLLER_DEADBAND);
     double rightX = -MathUtil.applyDeadband(m_rightX.get(), DriveTrainConstants.CONTROLLER_DEADBAND);
@@ -56,7 +70,27 @@ public class DriveCommand extends Command {
     double xVelocity = -DriveTrainConstants.ROBOT_MAX_SPEED * scale(leftY, DriveTrainConstants.LEFT_STICK_SCALE);
     double yVelocity = -DriveTrainConstants.ROBOT_MAX_SPEED * scale(leftX, DriveTrainConstants.LEFT_STICK_SCALE);
     /** angular velocity */
-    double omega = 2 * Math.PI * scale(rightX, 2.5);
+    double omega = 0;
+
+    boolean a = m_a.get();
+
+    if (a && !m_lastAButtonPressed) {
+      m_lineUp = !m_lineUp;
+    }
+    m_lastAButtonPressed = a;
+
+    if (rightX != 0) { // default turning with stick
+      omega = 2 * Math.PI * scale(rightX, 2.5);
+      m_lineUp = false;
+    }
+
+    else if (m_lineUp) {
+      xVelocity = m_driveTrain.getXVelocityAuto(m_driveTrain.getClosestTargetPose().getX(), m_xController,
+          m_xAccLimiter) / 10;
+      yVelocity = m_driveTrain.getYVelocityAuto(m_driveTrain.getClosestTargetPose().getY(), m_yController,
+          m_yAccLimiter) / 10;
+      omega = m_driveTrain.getOmegaVelocityAuto(m_turnPidController);
+    }
 
     m_driveTrain.drive(xVelocity, yVelocity, omega);
 

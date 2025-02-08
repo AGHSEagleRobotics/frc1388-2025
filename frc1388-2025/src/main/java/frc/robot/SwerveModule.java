@@ -37,7 +37,7 @@ public class SwerveModule {
       m_rotationMotor = rotationMotor;
       m_rotationMotorSettings = rotationMotorSettings;
       m_rotationMotor.setNeutralMode(NeutralModeValue.Brake);
-    m_rotationMotorSettings.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
+      m_rotationMotorSettings.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
       m_encoderOffset = encoderOffset;
 
@@ -57,10 +57,11 @@ public class SwerveModule {
   }
   
   public void setSwerveModuleStates(SwerveModuleState inputState) {
-      Rotation2d rotation = new Rotation2d(Math.toRadians(getRotationAngle()));
-      inputState.optimize(rotation);
-      setDriveSpeed(inputState.speedMetersPerSecond);
-      setRotationPosition(inputState.angle.getDegrees());
+    Rotation2d rotation = new Rotation2d(Math.toRadians(getRotationAngle()));
+    inputState.optimize(rotation);
+    setDriveSpeed(inputState.speedMetersPerSecond);
+    setRotationPosition(inputState.angle.getDegrees());
+
   }
 
   public SwerveModulePosition getPosition() {
