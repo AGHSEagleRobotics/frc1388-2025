@@ -16,10 +16,6 @@ public class AutoAllign extends Command {
 
   private final DriveTrainSubsystem m_driveTrain;
 
-  private final double X_SETPOINT;
-  private final double Y_SETPOINT;
-  private final double ROTATION_SETPOINT;
-
   // i was 0.015
   private final PIDController m_xController = new PIDController(1.8, 0, 0);
   private double m_lastXSpeed = 0;
@@ -33,13 +29,9 @@ public class AutoAllign extends Command {
 
 
   /** Creates a new AutoMove. */
-  public AutoAllign(double xSetpoint, double ySetpoint, double rotationSetpoint, DriveTrainSubsystem drivetrain) {
+  public AutoAllign(DriveTrainSubsystem drivetrain) {
 
     m_driveTrain =  drivetrain;
-
-    X_SETPOINT = xSetpoint;
-    Y_SETPOINT = ySetpoint;
-    ROTATION_SETPOINT = rotationSetpoint;
 
     m_xController.setTolerance(0.05);
     m_yController.setTolerance(0.05);
@@ -66,8 +58,6 @@ public class AutoAllign extends Command {
 
     SmartDashboard.putNumber("AutoGoToPoint/rot pid in", m_driveTrain.getAngle());
     SmartDashboard.putBoolean("AutoGoToPoint/is at rot sp", m_rotationController.atSetpoint());
-    SmartDashboard.putNumber("AutoAllign/XSetpoint", X_SETPOINT);
-    SmartDashboard.putNumber("AutoAllign/YSetpoint", Y_SETPOINT);
     m_driveTrain.drive(xSpeed, ySpeed, m_rotationController.calculate(m_driveTrain.getAngle(), m_driveTrain.getClosestTargetPose().getRotation().getDegrees()));
     m_lastXSpeed = xSpeed;
     m_lastYSpeed = ySpeed;

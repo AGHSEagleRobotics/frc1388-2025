@@ -95,13 +95,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    double closestPoseX = m_driveTrain.getClosestTargetPose().getX();
-    double closestPoseY = m_driveTrain.getClosestTargetPose().getY();
-    double closestPoseRotation = m_driveTrain.getClosestTargetPose().getRotation().getDegrees();
-    SmartDashboard.putNumber("XPose", closestPoseX);
-    SmartDashboard.putNumber("YPose", closestPoseY);
-    SmartDashboard.putNumber("RotationPose", closestPoseRotation);
-    m_driverController.b().whileTrue(new AutoAllign(closestPoseX, closestPoseY, closestPoseRotation, m_driveTrain));
+    m_driverController.b().whileTrue(new AutoAllign(m_driveTrain));
   }
 
   public void setAllEncoderOffsets() {

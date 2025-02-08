@@ -45,7 +45,7 @@ public final class Constants {
   }
 
   public static class DriveTrainConstants {
-    public static final double ROBOT_MAX_SPEED = 4.0; // 5.76 l3+ meters per second
+    public static final double ROBOT_MAX_SPEED = Units.feetToMeters(18.9); // 5.76 l3+ meters per second
     public static final double DT_SECONDS = 0.02; // 20ms per tick
     public static final double DISTANCE_PER_TICK = ROBOT_MAX_SPEED * DT_SECONDS; // 20ms per tick
  
