@@ -96,8 +96,7 @@ public static class ElevatorSubsystemConstants {
 
 
 public static final class RobotContainerConstants {
-  public static final int kElevatorMotorCANIDR = 13;
-  public static final int kElevatorMotorCANIDL = 14;
+  public static final int kElevatorMotorCANID = 13;
   public static final int kElevatorTopLimitChannel = 9;
   public static final int kElevatorBottomLimitChannel = 8;
   public static final int kLaserCanCANID = 29;

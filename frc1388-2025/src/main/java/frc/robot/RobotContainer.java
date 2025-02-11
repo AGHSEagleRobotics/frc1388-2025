@@ -11,19 +11,15 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.SerialPort;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
-
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import au.grapplerobotics.LaserCan;
@@ -65,8 +61,7 @@ public class RobotContainer {
       );
 
       ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(
-        new SparkMax(Constants.RobotContainerConstants.kElevatorMotorCANIDR, MotorType.kBrushless), //rightmotor
-        new SparkMax(Constants.RobotContainerConstants.kElevatorMotorCANIDL, MotorType.kBrushless), //leftmotor
+        new SparkFlex(Constants.RobotContainerConstants.kElevatorMotorCANID, MotorType.kBrushless), // motor
         new DigitalInput(Constants.RobotContainerConstants.kElevatorTopLimitChannel), //toplimitswitch
         new DigitalInput(Constants.RobotContainerConstants.kElevatorBottomLimitChannel), //bottomlimitswitch
         new LaserCan(Constants.RobotContainerConstants.kLaserCanCANID)
