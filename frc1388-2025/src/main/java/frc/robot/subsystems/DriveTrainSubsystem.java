@@ -90,11 +90,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
   private SwerveDrivePoseEstimator m_odometry;
 
   private final Limelight m_limelight;
-  // private final Pigeon2 m_navxGyro;
-  private final AHRS m_navxGyro;
+  private final Pigeon2 m_navxGyro;
+  // private final AHRS m_navxGyro;
 
   /** Creates a new DriveTrainSubsystem. */
-  public DriveTrainSubsystem(SwerveModule frontRight, SwerveModule frontLeft, SwerveModule backLeft, SwerveModule backRight, AHRS gyro, Limelight limelight) {
+  public DriveTrainSubsystem(SwerveModule frontRight, SwerveModule frontLeft, SwerveModule backLeft, SwerveModule backRight, Pigeon2 gyro, Limelight limelight) {
 
     m_frontRight = frontRight;
     m_frontLeft = frontLeft;
