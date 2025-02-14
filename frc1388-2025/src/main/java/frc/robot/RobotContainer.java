@@ -13,7 +13,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.EndEffectorCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriveTrainConstants;
+import frc.robot.Constants.RobotContainerConstants;
 import frc.robot.commands.AutoAllign;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
@@ -71,22 +74,26 @@ public class RobotContainer {
       );
 
       ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(
-        new SparkMax(Constants.RobotContainerConstants.kElevatorMotorCANIDR, MotorType.kBrushless), //rightmotor
-        new SparkMax(Constants.RobotContainerConstants.kElevatorMotorCANIDL, MotorType.kBrushless), //leftmotor
-        new DigitalInput(Constants.RobotContainerConstants.kElevatorTopLimitChannel), //toplimitswitch
-        new DigitalInput(Constants.RobotContainerConstants.kElevatorBottomLimitChannel), //bottomlimitswitch
-        new LaserCan(Constants.RobotContainerConstants.kLaserCanCANID)
+        new SparkMax(RobotContainerConstants.kElevatorMotorCANIDR, MotorType.kBrushless), //rightmotor
+        new SparkMax(RobotContainerConstants.kElevatorMotorCANIDL, MotorType.kBrushless), //leftmotor
+        new DigitalInput(RobotContainerConstants.kElevatorTopLimitChannel), //toplimitswitch
+        new DigitalInput(RobotContainerConstants.kElevatorBottomLimitChannel), //bottomlimitswitch
+        new LaserCan(RobotContainerConstants.kLaserCanCANID)
       );
+
+      EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem(
+        new SparkMax(RobotContainerConstants.kEndEffectorCANID, MotorType.kBrushless),
+        new DigitalInput(RobotContainerConstants.kEndEffectorLimitChannel));
 
       DriveCommand m_driveCommand;
       ElevatorCommand m_elevatorCommand;
+      EndEffectorCommand m_endEffectorCommand;
 
   private final boolean robot2025 = true;
       private final CommandXboxController m_driverController = new CommandXboxController(ControllerConstants.DRIVER_CONTROLLER_PORT);
-      private final CommandXboxController m_operatorController =
-      new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
+      private final CommandXboxController m_operatorController = new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */ 
   public RobotContainer() {
 
      m_driveCommand = new DriveCommand(
@@ -106,6 +113,15 @@ public class RobotContainer {
         () -> m_operatorController.getHID().getXButton(),
         () -> m_operatorController.getHID().getYButton());
     m_elevatorSubsystem.setDefaultCommand(m_elevatorCommand);
+
+    m_endEffectorCommand = new EndEffectorCommand(
+        m_endEffectorSubsystem,
+        // () -> m_driverController.getHID().getLeftTriggerAxis(),
+        // () -> m_driverController.getHID().getLeftBumperButton(), 
+        () -> m_driverController.getHID().getRightTriggerAxis(),
+        () -> m_driverController.getHID().getRightBumperButton());
+        
+    m_endEffectorSubsystem.setDefaultCommand(m_endEffectorCommand);
     // Configure the trigger bindings
     configureBindings();
 

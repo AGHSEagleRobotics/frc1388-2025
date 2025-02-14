@@ -34,7 +34,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   DigitalInput m_bottomLimitSwitch;
   LaserCan m_laserCan;
   private double m_targetPosition = 0;
-  RelativeEncoder m_elevatorEncoder;
+  private RelativeEncoder m_elevatorEncoder;
   private boolean m_isInitialized = false;
   private boolean m_autoMode = false;
   private double m_manualPower = 0;

@@ -109,6 +109,8 @@ public final class Constants {
     public static final int kElevatorTopLimitChannel = 9;
     public static final int kElevatorBottomLimitChannel = 8;
     public static final int kLaserCanCANID = 29;
+    public static final int kEndEffectorCANID = 30;
+    public static final int kEndEffectorLimitChannel = 7;
   }
 
   public static final class ElevatorCommandConstants {
