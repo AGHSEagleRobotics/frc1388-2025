@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotController.RadioLEDState;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -23,6 +24,7 @@ public class Robot extends TimedRobot {
   private int m_userButtonCounter = 0;
 
   private final RobotContainer m_robotContainer;
+  private Command m_autonomousCommand;
 
   private Timer m_neutralModeTimer = new Timer();
 
@@ -99,6 +101,39 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    DataLogManager.log("####### Autonomous Init");
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    DataLogManager.log("setting neutral mode");
+    m_robotContainer.setBrakeMode(true);
+    DataLogManager.log("done setting neutral mode");
+
+    // schedule the autonomous command
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+      System.out.println("starting auto command");
+    }
+
+
+    // Get match info from FMS
+    if (DriverStation.isFMSAttached()) {
+      String fmsInfo = "FMS info: ";
+      fmsInfo += " " + DriverStation.getEventName();
+      fmsInfo += " " + DriverStation.getMatchType();
+      fmsInfo += " match " + DriverStation.getMatchNumber();
+      fmsInfo += " replay " + DriverStation.getReplayNumber();
+      fmsInfo += ";  " + DriverStation.getAlliance() + " alliance";
+      fmsInfo += ",  Driver Station " + DriverStation.getLocation();
+      DataLogManager.log(fmsInfo);
+    } else {
+      DataLogManager.log("FMS not connected");
+
+      DataLogManager.log("Match type:\t" + DriverStation.getMatchType());
+      DataLogManager.log("Event name:\t" + DriverStation.getEventName());
+      DataLogManager.log("Alliance:\t" + DriverStation.getAlliance());
+      DataLogManager.log("Match number:\t" + DriverStation.getMatchNumber());
+    }
+
   }
 
   /** This function is called periodically during autonomous. */
@@ -111,6 +146,9 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
 
     m_robotContainer.setBrakeMode(true);
   }

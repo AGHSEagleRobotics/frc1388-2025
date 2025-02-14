@@ -70,7 +70,7 @@ public class DriveCommand extends Command {
     double xVelocity = -DriveTrainConstants.ROBOT_MAX_SPEED * scale(leftY, DriveTrainConstants.LEFT_STICK_SCALE);
     double yVelocity = -DriveTrainConstants.ROBOT_MAX_SPEED * scale(leftX, DriveTrainConstants.LEFT_STICK_SCALE);
     /** angular velocity */
-    double omega = 0;
+    double omega = 2 * Math.PI * scale(rightX, 2.5);
 
     boolean a = m_a.get();
 
@@ -79,18 +79,18 @@ public class DriveCommand extends Command {
     }
     m_lastAButtonPressed = a;
 
-    if (rightX != 0) { // default turning with stick
-      omega = 2 * Math.PI * scale(rightX, 2.5);
-      m_lineUp = false;
-    }
+    // if (rightX != 0) { // default turning with stick
 
-    else if (m_lineUp) {
-      xVelocity = m_driveTrain.getXVelocityAuto(m_driveTrain.getClosestTargetPose().getX(), m_xController,
-          m_xAccLimiter) / 10;
-      yVelocity = m_driveTrain.getYVelocityAuto(m_driveTrain.getClosestTargetPose().getY(), m_yController,
-          m_yAccLimiter) / 10;
-      omega = m_driveTrain.getOmegaVelocityAuto(m_turnPidController);
-    }
+      // m_lineUp = false;
+    // }
+
+    // else if (m_lineUp) {
+    //   xVelocity = m_driveTrain.getXVelocityAuto(m_driveTrain.getClosestTargetPose().getX(), m_xController,
+    //       m_xAccLimiter) / 10;
+    //   yVelocity = m_driveTrain.getYVelocityAuto(m_driveTrain.getClosestTargetPose().getY(), m_yController,
+    //       m_yAccLimiter) / 10;
+    //   omega = m_driveTrain.getOmegaVelocityAuto(m_turnPidController);
+    // }
 
     m_driveTrain.drive(xVelocity, yVelocity, omega);
 

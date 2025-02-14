@@ -106,7 +106,9 @@ public final class Constants {
   public class AutoConstants {
 
     public enum Objective {
-      SITSTILL("LookPretty");
+      SITSTILL("LookPretty"),
+      CHOREOAUTO("ChoreoAuto"),
+      CHOREOAUTOROUTINE("choreoAutoRoutine");
 
       public static final Objective Default = SITSTILL;
 
@@ -123,8 +125,8 @@ public final class Constants {
   }
 
   public static final class RobotContainerConstants {
-    public static final int kElevatorMotorCANIDR = 13;
-    public static final int kElevatorMotorCANIDL = 14;
+    public static final int kElevatorMotorCANIDR = 14;
+    public static final int kElevatorMotorCANIDL = 15;
     public static final int kElevatorTopLimitChannel = 9;
     public static final int kElevatorBottomLimitChannel = 8;
     public static final int kLaserCanCANID = 29;

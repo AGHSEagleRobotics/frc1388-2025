@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -17,6 +18,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
@@ -46,28 +48,28 @@ public class RobotContainer {
           new SwerveModule(
               new TalonFX(DriveTrainConstants.FRONT_RIGHT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.FRONT_RIGHT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(), 
+              new TalonFXConfiguration(), new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.FRONT_RIGHT_CANCODER),
               Preferences.getDouble(DriveTrainConstants.FRONT_RIGHT_ENCODER_OFFSET_KEY, 0)),
           new SwerveModule(
               new TalonFX(DriveTrainConstants.FRONT_LEFT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.FRONT_LEFT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(), 
+              new TalonFXConfiguration(), new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.FRONT_LEFT_CANCODER),
                             Preferences.getDouble(DriveTrainConstants.FRONT_LEFT_ENCODER_OFFSET_KEY, 0)),
           new SwerveModule(
               new TalonFX(DriveTrainConstants.BACK_LEFT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.BACK_LEFT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(),
+              new TalonFXConfiguration(), new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.BACK_LEFT_CANCODER),
                             Preferences.getDouble(DriveTrainConstants.BACK_LEFT_ENCODER_OFFSET_KEY, 0)),
           new SwerveModule(
               new TalonFX(DriveTrainConstants.BACK_RIGHT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.BACK_RIGHT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(),
+              new TalonFXConfiguration(), new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.BACK_RIGHT_CANCODER),
               Preferences.getDouble(DriveTrainConstants.BACK_RIGHT_ENCODER_OFFSET_KEY, 0)),
-          new Pigeon2(13), m_limeLight
+          new AHRS(SerialPort.Port.kUSB), m_limeLight
       );
 
       ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(
@@ -89,7 +91,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
 
     m_autoMethod = new AutoMethod(m_driveTrain, m_dashboard);
 
@@ -145,5 +146,9 @@ public class RobotContainer {
   public void resetSubsystemsAndCommands() {
     m_elevatorSubsystem.resetElevatorSubsystem();
     m_elevatorCommand.resetElevatorCommand();
+  }
+
+  public Command getAutonomousCommand() {
+    return m_autoMethod.getAutonomousCommand() ;
   }
 }
