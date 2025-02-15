@@ -86,15 +86,65 @@ public class AutoMethod extends SubsystemBase {
     return routine;
   }
   
-  public AutoRoutine Coral3L4() {
-    AutoRoutine routine = m_autoFactory.newRoutine("Coral3L4");
+  public AutoRoutine TopCoral3L4() {
+    AutoRoutine routine = m_autoFactory.newRoutine("TopCoral3L4");
 
-    AutoTrajectory startToScore = routine.trajectory("Coral3L4",0); 
-    AutoTrajectory score1ToPickup = routine.trajectory("Coral3L4",1);
-    AutoTrajectory pickup1ToScore = routine.trajectory("Coral3L4",2);
-    AutoTrajectory score2ToPickup = routine.trajectory("Coral3L4",3);
-    AutoTrajectory pickup2ToScore = routine.trajectory("Coral3L4",4);
-    AutoTrajectory endAuto = routine.trajectory("Coral3L4",5);
+    AutoTrajectory startToScore = routine.trajectory("TopCoral3L4",0); 
+    AutoTrajectory score1ToPickup = routine.trajectory("TopCoral3L4",1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("TopCoral3L4",2);
+    AutoTrajectory score2ToPickup = routine.trajectory("TopCoral3L4",3);
+    AutoTrajectory pickup2ToScore = routine.trajectory("TopCoral3L4",4);
+    AutoTrajectory endAuto = routine.trajectory("TopCoral3L4",5);
+
+
+    routine.active().onTrue(
+      Commands.sequence(
+        startToScore.resetOdometry(),
+        startToScore.cmd()
+      )
+    );
+      startToScore.done().onTrue(score1ToPickup.cmd());
+      score1ToPickup.done().onTrue(pickup1ToScore.cmd());
+      pickup1ToScore.done().onTrue(score2ToPickup.cmd());
+      score2ToPickup.done().onTrue(pickup2ToScore.cmd());
+      pickup2ToScore.done().onTrue(endAuto.cmd());
+    return routine;
+  }
+
+  public AutoRoutine MiddleCoral3L4() {
+    AutoRoutine routine = m_autoFactory.newRoutine("MiddleCoral3L4");
+
+    AutoTrajectory startToScore = routine.trajectory("MiddleCoral3L4",0); 
+    AutoTrajectory score1ToPickup = routine.trajectory("MiddleCoral3L4",1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("MiddleCoral3L4",2);
+    AutoTrajectory score2ToPickup = routine.trajectory("MiddleCoral3L4",3);
+    AutoTrajectory pickup2ToScore = routine.trajectory("MiddleCoral3L4",4);
+    AutoTrajectory endAuto = routine.trajectory("MiddleCoral3L4",5);
+
+
+    routine.active().onTrue(
+      Commands.sequence(
+        startToScore.resetOdometry(),
+        startToScore.cmd()
+      )
+    );
+      startToScore.done().onTrue(score1ToPickup.cmd());
+      score1ToPickup.done().onTrue(pickup1ToScore.cmd());
+      pickup1ToScore.done().onTrue(score2ToPickup.cmd());
+      score2ToPickup.done().onTrue(pickup2ToScore.cmd());
+      pickup2ToScore.done().onTrue(endAuto.cmd());
+    return routine;
+  }
+
+  public AutoRoutine BottomCoral3L4() {
+    AutoRoutine routine = m_autoFactory.newRoutine("BottomCoral3L4");
+
+    AutoTrajectory startToScore = routine.trajectory("BottomCoral3L4",0); 
+    AutoTrajectory score1ToPickup = routine.trajectory("BottomCoral3L4",1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("BottomCoral3L4",2);
+    AutoTrajectory score2ToPickup = routine.trajectory("BottomCoral3L4",3);
+    AutoTrajectory pickup2ToScore = routine.trajectory("BottomCoral3L4",4);
+    AutoTrajectory endAuto = routine.trajectory("BottomCoral3L4",5);
 
 
     routine.active().onTrue(

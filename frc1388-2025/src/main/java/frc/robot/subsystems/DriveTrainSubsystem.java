@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.Constants.RobotConstants;
@@ -89,7 +90,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   private SwerveDrivePoseEstimator m_odometry;
 
   private final Limelight m_limelight;
-  private final Pigeon2 m_navxGyro;
+  private final Pigeon2 m_pigeonGyro;
   // private final AHRS m_navxGyro;
 
   /** Creates a new DriveTrainSubsystem. */
@@ -100,14 +101,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backLeft = backLeft;
     m_backRight = backRight;
 
-    m_navxGyro = gyro;
+    m_pigeonGyro = gyro;
     m_limelight = limelight;
     
     //gyro and odometry setup code I copied from a youtube video <br> https://www.youtube.com/watch?v=0Xi9yb1IMyA
     new Thread(() -> {
       try {
         Thread.sleep(1000);
-        m_navxGyro.reset();
+        m_pigeonGyro.reset();
         m_odometry = new SwerveDrivePoseEstimator(
             m_kinematics,
             getGyroHeading(),
@@ -177,7 +178,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getGyroHeading() {
-    if (m_navxGyro.isConnected()) {
+    if (m_pigeonGyro.isConnected()) {
       // return new Rotation2d(Math.toRadians(Math.IEEEremainder(-m_navxGyro.getAngle(), 360)));
       return new Rotation2d(Math.toRadians(getAngle()));
     }
@@ -186,7 +187,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   public void resetGyroHeading(double offset) {
     m_gyroOffset = offset;
-    m_navxGyro.reset();
+    m_pigeonGyro.reset();
   }
 
   public void swerveOnlyResetPose(Pose2d pose) {
@@ -424,6 +425,10 @@ public boolean shouldResetPoseMegaTag2() {
   //   }
   // }
 
+  public void stopDriveTrain () {
+     drive(0, 0, 0);
+  }
+
 
   @Override
   public void periodic() {
@@ -501,6 +506,8 @@ public boolean shouldResetPoseMegaTag2() {
     SmartDashboard.putNumber("drivetrain/frontLeft encoder angle", m_frontLeft.getRotationAngle());
     SmartDashboard.putNumber("drivetrain/backLeft encoder angle", m_backLeft.getRotationAngle());
     SmartDashboard.putNumber("drivetrain/backRight encoder angle", m_backRight.getRotationAngle());
+
+
 
     publisher.set(getPose());
 
