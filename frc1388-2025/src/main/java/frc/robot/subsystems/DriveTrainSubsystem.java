@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.kauailabs.navx.frc.AHRS;
 
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.controller.PIDController;

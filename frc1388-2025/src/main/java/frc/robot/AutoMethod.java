@@ -39,7 +39,7 @@ public class AutoMethod extends SubsystemBase {
   public AutoMethod(DriveTrainSubsystem driveTrainSubsystem, Dashboard dashboard) {
     m_driveTrainSubsystem = driveTrainSubsystem;
     m_dashboard = dashboard;
-
+    
     m_autoFactory = new AutoFactory(
             m_driveTrainSubsystem::getPose, // A function that returns the current robot pose
             m_driveTrainSubsystem::resetPose, // A function that resets the current robot pose to the provided Pose2d
@@ -85,6 +85,32 @@ public class AutoMethod extends SubsystemBase {
     );
     return routine;
   }
+  
+  public AutoRoutine Coral3L4() {
+    AutoRoutine routine = m_autoFactory.newRoutine("Coral3L4");
+
+    AutoTrajectory startToScore = routine.trajectory("Coral3L4",0); 
+    AutoTrajectory score1ToPickup = routine.trajectory("Coral3L4",1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("Coral3L4",2);
+    AutoTrajectory score2ToPickup = routine.trajectory("Coral3L4",3);
+    AutoTrajectory pickup2ToScore = routine.trajectory("Coral3L4",4);
+    AutoTrajectory endAuto = routine.trajectory("Coral3L4",5);
+
+
+    routine.active().onTrue(
+      Commands.sequence(
+        startToScore.resetOdometry(),
+        startToScore.cmd()
+      )
+    );
+      startToScore.done().onTrue(score1ToPickup.cmd());
+      score1ToPickup.done().onTrue(pickup1ToScore.cmd());
+      pickup1ToScore.done().onTrue(score2ToPickup.cmd());
+      score2ToPickup.done().onTrue(pickup2ToScore.cmd());
+      pickup2ToScore.done().onTrue(endAuto.cmd());
+    return routine;
+  }
+
 
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
