@@ -41,7 +41,7 @@ public final class Constants {
     public static final double kElevatorPowerLimit = 0.5;
     public static final double kElevatorEndRangePowerLimit = 0.1;
     public static final double kElevatorEndRange = 5.25; //inches 2
-    public static final double kElevatorMaxHeight = 37; //inches
+    public static final double kElevatorMaxHeight = 50.5; //inches
     public static final double kElevatorTopEndRange = kElevatorMaxHeight - kElevatorEndRange; //inches
     public static final double kElevatorBottomEndRange = kElevatorEndRange; //inches
 
@@ -50,7 +50,7 @@ public final class Constants {
     public static final double kElevatorPIDP = 0.185;
     public static final double kElevatorPIDI = 0;
     public static final double kElevatorPIDD = 0;
-    public static final double kElevatorLimitSwitchZero = 0.25; //starting point after encoder set to 0 due to limit switch variability
+    public static final double kElevatorLimitSwitchZero = 0; //starting point after encoder set to 0 due to limit switch variability
     // public static final double kElevatorPIDP = 0.0325;
 
     public static final double kGearboxRatio = 9.0;       // input to output gear reduction
@@ -100,7 +100,7 @@ public final class Constants {
 
 
 public static final class RobotContainerConstants {
-  public static final int kElevatorMotorCANID = 13;
+  public static final int kElevatorMotorCANID = 20;
   public static final int kElevatorTopLimitChannel = 9;
   public static final int kElevatorBottomLimitChannel = 8;
   public static final int kLaserCanCANID = 29;

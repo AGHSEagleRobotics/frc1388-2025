@@ -57,7 +57,7 @@ public class RobotContainer {
               new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.BACK_RIGHT_CANCODER),
               Preferences.getDouble(DriveTrainConstants.BACK_RIGHT_ENCODER_OFFSET_KEY, 0)),
-          new Pigeon2(0)
+          new Pigeon2(13)
       );
 
       ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(

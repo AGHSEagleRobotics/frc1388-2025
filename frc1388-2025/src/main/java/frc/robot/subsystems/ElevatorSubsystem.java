@@ -47,7 +47,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     LEVEL1(5),
     LEVEL2(15),
     LEVEL3(25),
-    LEVEL4(35);
+    LEVEL4(50.5);
 
     private double setpoint;
 
@@ -74,7 +74,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     motorConfig.idleMode(IdleMode.kBrake);
     boolean isInverted = false;
     motorConfig.inverted(isInverted);
-    motorConfig.encoder.inverted(isInverted);   // only applies to brushed motors?
     motorConfig.encoder.positionConversionFactor(ElevatorSubsystemConstants.kCarriageInchesPerMotorRotation);
     m_motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
