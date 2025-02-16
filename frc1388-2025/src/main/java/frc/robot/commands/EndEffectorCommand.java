@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import edu.wpi.first.wpilibj.Timer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class EndEffectorCommand extends Command {
@@ -16,6 +17,7 @@ public class EndEffectorCommand extends Command {
   // private final Supplier<Boolean> m_leftBumper;
   private final Supplier<Double> m_rightTrigger;
   private final Supplier<Boolean> m_rightBumper;
+  private final Timer m_endEffectorTimer = new Timer();
   /** Creates a new EndEffectorCommand. */
   // Supplier<Double> leftTrigger, Supplier<Boolean> leftBumper,
   public EndEffectorCommand(EndEffectorSubsystem endEffectorSubsystem, Supplier<Double> rightTrigger, Supplier<Boolean> rightBumper) {
@@ -30,13 +32,31 @@ public class EndEffectorCommand extends Command {
 //TODO all left trigger and left bumper stuff is for algae intaking
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if (m_endEffectorSubsystem.isAtEffectorLimit() == true) {
+      m_endEffectorTimer.restart();;
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //TODO change timer values once programming gets robot
+    double rightTrigger = m_rightTrigger.get();
+    if (m_endEffectorTimer.get() > 1) {
+      m_endEffectorSubsystem.RunEndEffector(0.25);
+      // m_endEffectorSubsystem.RunEndEffector(0.25);
+      // m_endEffectorSubsystem.isAtEffectorLimit();
+    } 
+    else if (m_rightBumper.get()) {
+      m_endEffectorSubsystem.RunEndEffectorIgnoreLimit(0.25);  
+    }
+    
+        
+      
 
     }
+    
   
 
   // Called once the command ends or is interrupted.

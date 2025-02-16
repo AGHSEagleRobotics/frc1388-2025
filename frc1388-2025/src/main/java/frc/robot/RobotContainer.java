@@ -157,5 +157,9 @@ public class RobotContainer {
   public void resetSubsystemsAndCommands() {
     m_elevatorSubsystem.resetElevatorSubsystem();
     m_elevatorCommand.resetElevatorCommand();
+
+  if (robot2025) {
+    m_driverController.rightTrigger().whileTrue(m_endEffectorCommand);
+  }
   }
 }

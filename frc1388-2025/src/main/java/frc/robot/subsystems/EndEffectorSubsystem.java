@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 public class EndEffectorSubsystem extends SubsystemBase {
   SparkMax m_endEffectorMotor; 
-  DigitalInput m_endEffectorLimitSwitch;
+  DigitalInput m_endEffectorLimit;
 
   /** Creates a new EndEffectorSubsystem. */
   public EndEffectorSubsystem(SparkMax endEffectorMotor, DigitalInput endEffectorLimitSwitch) {
     m_endEffectorMotor = endEffectorMotor;
-    m_endEffectorLimitSwitch = endEffectorLimitSwitch;
+    m_endEffectorLimit = endEffectorLimitSwitch;
   }
 
 public void RunEndEffector(double power) {
@@ -27,11 +27,21 @@ public void RunEndEffector(double power) {
   }
 }
 
-private boolean isAtEffectorLimit() {
-  return m_endEffectorLimitSwitch.get();
+public void RunEndEffectorIgnoreLimit(double power) {
+  m_endEffectorMotor.set(power);
+  }
+
+
+
+public boolean isAtEffectorLimit() {
+  return m_endEffectorLimit.get();
 }
   @Override
   public void periodic() {
+    double speed = 0;
     // This method will be called once per scheduler run
+    if (isAtEffectorLimit()) {
+      RunEndEffector(0);
+    }
   }
 }
