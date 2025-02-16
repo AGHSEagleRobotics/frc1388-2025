@@ -74,8 +74,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     motorConfig.idleMode(IdleMode.kBrake);
     boolean isInverted = false;
     motorConfig.inverted(isInverted);
-    motorConfig.encoder.inverted(isInverted);
-    motorConfig.encoder.positionConversionFactor(1.0);  // ToDo:  This needs to be set!!!
+    motorConfig.encoder.inverted(isInverted);   // only applies to brushed motors?
+    motorConfig.encoder.positionConversionFactor(ElevatorSubsystemConstants.kCarriageInchesPerMotorRotation);
     m_motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
