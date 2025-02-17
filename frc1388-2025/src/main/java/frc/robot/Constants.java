@@ -130,10 +130,31 @@ public final class Constants {
     public static final int kElevatorTopLimitChannel = 9;
     public static final int kElevatorBottomLimitChannel = 8;
     public static final int kLaserCanCANID = 29;
+
+    public static final int kClimberMotorCANID = 40;
+    public static final int kClimberAbsoluteEncoderDIO = 6;
   }
 
   public static final class ElevatorCommandConstants {
     public static final double kElevatorDeadband = 0.1;
+  }
+
+  public static final class ClimberConstants {
+    public static final double LOWER_PERCENTAGE_ABSOLUTE_ENCODER = 1.0/1024.0;
+    public static final double HIGHER_PERCENTAGE_ABSOLUTE_ENCODER =  1023.0/1024.0;
+    public static final double DEGREES_PER_ROTATION = 360;
+
+    public static final double BOTTOM_LIMIT = 0;
+    public static final double TOP_LIMIT = 0;
+
+    public static final double CLIMBER_CONTROLLER_DEADBAND = 0.1;
+
+    public static final double CLIMBER_UP_POSITION = 0;
+    public static final double CLIMBER_DOWN_POSITION = 0;
+
+    public static final double CLIMBER_POWER_LIMIT = 0;
+
+    public static final double CLIMBER_ABSOLUTE_ENCODER_OFFSET = 0;
   }
   
     public static class LimelightConstants {

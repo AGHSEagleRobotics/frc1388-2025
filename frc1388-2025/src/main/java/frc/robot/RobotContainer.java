@@ -5,6 +5,8 @@
 package frc.robot;
 
 
+import static edu.wpi.first.units.Units.Newton;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -22,14 +24,19 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.commands.AutoAllign;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.vision.Limelight;
+
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -78,8 +85,13 @@ public class RobotContainer {
         new LaserCan(Constants.RobotContainerConstants.kLaserCanCANID)
       );
 
+      ClimberSubsystem m_climberSubsystem = new ClimberSubsystem(
+        new SparkFlex(Constants.RobotContainerConstants.kClimberMotorCANID, MotorType.kBrushless), 
+        new DutyCycleEncoder(Constants.RobotContainerConstants.kClimberAbsoluteEncoderDIO)); 
+
       DriveCommand m_driveCommand;
       ElevatorCommand m_elevatorCommand;
+      ClimberCommand m_climberCommand;
 
       private final AutoMethod m_autoMethod;
   private final boolean robot2025 = true;
@@ -110,6 +122,13 @@ public class RobotContainer {
         () -> m_operatorController.getHID().getXButton(),
         () -> m_operatorController.getHID().getYButton());
     m_elevatorSubsystem.setDefaultCommand(m_elevatorCommand);
+
+    m_climberCommand = new ClimberCommand(
+      m_climberSubsystem, 
+      () -> m_operatorController.getLeftY(), 
+      () -> m_operatorController.getHID().getPOV() == 0, 
+      () -> m_operatorController.getHID().getPOV() == 180);
+    m_climberSubsystem.setDefaultCommand(m_climberCommand);
     // Configure the trigger bindings
     configureBindings();
 
