@@ -10,9 +10,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotController.RadioLEDState;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import au.grapplerobotics.CanBridge;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -20,7 +18,6 @@ import au.grapplerobotics.CanBridge;
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
-  private boolean m_lastUserButton = false;
   private int m_userButtonCounter = 0;
 
   private final RobotContainer m_robotContainer;
@@ -40,6 +37,28 @@ public class Robot extends TimedRobot {
     // CanBridge.runTCP(); //for grapplehook/lasercan
   }
 
+  /**
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
+   */
+   @Override
+   public void robotInit() {
+     DataLogManager.start();
+     DataLogManager.log("####### RobotInit");
+     DataLogManager.log("Git version: " + BuildInfo.GIT_VERSION + " (branch: " + BuildInfo.GIT_BRANCH + " "
+         + BuildInfo.GIT_STATUS + ")");
+     DataLogManager.log("      Built: " + BuildInfo.BUILD_DATE + "  " + BuildInfo.BUILD_TIME);
+
+     // logs everytime a command starts / stops
+     CommandScheduler.getInstance()
+         .onCommandInitialize(command -> DataLogManager.log("++ " + command.getName() + " Initialized"));
+     CommandScheduler.getInstance()
+         .onCommandInterrupt(command -> DataLogManager.log("-- " + command.getName() + " Interrupted"));
+     CommandScheduler.getInstance()
+         .onCommandFinish(command -> DataLogManager.log("-- " + command.getName() + " Finished"));
+   }
+ 
+ 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
