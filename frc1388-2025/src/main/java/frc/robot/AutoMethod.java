@@ -35,10 +35,12 @@ public class AutoMethod extends SubsystemBase {
   private final Dashboard m_dashboard;
   private final Command m_choreoAuto;
   private final AutoRoutine m_choreoAutoRoutine;
+  private final AutoAllign m_allign;
   
-  public AutoMethod(DriveTrainSubsystem driveTrainSubsystem, Dashboard dashboard) {
+  public AutoMethod(DriveTrainSubsystem driveTrainSubsystem, Dashboard dashboard, AutoAllign allign) {
     m_driveTrainSubsystem = driveTrainSubsystem;
     m_dashboard = dashboard;
+    m_allign = allign;
     
     m_autoFactory = new AutoFactory(
             m_driveTrainSubsystem::getPose, // A function that returns the current robot pose
@@ -54,8 +56,11 @@ public class AutoMethod extends SubsystemBase {
     m_autoChooser = new AutoChooser();
 
         // Add options to the chooser
-        m_autoChooser.addRoutine("Choreo Auto Routine", this::ChoreoAutoRoutine);
-        m_autoChooser.addCmd("Choreo Auto", this::ChoreoAuto);
+        m_autoChooser.addRoutine("LayingEggsTop", this::LayingEggsTop);
+        m_autoChooser.addRoutine("LayingEggsBottom", this::LayingEggsBottom);
+        m_autoChooser.addRoutine("OneScoreCenter", this::OneScoreCenter);
+        m_autoChooser.addRoutine("EndAt2Top", this::EndAt2Top);
+        m_autoChooser.addRoutine("EndAt2Bottom", this::EndAt2Bottom);
 
         // Put the auto chooser on the dashboard
         SmartDashboard.putData(m_autoChooser);
@@ -86,15 +91,15 @@ public class AutoMethod extends SubsystemBase {
     return routine;
   }
   
-  public AutoRoutine TopCoral3L4() {
-    AutoRoutine routine = m_autoFactory.newRoutine("TopCoral3L4");
 
-    AutoTrajectory startToScore = routine.trajectory("TopCoral3L4",0); 
-    AutoTrajectory score1ToPickup = routine.trajectory("TopCoral3L4",1);
-    AutoTrajectory pickup1ToScore = routine.trajectory("TopCoral3L4",2);
-    AutoTrajectory score2ToPickup = routine.trajectory("TopCoral3L4",3);
-    AutoTrajectory pickup2ToScore = routine.trajectory("TopCoral3L4",4);
-    AutoTrajectory endAuto = routine.trajectory("TopCoral3L4",5);
+  public AutoRoutine LayingEggsTop() {
+    AutoRoutine routine = m_autoFactory.newRoutine("LayingEggsTop");
+
+    AutoTrajectory startToScore = routine.trajectory("LayingEggsTop",0); 
+    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsTop",1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsTop",2);
+    AutoTrajectory score2ToPickup = routine.trajectory("LayingEggsTop",3);
+    AutoTrajectory pickup2ToScore = routine.trajectory("LayingEggsTop",4);
 
 
     routine.active().onTrue(
@@ -103,24 +108,22 @@ public class AutoMethod extends SubsystemBase {
         startToScore.cmd()
       )
     );
-      startToScore.done().onTrue(score1ToPickup.cmd());
+      startToScore.done().onTrue(m_allign.andThen(score1ToPickup.cmd()));
       score1ToPickup.done().onTrue(pickup1ToScore.cmd());
-      pickup1ToScore.done().onTrue(score2ToPickup.cmd());
+      pickup1ToScore.done().onTrue(m_allign.andThen(score2ToPickup.cmd()));
       score2ToPickup.done().onTrue(pickup2ToScore.cmd());
-      pickup2ToScore.done().onTrue(endAuto.cmd());
+      pickup2ToScore.done().onTrue(m_allign);
     return routine;
   }
 
-  public AutoRoutine MiddleCoral3L4() {
-    AutoRoutine routine = m_autoFactory.newRoutine("MiddleCoral3L4");
+  public AutoRoutine LayingEggsBottom() {
+    AutoRoutine routine = m_autoFactory.newRoutine("LayingEggsBottom");
 
-    AutoTrajectory startToScore = routine.trajectory("MiddleCoral3L4",0); 
-    AutoTrajectory score1ToPickup = routine.trajectory("MiddleCoral3L4",1);
-    AutoTrajectory pickup1ToScore = routine.trajectory("MiddleCoral3L4",2);
-    AutoTrajectory score2ToPickup = routine.trajectory("MiddleCoral3L4",3);
-    AutoTrajectory pickup2ToScore = routine.trajectory("MiddleCoral3L4",4);
-    AutoTrajectory endAuto = routine.trajectory("MiddleCoral3L4",5);
-
+    AutoTrajectory startToScore = routine.trajectory("LayingEggsBottom",0); 
+    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsBottom",1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsBottom",2);
+    AutoTrajectory score2ToPickup = routine.trajectory("LayingEggsBottom",3);
+    AutoTrajectory pickup2ToScore = routine.trajectory("LayingEggsBottom",4);
 
     routine.active().onTrue(
       Commands.sequence(
@@ -128,24 +131,20 @@ public class AutoMethod extends SubsystemBase {
         startToScore.cmd()
       )
     );
-      startToScore.done().onTrue(score1ToPickup.cmd());
+      startToScore.done().onTrue(m_allign.andThen(score1ToPickup.cmd()));
       score1ToPickup.done().onTrue(pickup1ToScore.cmd());
-      pickup1ToScore.done().onTrue(score2ToPickup.cmd());
+      pickup1ToScore.done().onTrue(m_allign.andThen(score2ToPickup.cmd()));
       score2ToPickup.done().onTrue(pickup2ToScore.cmd());
-      pickup2ToScore.done().onTrue(endAuto.cmd());
-    return routine;
+      pickup2ToScore.done().onTrue(m_allign);
+      return routine;
   }
 
-  public AutoRoutine BottomCoral3L4() {
-    AutoRoutine routine = m_autoFactory.newRoutine("BottomCoral3L4");
+  public AutoRoutine EndAt2Top() {
+    AutoRoutine routine = m_autoFactory.newRoutine("LayingEggsTop");
 
-    AutoTrajectory startToScore = routine.trajectory("BottomCoral3L4",0); 
-    AutoTrajectory score1ToPickup = routine.trajectory("BottomCoral3L4",1);
-    AutoTrajectory pickup1ToScore = routine.trajectory("BottomCoral3L4",2);
-    AutoTrajectory score2ToPickup = routine.trajectory("BottomCoral3L4",3);
-    AutoTrajectory pickup2ToScore = routine.trajectory("BottomCoral3L4",4);
-    AutoTrajectory endAuto = routine.trajectory("BottomCoral3L4",5);
-
+    AutoTrajectory startToScore = routine.trajectory("LayingEggsTop",0); 
+    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsTop",1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsTop",2);
 
     routine.active().onTrue(
       Commands.sequence(
@@ -153,12 +152,44 @@ public class AutoMethod extends SubsystemBase {
         startToScore.cmd()
       )
     );
-      startToScore.done().onTrue(score1ToPickup.cmd());
+      startToScore.done().onTrue(m_allign.andThen(score1ToPickup.cmd()));
       score1ToPickup.done().onTrue(pickup1ToScore.cmd());
-      pickup1ToScore.done().onTrue(score2ToPickup.cmd());
-      score2ToPickup.done().onTrue(pickup2ToScore.cmd());
-      pickup2ToScore.done().onTrue(endAuto.cmd());
-    return routine;
+      pickup1ToScore.done().onTrue(m_allign);
+      return routine;
+  }
+
+  public AutoRoutine EndAt2Bottom() {
+    AutoRoutine routine = m_autoFactory.newRoutine("LayingEggsBottom");
+
+    AutoTrajectory startToScore = routine.trajectory("LayingEggsBottom",0); 
+    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsBottom",1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsBottom",2);
+
+    routine.active().onTrue(
+      Commands.sequence(
+        startToScore.resetOdometry(),
+        startToScore.cmd()
+      )
+    );
+      startToScore.done().onTrue(m_allign.andThen(score1ToPickup.cmd()));
+      score1ToPickup.done().onTrue(pickup1ToScore.cmd());
+      pickup1ToScore.done().onTrue(m_allign);
+      return routine;
+  }
+
+  public AutoRoutine OneScoreCenter() {
+    AutoRoutine routine = m_autoFactory.newRoutine("OneScoreCenter");
+
+    AutoTrajectory startToScore = routine.trajectory("OneScoreCenter",0); 
+
+    routine.active().onTrue(
+      Commands.sequence(
+        startToScore.resetOdometry(),
+        startToScore.cmd()
+      )
+    );
+      startToScore.done().onTrue(m_allign);
+      return routine;
   }
 
 

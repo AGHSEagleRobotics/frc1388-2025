@@ -41,7 +41,7 @@ public class RobotContainer {
   private final Dashboard m_dashboard = new Dashboard();
 
   private final Limelight m_limeLight = new Limelight("limelight-shooter", "limelight-intake");
-  
+
     private final DriveTrainSubsystem m_driveTrain = new DriveTrainSubsystem(
           new SwerveModule(
               new TalonFX(DriveTrainConstants.FRONT_RIGHT_DRIVE_MOTOR_CANID),
@@ -91,7 +91,7 @@ public class RobotContainer {
   public RobotContainer() {
 
 
-    m_autoMethod = new AutoMethod(m_driveTrain, m_dashboard);
+    m_autoMethod = new AutoMethod(m_driveTrain, m_dashboard, new AutoAllign(m_driveTrain));
 
     DriveCommand m_driveCommand = new DriveCommand(
         m_driveTrain,
