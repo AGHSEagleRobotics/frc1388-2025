@@ -33,8 +33,8 @@ public class EndEffectorCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (m_endEffectorSubsystem.isAtEffectorLimit() == true) {
-      m_endEffectorTimer.restart();;
+    if (m_endEffectorSubsystem.isCoralDetected() == true) {
+      m_endEffectorTimer.reset();
     }
   }
 
@@ -42,20 +42,18 @@ public class EndEffectorCommand extends Command {
   @Override
   public void execute() {
     //TODO change timer values once programming gets robot
+    m_endEffectorTimer.reset();
     double rightTrigger = m_rightTrigger.get();
-    if (m_endEffectorTimer.get() > 1) {
-      m_endEffectorSubsystem.RunEndEffector(0.25);
-      // m_endEffectorSubsystem.RunEndEffector(0.25);
-      // m_endEffectorSubsystem.isAtEffectorLimit();
+    boolean rightBumper = m_rightBumper.get();
+    if (rightTrigger > 0.2) {
+      m_endEffectorSubsystem.ShootCoral(0.3);
     } 
-    else if (m_rightBumper.get()) {
-      m_endEffectorSubsystem.RunEndEffectorIgnoreLimit(0.25);  
+    else if (rightBumper) {
+      //endeffectortimer
+      Timer.delay(0);
+      m_endEffectorSubsystem.IntakeCoral(0.3);  
     }
-    
-        
-      
-
-    }
+  }
     
   
 

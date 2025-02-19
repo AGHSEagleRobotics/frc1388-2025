@@ -4,44 +4,59 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.wpilibj.DigitalInput;
+import au.grapplerobotics.LaserCan;
+
 
 public class EndEffectorSubsystem extends SubsystemBase {
   SparkMax m_endEffectorMotor; 
-  DigitalInput m_endEffectorLimit;
-
+  LaserCan m_laserCAN;
   /** Creates a new EndEffectorSubsystem. */
-  public EndEffectorSubsystem(SparkMax endEffectorMotor, DigitalInput endEffectorLimitSwitch) {
+  public EndEffectorSubsystem(SparkMax endEffectorMotor, LaserCan laserCAN) {
     m_endEffectorMotor = endEffectorMotor;
-    m_endEffectorLimit = endEffectorLimitSwitch;
+    m_laserCAN = laserCAN;
   }
 
 public void RunEndEffector(double power) {
   m_endEffectorMotor.set(power);
+}
 
-  if (isAtEffectorLimit()) {
-    m_endEffectorMotor.set(0);
+public void IntakeCoral(double power) {
+  if (isCoralDetected() == true) {
+    RunEndEffector(0);
+  } else {
+    RunEndEffector(power);
   }
 }
 
-public void RunEndEffectorIgnoreLimit(double power) {
-  m_endEffectorMotor.set(power);
-  }
-
-
-
-public boolean isAtEffectorLimit() {
-  return m_endEffectorLimit.get();
+//ignores lasercan limit
+public void ShootCoral(double power) {
+  RunEndEffector(power);
 }
+
+public double getCoralHeight() {
+ return (m_laserCAN.getMeasurement().distance_mm); //ElevatorSubsystemConstants.kInchesPerMillimeters;
+}
+
+public boolean isCoralDetected() {
+  if (getCoralHeight() > 4) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+// public boolean isAtEffectorLimit() {
+//   return isCoralDetected();
+// }
+
   @Override
   public void periodic() {
-    double speed = 0;
+    getCoralHeight();
     // This method will be called once per scheduler run
-    if (isAtEffectorLimit()) {
-      RunEndEffector(0);
-    }
+    // if (isAtEffectorLimit()) {
+    //   RunEndEffector(0);
+    // }
   }
 }

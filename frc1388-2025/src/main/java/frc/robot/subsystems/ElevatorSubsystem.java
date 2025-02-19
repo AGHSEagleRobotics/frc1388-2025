@@ -202,3 +202,5 @@ public class ElevatorSubsystem extends SubsystemBase {
     //     + (m_targetPosition - getElevatorHeight()));
   }
 }
+
+//TODO slow down elevator more when its moving downwards

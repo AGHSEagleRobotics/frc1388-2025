@@ -60,6 +60,18 @@ public final class Constants {
                                                                 // switch variability
     // public static final double kElevatorPIDP = 0.0325;
     public static final double kTicksPerInch = 1;
+  }
+  
+  public static class ElevatorCommandConstants {
+    public static final double kElevatorDeadband = 0.1;
+  }
+  
+  public static class EndEffectorSubsystemConstants {
+    public static final double kCoralDetectionHeight = 4;
+    //TODO create constants for endeffectorsubsystem and commands
+  }
+
+  public static class EndEffectorCommandConstants {
 
   }
 
@@ -113,10 +125,6 @@ public final class Constants {
     public static final int kEndEffectorLimitChannel = 7;
   }
 
-  public static final class ElevatorCommandConstants {
-    public static final double kElevatorDeadband = 0.1;
-  }
-  
     public static class LimelightConstants {
 
       public static final int BOTPOSE_X = 0;

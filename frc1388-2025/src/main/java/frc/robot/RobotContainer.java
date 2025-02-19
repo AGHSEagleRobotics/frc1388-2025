@@ -83,7 +83,7 @@ public class RobotContainer {
 
       EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem(
         new SparkMax(RobotContainerConstants.kEndEffectorCANID, MotorType.kBrushless),
-        new DigitalInput(RobotContainerConstants.kEndEffectorLimitChannel));
+        new LaserCan(RobotContainerConstants.kLaserCanCANID));
 
       DriveCommand m_driveCommand;
       ElevatorCommand m_elevatorCommand;
@@ -158,8 +158,8 @@ public class RobotContainer {
     m_elevatorSubsystem.resetElevatorSubsystem();
     m_elevatorCommand.resetElevatorCommand();
 
-  if (robot2025) {
-    m_driverController.rightTrigger().whileTrue(m_endEffectorCommand);
-  }
+  // if (robot2025) {
+  //   m_driverController.rightTrigger().whileTrue(m_endEffectorCommand);
+  // }
   }
 }
