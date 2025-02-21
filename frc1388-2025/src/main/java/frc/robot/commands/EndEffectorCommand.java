@@ -7,6 +7,8 @@ package frc.robot.commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.EndEffectorCommandConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -18,41 +20,65 @@ public class EndEffectorCommand extends Command {
   private final Supplier<Double> m_rightTrigger;
   private final Supplier<Boolean> m_rightBumper;
   private final Timer m_endEffectorTimer = new Timer();
+  private boolean m_coralIsDetected = false;
+  private boolean m_rightTriggerWasPressed = false;
+  private boolean m_rightBumperWasPressed = false;
+
   /** Creates a new EndEffectorCommand. */
   // Supplier<Double> leftTrigger, Supplier<Boolean> leftBumper,
   public EndEffectorCommand(EndEffectorSubsystem endEffectorSubsystem, Supplier<Double> rightTrigger, Supplier<Boolean> rightBumper) {
   m_endEffectorSubsystem = endEffectorSubsystem;
+  m_rightTrigger = rightTrigger;
+  m_rightBumper = rightBumper;
+  addRequirements(m_endEffectorSubsystem);
     // m_leftTrigger = leftTrigger;
     // m_leftBumper = leftBumper;
-    m_rightTrigger = rightTrigger;
-    m_rightBumper = rightBumper;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_endEffectorSubsystem);
   }
+
 //TODO all left trigger and left bumper stuff is for algae intaking
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (m_endEffectorSubsystem.isCoralDetected() == true) {
-      m_endEffectorTimer.reset();
-    }
   }
-
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (m_endEffectorSubsystem.isCoralDetected() == true) {
+      //only run this 1st time coral is detected
+      if (m_coralIsDetected == false) {
+        m_endEffectorTimer.reset();
+        m_coralIsDetected = true;
+      }
+    } else { //coral is not detected
+      //reset coral detected flag when coral no longer detected
+      if (m_coralIsDetected == true) {
+        m_coralIsDetected = false;
+      }
+    }
+    if (m_coralIsDetected == true) {
+      if(m_endEffectorTimer.get() > EndEffectorCommandConstants.kIntakeKillDelay) {
+        m_endEffectorSubsystem.ShootCoral(0);
+      }
+    }
     //TODO change timer values once programming gets robot
-    m_endEffectorTimer.reset();
     double rightTrigger = m_rightTrigger.get();
     boolean rightBumper = m_rightBumper.get();
-    if (rightTrigger > 0.2) {
-      m_endEffectorSubsystem.ShootCoral(0.3);
+    if (rightTrigger > EndEffectorCommandConstants.kRightTriggerPressed) {
+      m_endEffectorSubsystem.ShootCoral(EndEffectorCommandConstants.kShootCoralPower);
+      m_rightTriggerWasPressed = true;
     } 
-    else if (rightBumper) {
-      //endeffectortimer
-      Timer.delay(0);
-      m_endEffectorSubsystem.IntakeCoral(0.3);  
+    else if (m_rightTriggerWasPressed == true) {
+      m_endEffectorSubsystem.ShootCoral(0);
+      m_rightTriggerWasPressed = false;
     }
+    else if (rightBumper == true) {
+      //endeffectortimer\
+      m_endEffectorSubsystem.IntakeCoral(EndEffectorCommandConstants.kIntakeCoralPower);  
+      m_rightBumperWasPressed = true;//if we dont need it delete it
+    }
+    
   }
     
   

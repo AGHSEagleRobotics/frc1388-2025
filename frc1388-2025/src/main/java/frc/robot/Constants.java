@@ -43,7 +43,6 @@ public final class Constants {
   }
 
   public static class ElevatorSubsystemConstants {
-    public static final double kInchesPerMillimeters = 1 / 25.4;
     public static final double kElevatorPowerLimit = 0.5;
     public static final double kElevatorEndRangePowerLimit = 0.1;
     public static final double kElevatorEndRange = 5.25; // inches 2
@@ -67,15 +66,20 @@ public final class Constants {
   }
   
   public static class EndEffectorSubsystemConstants {
-    public static final double kCoralDetectionHeight = 4;
+    public static final double kCoralDetectionHeight = 2; //in inches
+    public static final double kInchesPerMillimeters = 1 / 25.4;
     //TODO create constants for endeffectorsubsystem and commands
   }
 
   public static class EndEffectorCommandConstants {
+    public static final double kRightTriggerPressed = 0.1;
+    public static final double kIntakeCoralPower = 0.1;
+    public static final double kShootCoralPower = 0.1;    
+    public static final double kIntakeKillDelay = 0.1; //in seconds    
 
   }
 
-  public static class RobotConstants {
+  public static class RobotConstants { 
     public static final double ROBOT_WIDTH = 0.5981; // 0.9114
     public static final double ROBOT_LENGTH = 0.5981;
   }

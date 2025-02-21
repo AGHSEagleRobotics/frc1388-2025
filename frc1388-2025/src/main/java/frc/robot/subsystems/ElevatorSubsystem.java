@@ -52,6 +52,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // LEVEL3(47.625),
     // LEVEL4(72);
 
+    //values are in inches
     LEVEL1(5),
     LEVEL2(15),
     LEVEL3(25),
@@ -144,9 +145,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     
   // }
 
-  public double getLaserCanHeight() {
-    return (m_laserCan.getMeasurement().distance_mm) * ElevatorSubsystemConstants.kInchesPerMillimeters;
-  }
+  // public double getLaserCanHeight() {
+  //   return (m_laserCan.getMeasurement().distance_mm) * ElevatorSubsystemConstants.kInchesPerMillimeters;
+  // }
   
   private void resetEncoder() {
     m_elevatorEncoder.setPosition(ElevatorSubsystemConstants.kElevatorLimitSwitchZero);
