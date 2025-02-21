@@ -193,23 +193,23 @@ public class AutoMethod extends SubsystemBase {
   }
 
 
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    AutoConstants.Objective objective = m_dashboard.getObjective();
-        DataLogManager.log("####### objective:" + objective);
+  // public Command getAutonomousCommand() {
+  //   // An ExampleCommand will run in autonomous
+  //   AutoConstants.Objective objective = m_dashboard.getObjective();
+  //       DataLogManager.log("####### objective:" + objective);
     
-        if (objective == null) {
-          return null;
-        }
+  //       if (objective == null) {
+  //         return null;
+  //       }
       
-        switch (objective) {
+  //       switch (objective) {
     
-        case SITSTILL:
-            return SitStillLookPretty();
+  //       case SITSTILL:
+  //           return SitStillLookPretty();
       
-        case CHOREOAUTO:
-            return m_choreoAuto;
-        }
-      return null;
-    }
+  //       case CHOREOAUTO:
+  //           return m_choreoAuto;
+  //       }
+  //     return null;
+  //   }
 }

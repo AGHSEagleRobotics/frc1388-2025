@@ -147,7 +147,7 @@ public class RobotContainer {
     m_elevatorCommand.resetElevatorCommand();
   }
 
-  public Command getAutonomousCommand() {
-    return m_autoMethod.getAutonomousCommand();
-  }
+  // public Command getAutonomousCommand() {
+  //   return m_autoMethod.getAutonomousCommand();
+  // }
 }
