@@ -45,20 +45,26 @@ public final class Constants {
   public static class ElevatorSubsystemConstants {
     public static final double kElevatorPowerLimit = 0.5;
     public static final double kElevatorEndRangePowerLimit = 0.1;
-    public static final double kElevatorEndRange = 5.25; // inches 2
-    public static final double kElevatorMaxHeight = 37; // inches
-    public static final double kElevatorTopEndRange = kElevatorMaxHeight - kElevatorEndRange; // inches
-    public static final double kElevatorBottomEndRange = kElevatorEndRange; // inches
+
+    public static final double kElevatorEndRange = 5.25; //inches 2
+    public static final double kElevatorMaxHeight = 50.5; //inches
+    public static final double kElevatorTopEndRange = kElevatorMaxHeight - kElevatorEndRange; //inches
+    public static final double kElevatorBottomEndRange = kElevatorEndRange; //inches
 
     public static final double kElevatorTolerance = 0;
 
     public static final double kElevatorPIDP = 0.185;
     public static final double kElevatorPIDI = 0;
     public static final double kElevatorPIDD = 0;
-    public static final double kElevatorLimitSwitchZero = 0.25; // starting point after encoder set to 0 due to limit
-                                                                // switch variability
+
+    public static final double kElevatorLimitSwitchZero = 0; //starting point after encoder set to 0 due to limit switch variability
     // public static final double kElevatorPIDP = 0.0325;
-    public static final double kTicksPerInch = 1;
+    public static final double kGearboxRatio = 9.0;       // input to output gear reduction
+    public static final int    kSprocketToothCount = 22;
+    public static final double kChainPitch = 0.25;        // inches
+    public static final double kSprocketCircumference = kChainPitch * kSprocketToothCount;  // inches
+    public static final double kChainInchesPerMotorRotation = kSprocketCircumference / kGearboxRatio;
+    public static final double kCarriageInchesPerMotorRotation = kChainInchesPerMotorRotation * 2;  // carriage moves twice the rate of
   }
   
   public static class ElevatorCommandConstants {
@@ -77,6 +83,12 @@ public final class Constants {
     public static final double kShootCoralPower = 0.1;    
     public static final double kIntakeKillDelay = 0.1; //in seconds    
 
+    public static final double kGearboxRatio = 9.0;       // input to output gear reduction
+    public static final int    kSprocketToothCount = 22;
+    public static final double kChainPitch = 0.25;        // inches
+    public static final double kSprocketCircumference = kChainPitch * kSprocketToothCount;  // inches
+    public static final double kChainInchesPerMotorRotation = kSprocketCircumference / kGearboxRatio;
+    public static final double kCarriageInchesPerMotorRotation = kChainInchesPerMotorRotation * 2;  // carriage moves twice the rate of the chain
   }
 
   public static class RobotConstants { 
@@ -119,9 +131,29 @@ public final class Constants {
     public static final double RIGHT_STICK_SCALE = 5;
   }
 
+  public class AutoConstants {
+
+    public enum Objective {
+      SITSTILL("LookPretty"),
+      CHOREOAUTO("ChoreoAuto"),
+      CHOREOAUTOROUTINE("choreoAutoRoutine");
+
+      public static final Objective Default = SITSTILL;
+
+      private String m_dashboardDescript; // This is what will show on dashboard
+
+      private Objective(String dashboardDescript) {
+        m_dashboardDescript = dashboardDescript;
+      }
+
+      public String getDashboardDescript() {
+        return m_dashboardDescript;
+      }
+    }
+  }
+
   public static final class RobotContainerConstants {
-    public static final int kElevatorMotorCANIDR = 13;
-    public static final int kElevatorMotorCANIDL = 14;
+    public static final int kElevatorMotorCANID = 20;
     public static final int kElevatorTopLimitChannel = 9;
     public static final int kElevatorBottomLimitChannel = 8;
     public static final int kLaserCanCANID = 29;

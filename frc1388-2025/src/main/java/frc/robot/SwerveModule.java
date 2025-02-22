@@ -16,7 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 public class SwerveModule {
     
   private final TalonFX m_driveMotor;
-  
+  private final TalonFXConfiguration m_driveMotorSettings;
 
   private final CANcoder m_cancoder;
   private double m_encoderOffset;
@@ -25,19 +25,23 @@ public class SwerveModule {
   private final TalonFXConfiguration m_rotationMotorSettings;
   private final PIDController m_rotationPID;
 
-  public SwerveModule(TalonFX driveMotor, TalonFX rotationMotor, TalonFXConfiguration rotationMotorSettings, CANcoder cancoder, double encoderOffset) {
+  public SwerveModule(TalonFX driveMotor, TalonFX rotationMotor, TalonFXConfiguration rotationMotorSettings, TalonFXConfiguration driveMotorSettings, CANcoder cancoder, double encoderOffset) {
       m_driveMotor = driveMotor;
+      m_driveMotorSettings = driveMotorSettings;
       m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
       Slot0Configs driveConfig = new Slot0Configs();
       driveConfig.kP = Constants.SwerveModuleConstants.DRIVE_MOTOR_P;
       driveConfig.kI = Constants.SwerveModuleConstants.DRIVE_MOTOR_I;
       driveConfig.kD = Constants.SwerveModuleConstants.DRIVE_MOTOR_D;
+      m_driveMotorSettings.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+      m_driveMotor.getConfigurator().apply(m_driveMotorSettings);
       m_driveMotor.getConfigurator().apply(driveConfig);
 
       m_rotationMotor = rotationMotor;
       m_rotationMotorSettings = rotationMotorSettings;
       m_rotationMotor.setNeutralMode(NeutralModeValue.Brake);
       m_rotationMotorSettings.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+      m_rotationMotor.getConfigurator().apply(m_rotationMotorSettings);
 
       m_encoderOffset = encoderOffset;
 

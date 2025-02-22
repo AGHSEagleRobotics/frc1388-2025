@@ -5,31 +5,23 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ElevatorSubsystemConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkClosedLoopController;
 import au.grapplerobotics.LaserCan;
 
 
 public class ElevatorSubsystem extends SubsystemBase {
-  /** Creates a new ElevatorSubsystem. */
 
-  // Bottom sparkmax canid: 8 on left side looking at the motor
-  // Top sparkmax canid: 7 on the right side
-  //positive goes up negative goes down
-  // bottom limit switch is DIO 8 top is 9
-  SparkMax m_rightMotor;
-  SparkMax m_leftMotor;
+  SparkFlex m_motor;
   DigitalInput m_topLimitSwitch;
   DigitalInput m_bottomLimitSwitch;
   LaserCan m_laserCan;
@@ -56,7 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     LEVEL1(5),
     LEVEL2(15),
     LEVEL3(25),
-    LEVEL4(35);
+    LEVEL4(50.5);
 
     private double setpoint;
 
@@ -69,16 +61,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
 
-  public ElevatorSubsystem(SparkMax rightMotor, SparkMax leftMotor, DigitalInput topLimitSwitch, DigitalInput bottomLimitSwitch, LaserCan laserCan) {
-    m_rightMotor = rightMotor;
-    m_leftMotor = leftMotor;
+  /** Creates a new ElevatorSubsystem. */
+  public ElevatorSubsystem(SparkFlex motor, DigitalInput topLimitSwitch, DigitalInput bottomLimitSwitch, LaserCan laserCan) {
+    m_motor = motor;
     m_topLimitSwitch = topLimitSwitch;
     m_bottomLimitSwitch = bottomLimitSwitch;
     m_laserCan = laserCan;
-    m_elevatorEncoder = rightMotor.getEncoder();
-    m_elevatorEncoder = leftMotor.getEncoder();
+    m_elevatorEncoder = motor.getEncoder();
   
     m_elevatorController.setTolerance(ElevatorSubsystemConstants.kElevatorTolerance);
+
+    SparkFlexConfig motorConfig = new SparkFlexConfig();
+    motorConfig.idleMode(IdleMode.kBrake);
+    boolean isInverted = false;
+    motorConfig.inverted(isInverted);
+    motorConfig.encoder.positionConversionFactor(ElevatorSubsystemConstants.kCarriageInchesPerMotorRotation);
+    m_motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void moveElevator(double power) {
@@ -101,8 +99,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
       SmartDashboard.putNumber("elevator/moveElevatorPower", power);
       //driving the motors
-      m_leftMotor.set(power);
-      m_rightMotor.set(power);
+      m_motor.set(power);
       // System.out.println("power = " + power);
   }
 
@@ -136,14 +133,12 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   public double getElevatorHeight() {
     // return getLaserCanHeight();
-    double height = m_elevatorEncoder.getPosition();
-    //  / ElevatorSubsystemConstants.kTicksPerInch;
-    return height;
+    return getMotorEncoderHeight();
   }
-
-  // public double getMotorEncoderHeight() {
-    
-  // }
+  
+  private double getMotorEncoderHeight() {
+    return m_elevatorEncoder.getPosition();
+  }
 
   // public double getLaserCanHeight() {
   //   return (m_laserCan.getMeasurement().distance_mm) * ElevatorSubsystemConstants.kInchesPerMillimeters;

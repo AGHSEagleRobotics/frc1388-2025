@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import choreo.trajectory.SwerveSample;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
@@ -58,6 +60,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   private double m_gyroOffset = 0;
 
+  private final PIDController xController = new PIDController(10.0, 0.0, 0.0);
+  private final PIDController yController = new PIDController(10.0, 0.0, 0.0);
+  private final PIDController headingController = new PIDController(7.5, 0.0, 0.0);
+
   // these are the translations from the center of rotation of the robot to the center of rotation of each swerve module
   private final Translation2d m_frontRightTranslation = new Translation2d(ROBOT_WHEEL_BASE / 2, -ROBOT_TRACK_WIDTH / 2);
   private final Translation2d m_frontLeftTranslation = new Translation2d(ROBOT_WHEEL_BASE / 2, ROBOT_TRACK_WIDTH / 2);
@@ -83,7 +89,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
   private SwerveDrivePoseEstimator m_odometry;
 
   private final Limelight m_limelight;
-  private final Pigeon2 m_pigeon2;
+  private final Pigeon2 m_pigeonGyro;
+  // private final AHRS m_navxGyro;
 
   /** Creates a new DriveTrainSubsystem. */
   public DriveTrainSubsystem(SwerveModule frontRight, SwerveModule frontLeft, SwerveModule backLeft, SwerveModule backRight, Pigeon2 gyro, Limelight limelight) {
@@ -93,14 +100,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backLeft = backLeft;
     m_backRight = backRight;
 
-    m_pigeon2 = gyro;
+    m_pigeonGyro = gyro;
     m_limelight = limelight;
     
     //gyro and odometry setup code I copied from a youtube video <br> https://www.youtube.com/watch?v=0Xi9yb1IMyA
     new Thread(() -> {
       try {
         Thread.sleep(1000);
-        m_pigeon2.reset();
+        m_pigeonGyro.reset();
         m_odometry = new SwerveDrivePoseEstimator(
             m_kinematics,
             getGyroHeading(),
@@ -135,7 +142,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
   /** the drive method takes in an x and y velocity in meters / second, and a rotation rate in radians / second */
   public void drive(double xVelocity, double yVelocity, double omega) {
     m_robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getGyroHeading());
-    // m_robotRelativeSpeeds = ChassisSpeeds.discretize(xVelocity, yVelocity, omega, DriveTrainConstants.DT_SECONDS);
+    // m_robotRelativeSpeeds = ChassisSpeeds.discretize(xVelocity, yVelocity, omega,
+    // DriveTrainConstants.DT_SECONDS);
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_robotRelativeSpeeds);
 
     // optimises wheel heading direction changes.
@@ -169,7 +177,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getGyroHeading() {
-    if (m_pigeon2.isConnected()) {
+    if (m_pigeonGyro.isConnected()) {
       // return new Rotation2d(Math.toRadians(Math.IEEEremainder(-m_navxGyro.getAngle(), 360)));
       return new Rotation2d(Math.toRadians(getAngle()));
     }
@@ -178,7 +186,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   public void resetGyroHeading(double offset) {
     m_gyroOffset = offset;
-    m_pigeon2.reset();
+    m_pigeonGyro.reset();
   }
 
   public void swerveOnlyResetPose(Pose2d pose) {
@@ -200,6 +208,18 @@ public class DriveTrainSubsystem extends SubsystemBase {
     return new Pose2d(0, 0, getGyroHeading());
   }
 
+  public void resetPose(Pose2d pose) {
+    SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[] {
+      m_frontRight.getPosition(),
+      m_frontLeft.getPosition(),
+      m_backLeft.getPosition(),
+      m_backRight.getPosition()
+  };
+    if(m_odometry != null) {
+      m_odometry.resetPosition(getGyroHeading(), swerveModulePositions, pose);
+    }
+  }
+
   public ChassisSpeeds getRobotRelativeSpeeds() {
     return m_robotRelativeSpeeds;
   }
@@ -207,6 +227,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   public void driveRobotRelative(ChassisSpeeds speeds) {
     // speeds.vxMetersPerSecond = -speeds.vxMetersPerSecond;
     // speeds.vyMetersPerSecond = -speeds.vyMetersPerSecond;
+    m_robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getGyroHeading());
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveTrainConstants.ROBOT_MAX_SPEED);
     //check desaturate constants
@@ -216,6 +237,35 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backRight.setSwerveModuleStates(states[3]);
 
     }
+
+    public void driveFieldRelative(ChassisSpeeds speeds) {
+      // speeds.vxMetersPerSecond = -speeds.vxMetersPerSecond;
+      // speeds.vyMetersPerSecond = -speeds.vyMetersPerSecond;
+      SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
+      SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveTrainConstants.ROBOT_MAX_SPEED);
+      //check desaturate constants
+      m_frontRight.setSwerveModuleStates(states[0]);
+      m_frontLeft.setSwerveModuleStates(states[1]);
+      m_backLeft.setSwerveModuleStates(states[2]);
+      m_backRight.setSwerveModuleStates(states[3]);
+  
+      }
+
+    public void followTrajectory(SwerveSample trajectory) {
+        // Get the current pose of the robot
+        Pose2d pose = getPose();
+
+        // Generate the next speeds for the robot
+        ChassisSpeeds speeds = new ChassisSpeeds(
+            trajectory.vx + xController.calculate(pose.getX(), trajectory.x),
+            trajectory.vy + yController.calculate(pose.getY(), trajectory.y),
+            trajectory.omega + headingController.calculate(pose.getRotation().getRadians(), trajectory.heading)
+        );
+
+        // Apply the generated speeds
+        driveFieldRelative(speeds);
+    }
+
 
   public double getDistTraveled() {
     return m_frontRight.getPosition().distanceMeters;
@@ -297,7 +347,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 
   public double getAngle() {
-    if (m_pigeon2.isConnected()) {
+    if (m_pigeonGyro.isConnected()) {
       double angle = (getRawGyroAngle() + m_gyroOffset) % 360;
       if (angle < 0) {
         angle += 360;
@@ -308,8 +358,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
   }
 
   public double getRawGyroAngle () {
-    if (m_pigeon2.isConnected()) {
-      return -m_pigeon2.getYaw().getValueAsDouble();
+    if (m_pigeonGyro.isConnected()) {
+      return -m_pigeonGyro.getYaw().getValueAsDouble();
     }
     return 0;
   }
@@ -420,15 +470,15 @@ public boolean shouldResetPoseMegaTag2() {
       }
 
       m_odometry.updateWithTime(
-          Timer.getFPGATimestamp(),
-          getGyroHeading(),
-          new SwerveModulePosition[] {
-              m_frontRight.getPosition(),
-              m_frontLeft.getPosition(),
-              m_backLeft.getPosition(),
-              m_backRight.getPosition()
+        Timer.getFPGATimestamp(),
+        getGyroHeading(),
+        new SwerveModulePosition[] {
+            m_frontRight.getPosition(),
+            m_frontLeft.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
           });
-    }
+        }
     SmartDashboard.putNumber("Limelight ODO X", odomTag2[0]);
     SmartDashboard.putNumber("Limelight ODO Y", odomTag2[1]);
 

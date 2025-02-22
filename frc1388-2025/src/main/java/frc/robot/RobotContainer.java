@@ -11,14 +11,12 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.SerialPort;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.EndEffectorCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
@@ -27,13 +25,14 @@ import frc.robot.Constants.RobotContainerConstants;
 import frc.robot.commands.AutoAllign;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
+import com.revrobotics.spark.SparkFlex;
 import frc.robot.vision.Limelight;
-
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -42,6 +41,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private final Dashboard m_dashboard = new Dashboard();
 
   private final Limelight m_limeLight = new Limelight("limelight-shooter", "limelight-intake");
   
@@ -49,36 +49,36 @@ public class RobotContainer {
           new SwerveModule(
               new TalonFX(DriveTrainConstants.FRONT_RIGHT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.FRONT_RIGHT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(), 
+              new TalonFXConfiguration(), new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.FRONT_RIGHT_CANCODER),
               Preferences.getDouble(DriveTrainConstants.FRONT_RIGHT_ENCODER_OFFSET_KEY, 0)),
           new SwerveModule(
               new TalonFX(DriveTrainConstants.FRONT_LEFT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.FRONT_LEFT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(), 
+              new TalonFXConfiguration(), new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.FRONT_LEFT_CANCODER),
                             Preferences.getDouble(DriveTrainConstants.FRONT_LEFT_ENCODER_OFFSET_KEY, 0)),
           new SwerveModule(
               new TalonFX(DriveTrainConstants.BACK_LEFT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.BACK_LEFT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(),
+              new TalonFXConfiguration(), new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.BACK_LEFT_CANCODER),
                             Preferences.getDouble(DriveTrainConstants.BACK_LEFT_ENCODER_OFFSET_KEY, 0)),
           new SwerveModule(
               new TalonFX(DriveTrainConstants.BACK_RIGHT_DRIVE_MOTOR_CANID),
               new TalonFX(DriveTrainConstants.BACK_RIGHT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(),
+              new TalonFXConfiguration(), new TalonFXConfiguration(),
               new CANcoder(DriveTrainConstants.BACK_RIGHT_CANCODER),
               Preferences.getDouble(DriveTrainConstants.BACK_RIGHT_ENCODER_OFFSET_KEY, 0)),
+
           new Pigeon2(13), m_limeLight
       );
 
       ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(
-        new SparkMax(RobotContainerConstants.kElevatorMotorCANIDR, MotorType.kBrushless), //rightmotor
-        new SparkMax(RobotContainerConstants.kElevatorMotorCANIDL, MotorType.kBrushless), //leftmotor
-        new DigitalInput(RobotContainerConstants.kElevatorTopLimitChannel), //toplimitswitch
-        new DigitalInput(RobotContainerConstants.kElevatorBottomLimitChannel), //bottomlimitswitch
-        new LaserCan(RobotContainerConstants.kLaserCanCANID)
+        new SparkFlex(Constants.RobotContainerConstants.kElevatorMotorCANID, MotorType.kBrushless), // motor
+        new DigitalInput(Constants.RobotContainerConstants.kElevatorTopLimitChannel), //toplimitswitch
+        new DigitalInput(Constants.RobotContainerConstants.kElevatorBottomLimitChannel), //bottomlimitswitch
+        new LaserCan(Constants.RobotContainerConstants.kLaserCanCANID)
       );
 
       EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem(
@@ -89,6 +89,7 @@ public class RobotContainer {
       ElevatorCommand m_elevatorCommand;
       EndEffectorCommand m_endEffectorCommand;
 
+      private final AutoMethod m_autoMethod;
   private final boolean robot2025 = true;
       private final CommandXboxController m_driverController = new CommandXboxController(ControllerConstants.DRIVER_CONTROLLER_PORT);
       private final CommandXboxController m_operatorController = new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
@@ -96,7 +97,10 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */ 
   public RobotContainer() {
 
-     m_driveCommand = new DriveCommand(
+
+    m_autoMethod = new AutoMethod(m_driveTrain, m_dashboard);
+
+    DriveCommand m_driveCommand = new DriveCommand(
         m_driveTrain,
         () -> m_driverController.getLeftY(),
         () -> m_driverController.getLeftX(),
@@ -143,6 +147,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // Silence warnings if controllers aren't plugged in
+    DriverStation.silenceJoystickConnectionWarning(true);
+
     m_driverController.b().whileTrue(new AutoAllign(m_driveTrain));
   }
 
@@ -161,5 +168,9 @@ public class RobotContainer {
   // if (robot2025) {
   //   m_driverController.rightTrigger().whileTrue(m_endEffectorCommand);
   // }
+  }
+
+  public Command getAutonomousCommand() {
+    return m_autoMethod.getAutonomousCommand();
   }
 }
