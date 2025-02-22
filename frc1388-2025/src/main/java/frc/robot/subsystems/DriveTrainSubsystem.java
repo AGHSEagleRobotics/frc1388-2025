@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.kauailabs.navx.frc.AHRS;
 
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.controller.PIDController;
@@ -90,7 +89,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   private SwerveDrivePoseEstimator m_odometry;
 
   private final Limelight m_limelight;
-  private final Pigeon2 m_navxGyro;
+  private final Pigeon2 m_pigeonGyro;
   // private final AHRS m_navxGyro;
 
   /** Creates a new DriveTrainSubsystem. */
@@ -101,14 +100,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backLeft = backLeft;
     m_backRight = backRight;
 
-    m_navxGyro = gyro;
+    m_pigeonGyro = gyro;
     m_limelight = limelight;
     
     //gyro and odometry setup code I copied from a youtube video <br> https://www.youtube.com/watch?v=0Xi9yb1IMyA
     new Thread(() -> {
       try {
         Thread.sleep(1000);
-        m_navxGyro.reset();
+        m_pigeonGyro.reset();
         m_odometry = new SwerveDrivePoseEstimator(
             m_kinematics,
             getGyroHeading(),
@@ -178,7 +177,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getGyroHeading() {
-    if (m_navxGyro.isConnected()) {
+    if (m_pigeonGyro.isConnected()) {
       // return new Rotation2d(Math.toRadians(Math.IEEEremainder(-m_navxGyro.getAngle(), 360)));
       return new Rotation2d(Math.toRadians(getAngle()));
     }
@@ -187,7 +186,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   public void resetGyroHeading(double offset) {
     m_gyroOffset = offset;
-    m_navxGyro.reset();
+    m_pigeonGyro.reset();
   }
 
   public void swerveOnlyResetPose(Pose2d pose) {
@@ -348,20 +347,20 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 
   public double getAngle() {
-    // if (m_navxGyro.isConnected()) {
-    //   double angle = (getRawGyroAngle() + m_gyroOffset) % 360;
-    //   if (angle < 0) {
-    //     angle += 360;
-    //   }
-    //   return angle;
-    // }
+    if (m_pigeonGyro.isConnected()) {
+      double angle = (getRawGyroAngle() + m_gyroOffset) % 360;
+      if (angle < 0) {
+        angle += 360;
+      }
+      return angle;
+    }
     return 0;
   }
 
   public double getRawGyroAngle () {
-    // if (m_navxGyro.isConnected()) {
-    //   return -m_navxGyro.getAngle();
-    // }
+    if (m_pigeonGyro.isConnected()) {
+      return -m_pigeonGyro.getYaw().getValueAsDouble();
+    }
     return 0;
   }
 
