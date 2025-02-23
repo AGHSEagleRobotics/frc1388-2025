@@ -37,6 +37,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import au.grapplerobotics.LaserCan;
+import choreo.auto.AutoRoutine;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -51,7 +52,7 @@ public class RobotContainer {
   private final Dashboard m_dashboard = new Dashboard();
 
   private final Limelight m_limeLight = new Limelight("limelight-front", "limelight-back");
-  
+
     private final DriveTrainSubsystem m_driveTrain = new DriveTrainSubsystem(
           new SwerveModule(
               new TalonFX(DriveTrainConstants.FRONT_RIGHT_DRIVE_MOTOR_CANID),
@@ -109,8 +110,7 @@ public class RobotContainer {
   public RobotContainer() {
 
 
-    m_autoMethod = new AutoMethod(m_driveTrain, m_dashboard);
-
+    m_autoMethod = new AutoMethod(m_driveTrain, m_elevatorSubsystem, m_endEffectorSubsystem, m_dashboard);
     DriveCommand m_driveCommand = new DriveCommand(
         m_driveTrain,
         () -> m_driverController.getLeftY(),
@@ -188,7 +188,7 @@ public class RobotContainer {
   // }
   }
 
-  public Command getAutonomousCommand() {
+  public AutoRoutine getAutonomousCommand() {
     return m_autoMethod.getAutonomousCommand();
   }
 }

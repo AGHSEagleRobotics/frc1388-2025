@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -10,8 +11,10 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotController.RadioLEDState;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import au.grapplerobotics.CanBridge;
+import choreo.auto.AutoRoutine;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -22,7 +25,7 @@ public class Robot extends TimedRobot {
   private int m_userButtonCounter = 0;
 
   private final RobotContainer m_robotContainer;
-  // private Command m_autonomousCommand;
+  private AutoRoutine m_autonomousCommand;
 
   private Timer m_neutralModeTimer = new Timer();
 
@@ -122,17 +125,17 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     DataLogManager.log("####### Autonomous Init");
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     DataLogManager.log("setting neutral mode");
     m_robotContainer.setBrakeMode(true);
     DataLogManager.log("done setting neutral mode");
 
-    // // schedule the autonomous command
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    //   System.out.println("starting auto command");
-    // }
+    // schedule the autonomous command
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+      System.out.println("starting auto command");
+    }
 
 
     // Get match info from FMS

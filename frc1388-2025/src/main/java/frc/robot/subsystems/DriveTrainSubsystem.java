@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.Constants.RobotConstants;
@@ -455,6 +456,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
   //   }
   // }
 
+  public void stopDriveTrain () {
+     drive(0, 0, 0);
+  }
+
 
   @Override
   public void periodic() {
@@ -546,6 +551,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("drivetrain/frontLeft encoder angle", m_frontLeft.getRotationAngle());
     SmartDashboard.putNumber("drivetrain/backLeft encoder angle", m_backLeft.getRotationAngle());
     SmartDashboard.putNumber("drivetrain/backRight encoder angle", m_backRight.getRotationAngle());
+
+
 
     publisher.set(getPose());
 

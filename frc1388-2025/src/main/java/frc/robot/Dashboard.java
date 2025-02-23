@@ -26,7 +26,6 @@ public class Dashboard extends SubsystemBase {
       Shuffleboard.selectTab(SHUFFLEBOARD_TAB_NAME);
 
 
-
       for (AutoConstants.Objective o : Objective.values()) {
         m_autoObjective.addOption(o.getDashboardDescript(), o);
       }

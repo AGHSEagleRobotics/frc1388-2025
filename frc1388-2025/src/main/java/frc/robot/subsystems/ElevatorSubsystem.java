@@ -44,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // LEVEL4(72);
 
     //values are in inches
-    LEVEL1(5),
+    LEVEL1(0),
     LEVEL2(10),
     LEVEL3(25),
     LEVEL4(50.5);
