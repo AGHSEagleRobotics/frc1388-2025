@@ -50,7 +50,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 public class RobotContainer {
   private final Dashboard m_dashboard = new Dashboard();
 
-  private final Limelight m_limeLight = new Limelight("limelight-shooter", "limelight-intake");
+  private final Limelight m_limeLight = new Limelight("limelight-front", "limelight-back");
   
     private final DriveTrainSubsystem m_driveTrain = new DriveTrainSubsystem(
           new SwerveModule(
@@ -84,8 +84,7 @@ public class RobotContainer {
       ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(
         new SparkFlex(Constants.RobotContainerConstants.kElevatorMotorCANID, MotorType.kBrushless), // motor
         new DigitalInput(Constants.RobotContainerConstants.kElevatorTopLimitChannel), //toplimitswitch
-        new DigitalInput(Constants.RobotContainerConstants.kElevatorBottomLimitChannel), //bottomlimitswitch
-        new LaserCan(Constants.RobotContainerConstants.kLaserCanCANID)
+        new DigitalInput(Constants.RobotContainerConstants.kElevatorBottomLimitChannel) //bottomlimitswitch
       );
 
       ClimberSubsystem m_climberSubsystem = new ClimberSubsystem(
@@ -132,7 +131,7 @@ public class RobotContainer {
 
     m_climberCommand = new ClimberCommand(
       m_climberSubsystem, 
-      () -> m_operatorController.getLeftY(), 
+      () -> m_operatorController.getRightY(), 
       () -> m_operatorController.getHID().getPOV() == 0, 
       () -> m_operatorController.getHID().getPOV() == 180);
     m_climberSubsystem.setDefaultCommand(m_climberCommand);
@@ -169,7 +168,7 @@ public class RobotContainer {
     // Silence warnings if controllers aren't plugged in
     DriverStation.silenceJoystickConnectionWarning(true);
 
-    m_driverController.b().whileTrue(new AutoAllign(m_driveTrain));
+    m_driverController.leftBumper().whileTrue(new AutoAllign(m_driveTrain));
   }
 
   public void setAllEncoderOffsets() {

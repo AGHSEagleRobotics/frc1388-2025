@@ -14,15 +14,15 @@ import frc.robot.subsystems.ClimberSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimberCommand extends Command {
   private final ClimberSubsystem m_climberSubsystem;
-  private final Supplier<Double> m_leftY; 
+  private final Supplier<Double> m_rightY; 
   private final Supplier<Boolean> m_DPadUp;
   private final Supplier<Boolean> m_DPadDown;
   private boolean m_autoMode = false;
 
   /** Creates a new ClimberCommand. */
-  public ClimberCommand(ClimberSubsystem climberSubsystem, Supplier<Double> leftY, Supplier<Boolean> DPadUp, Supplier<Boolean> DPadDown) {
+  public ClimberCommand(ClimberSubsystem climberSubsystem, Supplier<Double> rightY, Supplier<Boolean> DPadUp, Supplier<Boolean> DPadDown) {
     m_climberSubsystem = climberSubsystem;
-    m_leftY = leftY;
+    m_rightY = rightY;
     m_DPadUp = DPadUp;
     m_DPadDown = DPadDown;
 
@@ -37,7 +37,7 @@ public class ClimberCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftY = MathUtil.applyDeadband(-m_leftY.get(), ClimberConstants.CLIMBER_CONTROLLER_DEADBAND);
+    double rightY = MathUtil.applyDeadband(m_rightY.get(), ClimberConstants.CLIMBER_CONTROLLER_DEADBAND);
     if(m_DPadDown.get()) {
       m_autoMode = true;
       m_climberSubsystem.setSetpoint(ClimberConstants.CLIMBER_DOWN_POSITION);
@@ -46,11 +46,11 @@ public class ClimberCommand extends Command {
       m_autoMode = true;
       m_climberSubsystem.setSetpoint(ClimberConstants.CLIMBER_UP_POSITION);
     }
-    else if (leftY > 0 || leftY < 0) {
+    else if (rightY > 0 || rightY < 0) {
       m_autoMode = false;
-      m_climberSubsystem.setManualPower(leftY);
+      m_climberSubsystem.setManualPower(rightY);
     } 
-    else if (!m_autoMode && leftY == 0) {
+    else if (!m_autoMode && rightY == 0) {
         m_autoMode = true;
         // m_elevatorSubsystem.setManualPower(0);
         m_climberSubsystem.setSetpointToCurrentPosition();

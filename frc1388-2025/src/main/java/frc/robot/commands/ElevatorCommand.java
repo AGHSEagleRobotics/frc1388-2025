@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.ElevatorCommandConstants;
+import frc.robot.Constants.ElevatorSubsystemConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorSetPoints;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -24,6 +25,7 @@ public class ElevatorCommand extends Command {
     private final Supplier<Boolean> m_y;
     private boolean m_autoMode = false;
     private boolean m_isInitialized = false;
+    private boolean m_manualMode = false;
   /** Creates a new ElevatorCommand. */
   public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, Supplier<Double> leftY, Supplier<Boolean> a, Supplier<Boolean> b, Supplier<Boolean> x, Supplier<Boolean> y) {
     m_elevatorSubsystem = elevatorSubsystem;
@@ -75,8 +77,12 @@ public class ElevatorCommand extends Command {
     else if (!m_autoMode && leftY == 0) {
       if (m_isInitialized) {
         m_autoMode = true;
+        m_manualMode = true;
         // m_elevatorSubsystem.setManualPower(0);
-        m_elevatorSubsystem.setSetpointToCurrentPosition();
+        if(m_manualMode) {
+          m_elevatorSubsystem.setSetpointToCurrentPosition();
+          m_manualMode = false;
+        }
       }
     }
 

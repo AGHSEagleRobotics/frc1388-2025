@@ -81,9 +81,19 @@ public class Limelight {
     return m_tx;
   }
 
-  public double[] getBotPose() {
+  public double[] getBotPoseFront() {
     double[] botPose;
       botPose = m_placerSideTable.getEntry("botpose_wpiblue").getDoubleArray(new double[] {});
+
+        if (botPose.length >= 18) {
+        return botPose;
+        }
+        return botPose0;
+  }
+
+  public double[] getBotPoseBack() {
+    double[] botPose;
+      botPose = m_intakeSideTable.getEntry("botpose_wpiblue").getDoubleArray(new double[] {});
 
         if (botPose.length >= 18) {
         return botPose;
@@ -99,9 +109,19 @@ public class Limelight {
     }
   }
 
-  public double[] getMegaTag2() {
+  public double[] getMegaTag2Front() {
     double[] botPose;
       botPose = m_placerSideTable.getEntry("botpose_orb_wpiblue").getDoubleArray(new double[] {});
+
+        if (botPose.length >= 3) {
+        return botPose;
+        }
+        return botPose0;
+  }
+
+  public double[] getMegaTag2Back() {
+    double[] botPose;
+      botPose = m_intakeSideTable.getEntry("botpose_orb_wpiblue").getDoubleArray(new double[] {});
 
         if (botPose.length >= 3) {
         return botPose;

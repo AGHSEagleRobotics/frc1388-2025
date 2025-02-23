@@ -9,6 +9,7 @@ import com.revrobotics.spark.SparkFlex;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorSetPoints;
@@ -36,15 +37,15 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void moveClimber(double power) {
     double powerLimit = ClimberConstants.CLIMBER_POWER_LIMIT;
-    if ((isAtTopLimit() && power > 0)) {
+    if ((isAtTopLimit() && power < 0)) {
       power = 0;
-    } else if (isAtBottomLimit() && power < 0) {
+    } else if (isAtBottomLimit() && power > 0) {
       power = 0;
     }
     power = MathUtil.clamp(power,
         -(powerLimit),
           powerLimit);
-    m_climbMotor.set(power);
+    m_climbMotor.set(-power);
   }
 
   public double getPosition() {
@@ -67,7 +68,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public boolean isAtTopLimit() {
-    if (getPosition() >= ClimberConstants.TOP_LIMIT) {
+    if (getPosition() <= ClimberConstants.TOP_LIMIT) {
       return true;
     } else {
       return false;
@@ -75,7 +76,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public boolean isAtBottomLimit() {
-    if (getPosition() <= ClimberConstants.BOTTOM_LIMIT) {
+    if (getPosition() >= ClimberConstants.BOTTOM_LIMIT) {
       return true;
     } else {
       return false;
@@ -100,5 +101,10 @@ public class ClimberSubsystem extends SubsystemBase {
         speed = m_manualPower;
       }
       moveClimber(speed);
+      SmartDashboard.putNumber("climber/Climber Position", getPosition());
+      SmartDashboard.putNumber("climber/Power Output", speed);
+      SmartDashboard.putBoolean("climber/isAtTopLimit", isAtTopLimit());
+      SmartDashboard.putBoolean("climber/isAtBottomLimit", isAtBottomLimit());
   }
+  
 }

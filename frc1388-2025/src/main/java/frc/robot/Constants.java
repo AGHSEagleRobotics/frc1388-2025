@@ -35,7 +35,7 @@ public final class Constants {
     public static final double DRIVE_MOTOR_I = 0;
     public static final double DRIVE_MOTOR_D = 0;
 
-    public static final double ROTATION_MOTOR_P = 0.007;
+    public static final double ROTATION_MOTOR_P = 0.009; //0.007
     public static final double ROTATION_MOTOR_I = 0;
     public static final double ROTATION_MOTOR_D = 0;
 
@@ -43,17 +43,18 @@ public final class Constants {
   }
 
   public static class ElevatorSubsystemConstants {
-    public static final double kElevatorPowerLimit = 0.5;
+    public static final double kElevatorPowerLimit = 1;
+    public static final double kElevatorPowerLimitDown = 0.4;
     public static final double kElevatorEndRangePowerLimit = 0.1;
 
     public static final double kElevatorEndRange = 5.25; //inches 2
     public static final double kElevatorMaxHeight = 50.5; //inches
-    public static final double kElevatorTopEndRange = kElevatorMaxHeight - kElevatorEndRange; //inches
+    public static final double kElevatorTopEndRange = kElevatorMaxHeight - 6.5; //inches
     public static final double kElevatorBottomEndRange = kElevatorEndRange; //inches
 
     public static final double kElevatorTolerance = 0;
 
-    public static final double kElevatorPIDP = 0.185;
+    public static final double kElevatorPIDP = 0.085;
     public static final double kElevatorPIDI = 0;
     public static final double kElevatorPIDD = 0;
 
@@ -65,6 +66,10 @@ public final class Constants {
     public static final double kSprocketCircumference = kChainPitch * kSprocketToothCount;  // inches
     public static final double kChainInchesPerMotorRotation = kSprocketCircumference / kGearboxRatio;
     public static final double kCarriageInchesPerMotorRotation = kChainInchesPerMotorRotation * 2;  // carriage moves twice the rate of
+
+    public static final double kSecondsPerMinute = 60;
+    public static final double kDistancePerVelocityScale = kCarriageInchesPerMotorRotation / kSecondsPerMinute;
+    public static final double kElevatorOffsetAccountSpeed = 0.5;
   }
   
   public static class ElevatorCommandConstants {
@@ -72,15 +77,15 @@ public final class Constants {
   }
   
   public static class EndEffectorSubsystemConstants {
-    public static final double kCoralDetectionHeight = 2; //in inches
+    public static final double kCoralDetectionHeight = 4; //in inches
     public static final double kInchesPerMillimeters = 1 / 25.4;
     //TODO create constants for endeffectorsubsystem and commands
   }
 
   public static class EndEffectorCommandConstants {
     public static final double kRightTriggerPressed = 0.1;
-    public static final double kIntakeCoralPower = 0.1;
-    public static final double kShootCoralPower = 0.1;    
+    public static final double kIntakeCoralPower = 0.4;
+    public static final double kShootCoralPower = 0.6;    
     public static final double kIntakeKillDelay = 0.1; //in seconds    
 
     public static final double kGearboxRatio = 9.0;       // input to output gear reduction
@@ -171,15 +176,15 @@ public final class Constants {
     public static final double HIGHER_PERCENTAGE_ABSOLUTE_ENCODER =  1023.0/1024.0;
     public static final double DEGREES_PER_ROTATION = 360;
 
-    public static final double BOTTOM_LIMIT = 0;
-    public static final double TOP_LIMIT = 0;
+    public static final double BOTTOM_LIMIT = 0.8;
+    public static final double TOP_LIMIT = 0.3;
 
     public static final double CLIMBER_CONTROLLER_DEADBAND = 0.1;
 
     public static final double CLIMBER_UP_POSITION = 0;
     public static final double CLIMBER_DOWN_POSITION = 0;
 
-    public static final double CLIMBER_POWER_LIMIT = 0;
+    public static final double CLIMBER_POWER_LIMIT = 0.2;
 
     public static final double CLIMBER_ABSOLUTE_ENCODER_OFFSET = 0;
   }

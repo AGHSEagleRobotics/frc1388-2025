@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EndEffectorSubsystemConstants;
 
 import com.revrobotics.spark.SparkMax;
+
+import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 
 
@@ -19,10 +21,15 @@ public class EndEffectorSubsystem extends SubsystemBase {
   public EndEffectorSubsystem(SparkMax endEffectorMotor, LaserCan laserCAN) {
     m_endEffectorMotor = endEffectorMotor;
     m_laserCAN = laserCAN;
+    try {
+      m_laserCAN.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);
+    } catch (ConfigurationFailedException e) {
+      System.out.println("Configuration failed! " + e);
+    }
   }
 
 private void RunEndEffector(double power) {
-  m_endEffectorMotor.set(power);
+  m_endEffectorMotor.set(-power);
 }
 
 public void IntakeCoral(double power) {
@@ -58,6 +65,7 @@ public boolean isCoralDetected() {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("endeffector/coralheight", getCoralHeight());
+    SmartDashboard.putBoolean("endeffector/isCoralDetected", isCoralDetected());
 
     // This method will be called once per scheduler run
     // if (isAtEffectorLimit()) {

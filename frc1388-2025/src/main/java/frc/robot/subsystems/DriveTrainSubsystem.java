@@ -45,8 +45,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(); 
 
-  private VisionAcceptor visionAcceptorGyro = new VisionAcceptor(false);
-  private VisionAcceptor visionAcceptorMegaTag2 = new VisionAcceptor(true);
+  private VisionAcceptor visionAcceptorGyroFront = new VisionAcceptor(false);
+  private VisionAcceptor visionAcceptorGyroBack = new VisionAcceptor(false);
+  private VisionAcceptor visionAcceptorMegaTag2Front = new VisionAcceptor(true);
+  private VisionAcceptor visionAcceptorMegaTag2Back = new VisionAcceptor(true);
   private VisionAcceptor visionAcceptor = new VisionAcceptor(false);
 
   private ChassisSpeeds m_robotRelativeSpeeds = new ChassisSpeeds();
@@ -141,10 +143,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   /** the drive method takes in an x and y velocity in meters / second, and a rotation rate in radians / second */
   public void drive(double xVelocity, double yVelocity, double omega) {
-    m_robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getGyroHeading());
+    ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getGyroHeading());
     // m_robotRelativeSpeeds = ChassisSpeeds.discretize(xVelocity, yVelocity, omega,
     // DriveTrainConstants.DT_SECONDS);
-    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_robotRelativeSpeeds);
+    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(robotRelativeSpeeds);
 
     // optimises wheel heading direction changes.
     SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveTrainConstants.ROBOT_MAX_SPEED);
@@ -271,8 +273,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
     return m_frontRight.getPosition().distanceMeters;
   }
 
-  public void limelightResetGyro() {
-    double[] botPose = m_limelight.getBotPose();
+  public void limelightResetGyroFront() {
+    double[] botPose = m_limelight.getBotPoseFront();
+    m_gyroOffset = botPose[5] - getRawGyroAngle();
+  }
+
+  public void limelightResetGyroBack() {
+    double[] botPose = m_limelight.getBotPoseBack();
     m_gyroOffset = botPose[5] - getRawGyroAngle();
   }
 
@@ -359,7 +366,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   public double getRawGyroAngle () {
     if (m_pigeonGyro.isConnected()) {
-      return -m_pigeonGyro.getYaw().getValueAsDouble();
+      return m_pigeonGyro.getYaw().getValueAsDouble();
     }
     return 0;
   }
@@ -390,21 +397,45 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backRight.setBrakeMode(brakeMode);
   }
 
-public boolean shouldResetPoseMegaTag2() {
-    boolean acceptMegaTag2 = false;
-    double[] odomTag2 = m_limelight.getMegaTag2();
+  public boolean shouldResetPoseMegaTag2Front() {
+      boolean acceptMegaTag2 = false;
+      double[] odomTag2 = m_limelight.getMegaTag2Front();
+      Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
+          getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
+      Pose2d megaTag2 = new Pose2d(odomTag2[0], odomTag2[1], getGyroHeading());
+      if (m_limelight.getApriltagTargetFound()) {
+        acceptMegaTag2 = visionAcceptorMegaTag2Front.shouldAccept(megaTag2, robotSpeeds);
+      }
+      return acceptMegaTag2;
+    }
+
+    public boolean shouldResetPoseMegaTag2Back() {
+      boolean acceptMegaTag2 = false;
+      double[] odomTag2 = m_limelight.getMegaTag2Back();
+      Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
+          getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
+      Pose2d megaTag2 = new Pose2d(odomTag2[0], odomTag2[1], getGyroHeading());
+      if (m_limelight.getApriltagTargetFound()) {
+        acceptMegaTag2 = visionAcceptorMegaTag2Back.shouldAccept(megaTag2, robotSpeeds);
+      }
+      return acceptMegaTag2;
+    }
+
+  public boolean shouldResetGyroFront() {
+    boolean acceptPose = false;
+    double[] botPose = m_limelight.getBotPoseFront();
     Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
         getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
-    Pose2d megaTag2 = new Pose2d(odomTag2[0], odomTag2[1], getGyroHeading());
+    Pose2d megaTag1 = new Pose2d(botPose[0], botPose[1], getGyroHeading());
     if (m_limelight.getApriltagTargetFound()) {
-      acceptMegaTag2 = visionAcceptorMegaTag2.shouldAccept(megaTag2, robotSpeeds);
+      acceptPose = visionAcceptor.shouldAccept(megaTag1, robotSpeeds);
     }
-    return acceptMegaTag2;
+    return acceptPose;
   }
 
-  public boolean shouldResetGyro() {
+  public boolean shouldResetGyroBack() {
     boolean acceptPose = false;
-    double[] botPose = m_limelight.getBotPose();
+    double[] botPose = m_limelight.getBotPoseBack();
     Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
         getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
     Pose2d megaTag1 = new Pose2d(botPose[0], botPose[1], getGyroHeading());
@@ -434,16 +465,22 @@ public boolean shouldResetPoseMegaTag2() {
     m_backRight.periodic();
 
     boolean acceptPose = false;
-    boolean acceptMegaTag2 = false;
-    boolean acceptGyro = false;
+    boolean acceptMegaTag2Front = false;
+    boolean acceptMegaTag2Back = false;
+    boolean acceptGyroFront = false;
+    boolean acceptGyroBack = false;
     
-    double[] botPose = m_limelight.getBotPose();
+    double[] botPoseFront = m_limelight.getBotPoseFront();
+    double[] botPoseBack = m_limelight.getBotPoseBack();
 
-    double[] odomTag2 = m_limelight.getMegaTag2();
+    double[] odomTag2Front = m_limelight.getMegaTag2Front();
+    double[] odomTag2Back = m_limelight.getMegaTag2Back();
     
-    Pose2d position1 = new Pose2d(botPose[0], botPose[1], getGyroHeading());
+    Pose2d position1 = new Pose2d(botPoseFront[0], botPoseFront[1], getGyroHeading());
+    Pose2d position2 = new Pose2d(botPoseBack[0], botPoseBack[1], getGyroHeading());
 
-    Pose2d megaTag2 = new Pose2d(odomTag2[0], odomTag2[1], getGyroHeading());
+    Pose2d megaTag2Front = new Pose2d(odomTag2Front[0], odomTag2Front[1], getGyroHeading());
+    Pose2d megaTag2Back = new Pose2d(odomTag2Back[0], odomTag2Back[1], getGyroHeading());
 
     LimelightHelpers.SetRobotOrientation("limelight-shooter", getGyroHeading().getDegrees(), 0, 0, 0, 0, 0);
 
@@ -455,18 +492,26 @@ public boolean shouldResetPoseMegaTag2() {
       timer = Timer.getFPGATimestamp();
     }
     if (m_limelight.getApriltagTargetFound()) {
-      acceptPose = visionAcceptorGyro.shouldAccept(position1, robotSpeeds);
-      acceptMegaTag2 = visionAcceptorMegaTag2.shouldAccept(megaTag2, robotSpeeds);
-      acceptGyro = visionAcceptorGyro.shouldResetGyro(robotSpeeds);
+      acceptPose = visionAcceptor.shouldAccept(position1, robotSpeeds);
+      acceptMegaTag2Front = visionAcceptorMegaTag2Front.shouldAccept(megaTag2Front, robotSpeeds);
+      acceptMegaTag2Front = visionAcceptorMegaTag2Back.shouldAccept(megaTag2Back, robotSpeeds);
+      acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro(robotSpeeds);
+      acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro(robotSpeeds);
     }
 
-    if (acceptGyro && acceptPose) {
-      limelightResetGyro();
+    if (acceptGyroFront && acceptPose) {
+      limelightResetGyroFront();
+    }
+    else if(acceptGyroBack && acceptPose) {
+      limelightResetGyroBack();
     }
 
     if (m_odometry != null) {
-      if (acceptMegaTag2 && m_limelight.getApriltagTargetFound()) {
-        m_odometry.addVisionMeasurement(megaTag2, timer);
+      if (acceptMegaTag2Front && m_limelight.getApriltagTargetFound()) {
+        m_odometry.addVisionMeasurement(megaTag2Front, timer);
+      }
+      if (acceptMegaTag2Back && m_limelight.getApriltagTargetFound()) {
+        m_odometry.addVisionMeasurement(megaTag2Back, timer);
       }
 
       m_odometry.updateWithTime(
@@ -479,8 +524,8 @@ public boolean shouldResetPoseMegaTag2() {
             m_backRight.getPosition()
           });
         }
-    SmartDashboard.putNumber("Limelight ODO X", odomTag2[0]);
-    SmartDashboard.putNumber("Limelight ODO Y", odomTag2[1]);
+    SmartDashboard.putNumber("Limelight ODO X", odomTag2Front[0]);
+    SmartDashboard.putNumber("Limelight ODO Y", odomTag2Front[1]);
 
     SmartDashboard.putNumber("drivetrain/odo x", getPose().getX());
     SmartDashboard.putNumber("drivetrain/odo y", getPose().getY());
@@ -490,7 +535,7 @@ public boolean shouldResetPoseMegaTag2() {
 
     SmartDashboard.putNumber("drivetrain/gyro angle", getAngle());
     SmartDashboard.putBoolean("VisionAcceptor/is Accepting Pose", acceptPose);
-    SmartDashboard.putBoolean("VissionAcceptor/is Accepting megatag2", acceptMegaTag2);
+    SmartDashboard.putBoolean("VissionAcceptor/is Accepting megatag2", acceptMegaTag2Front);
 
     SmartDashboard.putNumber("drivetrain/closestPoseX", getClosestTargetPose().getX());
     SmartDashboard.putNumber("drivetrain/closestPoseY", getClosestTargetPose().getY());

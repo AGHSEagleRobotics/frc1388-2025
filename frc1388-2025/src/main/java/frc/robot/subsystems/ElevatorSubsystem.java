@@ -24,7 +24,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   SparkFlex m_motor;
   DigitalInput m_topLimitSwitch;
   DigitalInput m_bottomLimitSwitch;
-  LaserCan m_laserCan;
   private double m_targetPosition = 0;
   private RelativeEncoder m_elevatorEncoder;
   private boolean m_isInitialized = false;
@@ -46,7 +45,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     //values are in inches
     LEVEL1(5),
-    LEVEL2(15),
+    LEVEL2(10),
     LEVEL3(25),
     LEVEL4(50.5);
 
@@ -62,11 +61,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   /** Creates a new ElevatorSubsystem. */
-  public ElevatorSubsystem(SparkFlex motor, DigitalInput topLimitSwitch, DigitalInput bottomLimitSwitch, LaserCan laserCan) {
+  public ElevatorSubsystem(SparkFlex motor, DigitalInput topLimitSwitch, DigitalInput bottomLimitSwitch) {
     m_motor = motor;
     m_topLimitSwitch = topLimitSwitch;
     m_bottomLimitSwitch = bottomLimitSwitch;
-    m_laserCan = laserCan;
     m_elevatorEncoder = motor.getEncoder();
   
     m_elevatorController.setTolerance(ElevatorSubsystemConstants.kElevatorTolerance);
@@ -90,7 +88,10 @@ public class ElevatorSubsystem extends SubsystemBase {
       if ((height < ElevatorSubsystemConstants.kElevatorBottomEndRange && power < 0) || //if the elevator is near the bottom & going down, clamp power
           (height > ElevatorSubsystemConstants.kElevatorTopEndRange && power > 0)) {    //if the elevator is near the top & going up, clamp power
         powerLimit = ElevatorSubsystemConstants.kElevatorEndRangePowerLimit;
-      } else {
+      } else if (power < 0) {
+        powerLimit = ElevatorSubsystemConstants.kElevatorPowerLimitDown;
+      }
+      else {
         powerLimit = ElevatorSubsystemConstants.kElevatorPowerLimit;
       }
       power = MathUtil.clamp(power,
@@ -114,7 +115,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setSetpointToCurrentPosition() {
-    setTargetPosition(getElevatorHeight());
+    double scaleFactor = MathUtil.clamp(ElevatorSubsystemConstants.kElevatorOffsetAccountSpeed * getMotorEncoderVelocity(), -1, 1);
+    setTargetPosition(getElevatorHeight() + scaleFactor);
     m_autoMode = true;
   }
 
@@ -138,6 +140,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   
   private double getMotorEncoderHeight() {
     return m_elevatorEncoder.getPosition();
+  }
+
+  public double getMotorEncoderVelocity() {
+    return m_elevatorEncoder.getVelocity() * ElevatorSubsystemConstants.kDistancePerVelocityScale;
   }
 
   // public double getLaserCanHeight() {
@@ -193,6 +199,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("elevator/bottomlimit", isAtBottomLimit());
     SmartDashboard.putBoolean("elevator/toplimit", isAtTopLimit());
     SmartDashboard.putNumber("elevator/speed", speed);
+    SmartDashboard.putNumber("elevator/elevatorVelocity", getMotorEncoderVelocity());
     // System.out.println("speed =" + speed +
     //     " height =" + getElevatorHeight() + " setpoint =" + m_targetPosition + " error"
     //     + (m_targetPosition - getElevatorHeight()));
