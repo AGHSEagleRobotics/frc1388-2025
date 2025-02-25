@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Robot;
@@ -304,7 +305,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   public Pose2d getClosestTargetPose() {
 
-    Pose2d[] SETPOINTS = new Pose2d[24];
+    Pose2d[] SETPOINTS = AutoConstants.SETPOINTS;
     
     double distance;
     double nextSetpointDistance;
