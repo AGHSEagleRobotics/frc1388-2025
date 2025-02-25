@@ -144,10 +144,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   /** the drive method takes in an x and y velocity in meters / second, and a rotation rate in radians / second */
   public void drive(double xVelocity, double yVelocity, double omega) {
-    ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getGyroHeading());
+    m_robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getGyroHeading());
     // m_robotRelativeSpeeds = ChassisSpeeds.discretize(xVelocity, yVelocity, omega,
     // DriveTrainConstants.DT_SECONDS);
-    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(robotRelativeSpeeds);
+    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_robotRelativeSpeeds);
 
     // optimises wheel heading direction changes.
     SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveTrainConstants.ROBOT_MAX_SPEED);
@@ -304,10 +304,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   public Pose2d getClosestTargetPose() {
 
-    Pose2d[] SETPOINTS = new Pose2d[2];
-
-    SETPOINTS[0] = new Pose2d(15.15, 5.55, new Rotation2d(0));
-    SETPOINTS[1] = new Pose2d(13.75, 7.25, new Rotation2d(45));
+    Pose2d[] SETPOINTS = new Pose2d[24];
     
     double distance;
     double nextSetpointDistance;
@@ -401,8 +398,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
   public boolean shouldResetPoseMegaTag2Front() {
       boolean acceptMegaTag2 = false;
       double[] odomTag2 = m_limelight.getMegaTag2Front();
-      Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
-          getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
+      Twist2d robotSpeeds = new Twist2d(m_robotRelativeSpeeds.vxMetersPerSecond,
+          m_robotRelativeSpeeds.vyMetersPerSecond, m_robotRelativeSpeeds.omegaRadiansPerSecond);
       Pose2d megaTag2 = new Pose2d(odomTag2[0], odomTag2[1], getGyroHeading());
       if (m_limelight.getApriltagTargetFound()) {
         acceptMegaTag2 = visionAcceptorMegaTag2Front.shouldAccept(megaTag2, robotSpeeds);
@@ -413,8 +410,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public boolean shouldResetPoseMegaTag2Back() {
       boolean acceptMegaTag2 = false;
       double[] odomTag2 = m_limelight.getMegaTag2Back();
-      Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
-          getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
+      Twist2d robotSpeeds = new Twist2d(m_robotRelativeSpeeds.vxMetersPerSecond,
+          m_robotRelativeSpeeds.vyMetersPerSecond, m_robotRelativeSpeeds.omegaRadiansPerSecond);
       Pose2d megaTag2 = new Pose2d(odomTag2[0], odomTag2[1], getGyroHeading());
       if (m_limelight.getApriltagTargetFound()) {
         acceptMegaTag2 = visionAcceptorMegaTag2Back.shouldAccept(megaTag2, robotSpeeds);
@@ -425,8 +422,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
   public boolean shouldResetGyroFront() {
     boolean acceptPose = false;
     double[] botPose = m_limelight.getBotPoseFront();
-    Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
-        getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
+    Twist2d robotSpeeds = new Twist2d(m_robotRelativeSpeeds.vxMetersPerSecond,
+        m_robotRelativeSpeeds.vyMetersPerSecond, m_robotRelativeSpeeds.omegaRadiansPerSecond);
     Pose2d megaTag1 = new Pose2d(botPose[0], botPose[1], getGyroHeading());
     if (m_limelight.getApriltagTargetFound()) {
       acceptPose = visionAcceptor.shouldAccept(megaTag1, robotSpeeds);
@@ -437,8 +434,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
   public boolean shouldResetGyroBack() {
     boolean acceptPose = false;
     double[] botPose = m_limelight.getBotPoseBack();
-    Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
-        getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
+    Twist2d robotSpeeds = new Twist2d(m_robotRelativeSpeeds.vxMetersPerSecond,
+        m_robotRelativeSpeeds.vyMetersPerSecond, m_robotRelativeSpeeds.omegaRadiansPerSecond);
     Pose2d megaTag1 = new Pose2d(botPose[0], botPose[1], getGyroHeading());
     if (m_limelight.getApriltagTargetFound()) {
       acceptPose = visionAcceptor.shouldAccept(megaTag1, robotSpeeds);
@@ -488,10 +485,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
     Pose2d megaTag2Back = new Pose2d(odomTag2Back[0], odomTag2Back[1], getGyroHeading());
 
     LimelightHelpers.SetRobotOrientation("limelight-shooter", getGyroHeading().getDegrees(), 0, 0, 0, 0, 0);
-
-    Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
-    getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
-
+    if(m_robotRelativeSpeeds != null) {
+    Twist2d robotSpeeds = new Twist2d(m_robotRelativeSpeeds.vxMetersPerSecond,
+    m_robotRelativeSpeeds.vyMetersPerSecond, m_robotRelativeSpeeds.omegaRadiansPerSecond);
     double timer = 1.5;
     if (Timer.getFPGATimestamp() > 1.5 ) {
       timer = Timer.getFPGATimestamp();
@@ -503,7 +499,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
       acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro(robotSpeeds);
       acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro(robotSpeeds);
     }
-
+  
     if (acceptGyroFront && acceptPose) {
       limelightResetGyroFront();
     }
@@ -518,7 +514,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
       if (acceptMegaTag2Back && m_limelight.getApriltagTargetFound()) {
         m_odometry.addVisionMeasurement(megaTag2Back, timer);
       }
-
+    }
       m_odometry.updateWithTime(
         Timer.getFPGATimestamp(),
         getGyroHeading(),

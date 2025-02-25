@@ -26,6 +26,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.AutoAllign;
 import frc.robot.commands.ElevatorSetpointCommand;
 import frc.robot.commands.EndEffectorCommand;
+import frc.robot.commands.EndEffectorIntake;
 import frc.robot.commands.EndEffectorShoot;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -92,12 +93,11 @@ public class AutoMethod extends SubsystemBase {
   public AutoRoutine LayingEggsTop() {
     AutoRoutine routine = m_autoFactory.newRoutine("LayingEggsTop");
 
-    AutoTrajectory startToScore = routine.trajectory("LayingEggsTop",0); 
-    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsTop",1);
-    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsTop",2);
-    AutoTrajectory score2ToPickup = routine.trajectory("LayingEggsTop",3);
-    AutoTrajectory pickup2ToScore = routine.trajectory("LayingEggsTop",4);
-
+    AutoTrajectory startToScore = routine.trajectory("LayingEggsTop", 0);
+    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsTop", 1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsTop", 2);
+    AutoTrajectory score2ToPickup = routine.trajectory("LayingEggsTop", 3);
+    AutoTrajectory pickup2ToScore = routine.trajectory("LayingEggsTop", 4);
 
     routine.active().onTrue(
         Commands.sequence(
@@ -107,119 +107,154 @@ public class AutoMethod extends SubsystemBase {
         .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen(score1ToPickup.cmd()));
-    score1ToPickup.done().onTrue(pickup1ToScore.cmd());
-    pickup1ToScore.done().onTrue(new AutoAllign(m_driveTrainSubsystem).andThen(score2ToPickup.cmd()));
-    score2ToPickup.done().onTrue(pickup2ToScore.cmd());
-    pickup2ToScore.done().onTrue(new AutoAllign(m_driveTrainSubsystem));
+    score1ToPickup.done()
+        .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup1ToScore.cmd()));
+    pickup1ToScore.done()
+        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+            .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
+            .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen((score2ToPickup.cmd())));
+    score2ToPickup.done()
+        .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup2ToScore.cmd()));
+    pickup2ToScore.done()
+        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+            .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
+            .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)));
+
     return routine;
   }
 
   public AutoRoutine LayingEggsBottom() {
     AutoRoutine routine = m_autoFactory.newRoutine("LayingEggsBottom");
 
-    AutoTrajectory startToScore = routine.trajectory("LayingEggsBottom",0); 
-    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsBottom",1);
-    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsBottom",2);
-    AutoTrajectory score2ToPickup = routine.trajectory("LayingEggsBottom",3);
-    AutoTrajectory pickup2ToScore = routine.trajectory("LayingEggsBottom",4);
+    AutoTrajectory startToScore = routine.trajectory("LayingEggsBottom", 0);
+    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsBottom", 1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsBottom", 2);
+    AutoTrajectory score2ToPickup = routine.trajectory("LayingEggsBottom", 3);
+    AutoTrajectory pickup2ToScore = routine.trajectory("LayingEggsBottom", 4);
 
     routine.active().onTrue(
-      Commands.sequence(
-        startToScore.resetOdometry(),
-        startToScore.cmd()
-      )
-    );
-      startToScore.done().onTrue(new AutoAllign(m_driveTrainSubsystem).andThen(score1ToPickup.cmd()));
-      score1ToPickup.done().onTrue(pickup1ToScore.cmd());
-      pickup1ToScore.done().onTrue(new AutoAllign(m_driveTrainSubsystem).andThen(score2ToPickup.cmd()));
-      score2ToPickup.done().onTrue(pickup2ToScore.cmd());
-      pickup2ToScore.done().onTrue(new AutoAllign(m_driveTrainSubsystem));
-      return routine;
+        Commands.sequence(
+            startToScore.resetOdometry(),
+            startToScore.cmd()));
+    routine.active().onTrue(
+        Commands.sequence(
+            startToScore.resetOdometry(),
+            startToScore.cmd()));
+    startToScore.done()
+        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+            .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
+            .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen(score1ToPickup.cmd()));
+    score1ToPickup.done()
+        .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup1ToScore.cmd()));
+    pickup1ToScore.done()
+        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+            .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
+            .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen((score2ToPickup.cmd())));
+    score2ToPickup.done()
+        .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup2ToScore.cmd()));
+    pickup2ToScore.done()
+        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+            .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
+            .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)));
+
+    return routine;
   }
 
   public AutoRoutine EndAt2Top() {
     AutoRoutine routine = m_autoFactory.newRoutine("LayingEggsTop");
 
-    AutoTrajectory startToScore = routine.trajectory("LayingEggsTop",0); 
-    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsTop",1);
-    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsTop",2);
+    AutoTrajectory startToScore = routine.trajectory("LayingEggsTop", 0);
+    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsTop", 1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsTop", 2);
 
     routine.active().onTrue(
-      Commands.sequence(
-        startToScore.resetOdometry(),
-        startToScore.cmd()
-      )
-    );
-      startToScore.done().onTrue(new AutoAllign(m_driveTrainSubsystem).andThen(score1ToPickup.cmd()));
-      score1ToPickup.done().onTrue(pickup1ToScore.cmd());
-      pickup1ToScore.done().onTrue(new AutoAllign(m_driveTrainSubsystem));
-      return routine;
+        Commands.sequence(
+            startToScore.resetOdometry(),
+            startToScore.cmd()));
+    startToScore.done()
+        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+            .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
+            .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen(score1ToPickup.cmd()));
+    score1ToPickup.done()
+        .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup1ToScore.cmd()));
+    pickup1ToScore.done()
+        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+            .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
+            .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)));
+
+    return routine;
   }
 
   public AutoRoutine EndAt2Bottom() {
     AutoRoutine routine = m_autoFactory.newRoutine("LayingEggsBottom");
 
-    AutoTrajectory startToScore = routine.trajectory("LayingEggsBottom",0); 
-    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsBottom",1);
-    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsBottom",2);
+    AutoTrajectory startToScore = routine.trajectory("LayingEggsBottom", 0);
+    AutoTrajectory score1ToPickup = routine.trajectory("LayingEggsBottom", 1);
+    AutoTrajectory pickup1ToScore = routine.trajectory("LayingEggsBottom", 2);
 
     routine.active().onTrue(
-      Commands.sequence(
-        startToScore.resetOdometry(),
-        startToScore.cmd()
-      )
-    );
-      startToScore.done().onTrue(new AutoAllign(m_driveTrainSubsystem).andThen(score1ToPickup.cmd()));
-      score1ToPickup.done().onTrue(pickup1ToScore.cmd());
-      pickup1ToScore.done().onTrue(new AutoAllign(m_driveTrainSubsystem));
-      return routine;
+        Commands.sequence(
+            startToScore.resetOdometry(),
+            startToScore.cmd()));
+    startToScore.done()
+        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+            .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
+            .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen(score1ToPickup.cmd()));
+    score1ToPickup.done()
+        .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup1ToScore.cmd()));
+    pickup1ToScore.done()
+        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+            .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
+            .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)));
+    return routine;
   }
 
   public AutoRoutine OneScoreCenter() {
     AutoRoutine routine = m_autoFactory.newRoutine("OneScoreCenter");
 
-    AutoTrajectory startToScore = routine.trajectory("OneScoreCenter",0); 
+    AutoTrajectory startToScore = routine.trajectory("OneScoreCenter", 0);
 
     routine.active().onTrue(
-      Commands.sequence(
-        startToScore.resetOdometry(),
-        startToScore.cmd()
-      )
-    );
-      startToScore.done().onTrue(new AutoAllign(m_driveTrainSubsystem));
-      return routine;
+        Commands.sequence(
+            startToScore.resetOdometry(),
+            startToScore.cmd()));
+    startToScore.done()
+        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+            .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
+            .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)));
+    return routine;
   }
 
 
   public AutoRoutine getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     AutoConstants.Objective objective = m_dashboard.getObjective();
-        DataLogManager.log("####### objective:" + objective);
-    
-        if (objective == null) {
-          return null;
-        }
-      
-        switch (objective) {
-      
-        case LAYINGEGGSBOTTOM:
-            return LayingEggsBottom();
-        
-        case LAYINGEGGSTOP:
-            return LayingEggsTop();
+    DataLogManager.log("####### objective:" + objective);
 
-        case ENDATBOT2:
-            return EndAt2Bottom();
-
-        case ENDATTOP2:
-            return EndAt2Top();
-        
-        case ONESCORECENTER:
-            return OneScoreCenter();
-
-        case CHOREOAUTOROUTINE:
-            return ChoreoAutoRoutine();
-        }
+    if (objective == null) {
       return null;
     }
+
+    switch (objective) {
+
+      case LAYINGEGGSBOTTOM:
+        return LayingEggsBottom();
+
+      case LAYINGEGGSTOP:
+        return LayingEggsTop();
+
+      case ENDATBOT2:
+        return EndAt2Bottom();
+
+      case ENDATTOP2:
+        return EndAt2Top();
+
+      case ONESCORECENTER:
+        return OneScoreCenter();
+
+      case CHOREOAUTOROUTINE:
+        return ChoreoAutoRoutine();
+    }
+    return null;
+  }
 }
