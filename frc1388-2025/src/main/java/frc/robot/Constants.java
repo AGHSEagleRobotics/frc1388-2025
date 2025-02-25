@@ -139,11 +139,14 @@ public final class Constants {
   public class AutoConstants {
 
     public enum Objective {
-      SITSTILL("LookPretty"),
-      CHOREOAUTO("ChoreoAuto"),
+      LAYINGEGGSBOTTOM("3L4Bot"),
+      LAYINGEGGSTOP("3L4Top"),
+      ENDATTOP2("2L4Top"),
+      ENDATBOT2("2L4Bot"),
+      ONESCORECENTER("1L4Cent"),
       CHOREOAUTOROUTINE("choreoAutoRoutine");
 
-      public static final Objective Default = SITSTILL;
+      public static final Objective Default = CHOREOAUTOROUTINE;
 
       private String m_dashboardDescript; // This is what will show on dashboard
 
@@ -176,7 +179,7 @@ public final class Constants {
     public static final double HIGHER_PERCENTAGE_ABSOLUTE_ENCODER =  1023.0/1024.0;
     public static final double DEGREES_PER_ROTATION = 360;
 
-    public static final double BOTTOM_LIMIT = 0.8;
+    public static final double BOTTOM_LIMIT = 0.75;
     public static final double TOP_LIMIT = 0.3;
 
     public static final double CLIMBER_CONTROLLER_DEADBAND = 0.1;
@@ -184,7 +187,7 @@ public final class Constants {
     public static final double CLIMBER_UP_POSITION = 0;
     public static final double CLIMBER_DOWN_POSITION = 0;
 
-    public static final double CLIMBER_POWER_LIMIT = 0.2;
+    public static final double CLIMBER_POWER_LIMIT = 0.75;
 
     public static final double CLIMBER_ABSOLUTE_ENCODER_OFFSET = 0;
   }

@@ -128,10 +128,13 @@ public class VisionAcceptor {
     }
 
     public double norm() {
+        if (m_robotVelocity != null) {
         double dx = m_robotVelocity.dx;
         double dy = m_robotVelocity.dy;
         if (dy == 0.0)
             return Math.abs(dx);
         return Math.hypot(dx, dy);
+        }
+        return 0;
     }
 }

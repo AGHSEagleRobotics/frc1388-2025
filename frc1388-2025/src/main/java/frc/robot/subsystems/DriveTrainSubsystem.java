@@ -143,10 +143,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   /** the drive method takes in an x and y velocity in meters / second, and a rotation rate in radians / second */
   public void drive(double xVelocity, double yVelocity, double omega) {
-    ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getGyroHeading());
+    m_robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getGyroHeading());
     // m_robotRelativeSpeeds = ChassisSpeeds.discretize(xVelocity, yVelocity, omega,
     // DriveTrainConstants.DT_SECONDS);
-    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(robotRelativeSpeeds);
+    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_robotRelativeSpeeds);
 
     // optimises wheel heading direction changes.
     SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveTrainConstants.ROBOT_MAX_SPEED);
@@ -305,8 +305,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     Pose2d[] SETPOINTS = new Pose2d[2];
 
-    SETPOINTS[0] = new Pose2d(15.15, 5.55, new Rotation2d(0));
-    SETPOINTS[1] = new Pose2d(13.75, 7.25, new Rotation2d(45));
+    SETPOINTS[0] = new Pose2d(3.34, 3.45, new Rotation2d(59));
+    SETPOINTS[1] = new Pose2d(3.59, 3.33, new Rotation2d(59));
     
     double distance;
     double nextSetpointDistance;
@@ -483,10 +483,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
     Pose2d megaTag2Back = new Pose2d(odomTag2Back[0], odomTag2Back[1], getGyroHeading());
 
     LimelightHelpers.SetRobotOrientation("limelight-shooter", getGyroHeading().getDegrees(), 0, 0, 0, 0, 0);
-
+    if(getRobotRelativeSpeeds() != null) {
     Twist2d robotSpeeds = new Twist2d(getRobotRelativeSpeeds().vxMetersPerSecond,
     getRobotRelativeSpeeds().vyMetersPerSecond, getRobotRelativeSpeeds().omegaRadiansPerSecond);
-
     double timer = 1.5;
     if (Timer.getFPGATimestamp() > 1.5 ) {
       timer = Timer.getFPGATimestamp();
@@ -498,7 +497,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
       acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro(robotSpeeds);
       acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro(robotSpeeds);
     }
-
+  
     if (acceptGyroFront && acceptPose) {
       limelightResetGyroFront();
     }
@@ -513,7 +512,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
       if (acceptMegaTag2Back && m_limelight.getApriltagTargetFound()) {
         m_odometry.addVisionMeasurement(megaTag2Back, timer);
       }
-
+    }
       m_odometry.updateWithTime(
         Timer.getFPGATimestamp(),
         getGyroHeading(),

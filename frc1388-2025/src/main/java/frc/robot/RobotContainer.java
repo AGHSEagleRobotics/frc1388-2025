@@ -188,7 +188,7 @@ public class RobotContainer {
   // }
   }
 
-  public Command getAutonomousCommand() {
-    return m_autoMethod.getAutonomousCommand();
-  }
+  // public Command getAutonomousCommand() {
+  //   return m_autoMethod.getAutonomousCommand();
+  // }
 }

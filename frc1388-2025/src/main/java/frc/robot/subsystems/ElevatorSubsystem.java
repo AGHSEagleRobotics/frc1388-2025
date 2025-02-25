@@ -166,6 +166,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_isInitialized = false;
     m_autoMode = false;
   }
+
+  public boolean isAtSetpoint() {
+    return m_elevatorController.atSetpoint();
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
