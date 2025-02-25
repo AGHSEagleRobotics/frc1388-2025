@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import au.grapplerobotics.CanBridge;
 import choreo.auto.AutoRoutine;
 
@@ -125,17 +126,17 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     DataLogManager.log("####### Autonomous Init");
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     DataLogManager.log("setting neutral mode");
     m_robotContainer.setBrakeMode(true);
     DataLogManager.log("done setting neutral mode");
 
-    // schedule the autonomous command
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-      System.out.println("starting auto command");
-    }
+    // // schedule the autonomous command
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.poll();
+    //   System.out.println("starting auto command");
+    // }
 
 
     // Get match info from FMS
@@ -161,7 +162,12 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    if(m_autonomousCommand != null) {
+    m_autonomousCommand.poll();
+    }
+  }
 
   @Override
   public void teleopInit() {
