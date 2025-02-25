@@ -64,9 +64,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   private double m_gyroOffset = 0;
 
-  private final PIDController xController = new PIDController(10.0, 0.0, 0.0);
-  private final PIDController yController = new PIDController(10.0, 0.0, 0.0);
-  private final PIDController headingController = new PIDController(7.5, 0.0, 0.0);
+  private final PIDController xController = new PIDController(0.9, 0.0, 0.0);
+  private final PIDController yController = new PIDController(0.9, 0.0, 0.0);
+  private final PIDController headingController = new PIDController(1.1, 0.0, 0.0);
 
   // these are the translations from the center of rotation of the robot to the center of rotation of each swerve module
   private final Translation2d m_frontRightTranslation = new Translation2d(ROBOT_WHEEL_BASE / 2, -ROBOT_TRACK_WIDTH / 2);
