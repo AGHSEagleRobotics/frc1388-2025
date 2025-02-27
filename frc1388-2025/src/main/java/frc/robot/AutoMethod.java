@@ -16,6 +16,7 @@ import choreo.trajectory.Trajectory;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,7 +24,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.FieldLayout;
 import frc.robot.commands.AutoAllign;
+import frc.robot.commands.AutoGoToPoint;
 import frc.robot.commands.ElevatorSetpointCommand;
 import frc.robot.commands.EndEffectorCommand;
 import frc.robot.commands.EndEffectorIntake;
@@ -44,6 +47,7 @@ public class AutoMethod extends SubsystemBase {
   private final Command m_choreoAuto;
   private final AutoRoutine m_choreoAutoRoutine;
   
+  
   public AutoMethod(DriveTrainSubsystem driveTrainSubsystem, ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, Dashboard dashboard) {
     m_driveTrainSubsystem = driveTrainSubsystem;
     m_elevatorSubsystem = elevatorSubsystem;
@@ -61,10 +65,14 @@ public class AutoMethod extends SubsystemBase {
     m_choreoAuto = ChoreoAuto();
     m_choreoAutoRoutine = ChoreoAutoRoutine();
 
+    
     m_autoChooser = new AutoChooser();
+    
+    // m_autoChooser.addRoutine("OneScoreCenter", this::OneScoreCenter);
+    // SmartDashboard.putData(m_autoChooser);
 
         // Schedule the selected auto during the autonomous period
-        RobotModeTriggers.autonomous().whileTrue(m_autoChooser.selectedCommandScheduler());
+        // RobotModeTriggers.autonomous().whileTrue(OneScoreCenter());
   }
 
   public Command SitStillLookPretty(){
@@ -209,24 +217,43 @@ public class AutoMethod extends SubsystemBase {
     return routine;
   }
 
-  public AutoRoutine OneScoreCenter() {
-    AutoRoutine routine = m_autoFactory.newRoutine("OneScoreCenter");
+  // public AutoRoutine OneScoreCenter() {
+  //   AutoRoutine routine = m_autoFactory.newRoutine("OneScoreCenter");
 
-    AutoTrajectory startToScore = routine.trajectory("OneScoreCenter", 0);
+  //   AutoTrajectory startToScore = routine.trajectory("OneScoreCenter", 0);
 
-    routine.active().onTrue(
-        Commands.sequence(
-            startToScore.resetOdometry(),
-            startToScore.cmd()));
-    startToScore.done()
-        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
-            .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
-            .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)));
-    return routine;
+  //   routine.active().onTrue(
+  //       Commands.sequence(
+  //           startToScore.resetOdometry(),
+  //           startToScore.cmd()));
+  //   // startToScore.done()
+  //   //     .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+  //   //         .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
+  //   //         .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)));
+  //   return routine;
+  // }
+
+  public Command OneScoreCenter() {
+    if (Alliance.Blue == DriverStation.getAlliance().get()) {
+      return new AutoGoToPoint(5.77, 4.19, 180, m_driveTrainSubsystem).andThen(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
+    } else {
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH, 0, m_driveTrainSubsystem)
+          .andThen(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true)
+                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
+    }
   }
 
+  public Command Leave() {
+    if (Alliance.Blue == DriverStation.getAlliance().get()) {
+      return new AutoGoToPoint(5.77, 4.19, 180, m_driveTrainSubsystem);
+    } else {
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH , 0, m_driveTrainSubsystem);
+    }
+  }
 
-  public AutoRoutine getAutonomousCommand() {
+  public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     AutoConstants.Objective objective = m_dashboard.getObjective();
     DataLogManager.log("####### objective:" + objective);
@@ -237,23 +264,26 @@ public class AutoMethod extends SubsystemBase {
 
     switch (objective) {
 
-      case LAYINGEGGSBOTTOM:
-        return LayingEggsBottom();
+      // case LAYINGEGGSBOTTOM:
+      //   return LayingEggsBottom();
 
-      case LAYINGEGGSTOP:
-        return LayingEggsTop();
+      // case LAYINGEGGSTOP:
+      //   return LayingEggsTop();
 
-      case ENDATBOT2:
-        return EndAt2Bottom();
+      // case ENDATBOT2:
+      //   return EndAt2Bottom();
 
-      case ENDATTOP2:
-        return EndAt2Top();
+      // case ENDATTOP2:
+      //   return EndAt2Top();
+
+      case LEAVE:
+        return Leave();
 
       case ONESCORECENTER:
         return OneScoreCenter();
 
-      case CHOREOAUTOROUTINE:
-        return ChoreoAutoRoutine();
+      // case CHOREOAUTOROUTINE:
+      //   return ChoreoAutoRoutine();
     }
     return null;
   }

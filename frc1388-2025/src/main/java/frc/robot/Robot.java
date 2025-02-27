@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   private int m_userButtonCounter = 0;
 
   private final RobotContainer m_robotContainer;
-  private AutoRoutine m_autonomousCommand;
+  private Command m_autonomousCommand;
 
   private Timer m_neutralModeTimer = new Timer();
 
@@ -126,17 +126,17 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     DataLogManager.log("####### Autonomous Init");
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     DataLogManager.log("setting neutral mode");
     m_robotContainer.setBrakeMode(true);
     DataLogManager.log("done setting neutral mode");
 
-    // // schedule the autonomous command
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.poll();
-    //   System.out.println("starting auto command");
-    // }
+    // schedule the autonomous command
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+      System.out.println("starting auto command");
+    }
 
 
     // Get match info from FMS
@@ -163,10 +163,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    if(m_autonomousCommand != null) {
-    m_autonomousCommand.poll();
-    }
+    // if(m_autonomousCommand != null) {
+    // m_autonomousCommand.poll();
+    // }
   }
 
   @Override
@@ -175,9 +174,9 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // // this line or comment it out.
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.cancel();
-    // }
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
 
     m_robotContainer.setBrakeMode(true);
   }

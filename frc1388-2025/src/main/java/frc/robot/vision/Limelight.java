@@ -31,6 +31,10 @@ public class Limelight {
     intakePipeline.setNumber(pipelineNumber);
   }
 
+  public void setIMUMode(int number) {
+    m_placerSideTable.getEntry("imumode_set").setNumber(number);
+  }
+
    public double getAprilTagID() {
     NetworkTableEntry tid = m_placerSideTable.getEntry("tid");
     double m_tid = tid.getDouble(0);

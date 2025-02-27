@@ -64,9 +64,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   private double m_gyroOffset = 0;
 
-  private final PIDController xController = new PIDController(0.9, 0.0, 0.0);
-  private final PIDController yController = new PIDController(0.9, 0.0, 0.0);
-  private final PIDController headingController = new PIDController(1.1, 0.0, 0.0);
+  private final PIDController xController = new PIDController(0.1, 0.0, 0.0);
+  private final PIDController yController = new PIDController(0.1, 0.0, 0.0);
+  private final PIDController headingController = new PIDController(0.1, 0.0, 0.0);
 
   // these are the translations from the center of rotation of the robot to the center of rotation of each swerve module
   private final Translation2d m_frontRightTranslation = new Translation2d(ROBOT_WHEEL_BASE / 2, -ROBOT_TRACK_WIDTH / 2);
@@ -307,18 +307,30 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     Pose2d[] SETPOINTS = AutoConstants.SETPOINTS;
     
+    // double distance;
+    // double nextSetpointDistance;
+    // Pose2d[] setpoints = SETPOINTS;
+    // Pose2d closestPose = setpoints[0];
+    // for (int i = 0; i < setpoints.length - 1; i++) {
+    //   distance = calculateDistancePose(setpoints[i]);
+    //   nextSetpointDistance = calculateDistancePose(setpoints[i + 1]);
+    //   if (distance < nextSetpointDistance) {
+    //     closestPose = setpoints[i];
+    //   }
+    //   else {
+    //     closestPose = setpoints[i + 1];
+    //   }
+    // }
+    
     double distance;
-    double nextSetpointDistance;
     Pose2d[] setpoints = SETPOINTS;
+    double closestDistance = calculateDistancePose(setpoints[0]);
     Pose2d closestPose = setpoints[0];
-    for (int i = 0; i < setpoints.length - 1; i++) {
+    for (int i = 0; i < setpoints.length; i++) {
       distance = calculateDistancePose(setpoints[i]);
-      nextSetpointDistance = calculateDistancePose(setpoints[i + 1]);
-      if (distance < nextSetpointDistance) {
+      if (distance < closestDistance) {
         closestPose = setpoints[i];
-      }
-      else {
-        closestPose = setpoints[i + 1];
+        closestDistance = distance;
       }
     }
     return closestPose;
@@ -485,7 +497,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     Pose2d megaTag2Front = new Pose2d(odomTag2Front[0], odomTag2Front[1], getGyroHeading());
     Pose2d megaTag2Back = new Pose2d(odomTag2Back[0], odomTag2Back[1], getGyroHeading());
 
-    LimelightHelpers.SetRobotOrientation("limelight-shooter", getGyroHeading().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.SetRobotOrientation("limelight-front", getAngle(), 0, 0, 0, 0, 0);
     if(m_robotRelativeSpeeds != null) {
     Twist2d robotSpeeds = new Twist2d(m_robotRelativeSpeeds.vxMetersPerSecond,
     m_robotRelativeSpeeds.vyMetersPerSecond, m_robotRelativeSpeeds.omegaRadiansPerSecond);

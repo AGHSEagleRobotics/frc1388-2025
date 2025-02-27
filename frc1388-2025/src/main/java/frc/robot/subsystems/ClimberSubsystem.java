@@ -20,7 +20,7 @@ public class ClimberSubsystem extends SubsystemBase {
   DutyCycleEncoder m_absoluteClimbEncoder;
 
   private final PIDController m_climberPidController = 
-   new PIDController(1, 0.0, 0.0);
+   new PIDController(10, 0.0, 0.0);
 
    private double m_targetPosition = 0;
    private boolean m_autoMode = false;

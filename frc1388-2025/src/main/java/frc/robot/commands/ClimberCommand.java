@@ -17,14 +17,16 @@ public class ClimberCommand extends Command {
   private final Supplier<Double> m_rightY; 
   private final Supplier<Boolean> m_DPadUp;
   private final Supplier<Boolean> m_DPadDown;
+  private final Supplier<Boolean> m_DPadRight;
   private boolean m_autoMode = false;
 
   /** Creates a new ClimberCommand. */
-  public ClimberCommand(ClimberSubsystem climberSubsystem, Supplier<Double> rightY, Supplier<Boolean> DPadUp, Supplier<Boolean> DPadDown) {
+  public ClimberCommand(ClimberSubsystem climberSubsystem, Supplier<Double> rightY, Supplier<Boolean> DPadUp, Supplier<Boolean> DPadDown, Supplier<Boolean> DPadRight) {
     m_climberSubsystem = climberSubsystem;
     m_rightY = rightY;
     m_DPadUp = DPadUp;
     m_DPadDown = DPadDown;
+    m_DPadRight = DPadRight;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_climberSubsystem);
@@ -45,6 +47,10 @@ public class ClimberCommand extends Command {
     else if(m_DPadUp.get()) {
       m_autoMode = true;
       m_climberSubsystem.setSetpoint(ClimberConstants.CLIMBER_UP_POSITION);
+    }
+    else if(m_DPadRight.get()) {
+      m_autoMode = true;
+      m_climberSubsystem.setSetpoint(0.508);
     }
     else if (rightY > 0 || rightY < 0) {
       m_autoMode = false;

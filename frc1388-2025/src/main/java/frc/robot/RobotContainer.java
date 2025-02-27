@@ -133,7 +133,8 @@ public class RobotContainer {
       m_climberSubsystem, 
       () -> m_operatorController.getRightY(), 
       () -> m_operatorController.getHID().getPOV() == 0, 
-      () -> m_operatorController.getHID().getPOV() == 180);
+      () -> m_operatorController.getHID().getPOV() == 180,
+      () -> m_operatorController.getHID().getPOV() == 90);
     m_climberSubsystem.setDefaultCommand(m_climberCommand);
 
     m_endEffectorCommand = new EndEffectorCommand(
@@ -188,7 +189,7 @@ public class RobotContainer {
   // }
   }
 
-  public AutoRoutine getAutonomousCommand() {
+  public Command getAutonomousCommand() {
     return m_autoMethod.getAutonomousCommand();
   }
 }
