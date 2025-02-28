@@ -47,7 +47,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     LEVEL1(0),
     LEVEL2(10),
     LEVEL3(25),
-    LEVEL4(50.5);
+    LEVEL4(51);
 
     private double setpoint;
 
@@ -58,6 +58,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     public double getSetPoint() {
       return this.setpoint;
     }
+  }
+
+  public enum deAglifySetpoints {
+    ALGAELEVEL2(0),
+    ALGAELEVEL3(0);
+//replace this after lunch w real setpoints
+    private double setpoint;
+
+    private deAglifySetpoints(double setpoint) {
+      this.setpoint = setpoint;
+    }
+
+    public double getDeAlgifySetpoint() {
+      return this.setpoint;
+    }
+
   }
 
   /** Creates a new ElevatorSubsystem. */

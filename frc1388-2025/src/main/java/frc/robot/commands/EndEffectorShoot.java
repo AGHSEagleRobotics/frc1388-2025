@@ -36,6 +36,6 @@ public class EndEffectorShoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !m_endEffectorSubsystem.isCoralDetected();
+    return false;
   }
 }

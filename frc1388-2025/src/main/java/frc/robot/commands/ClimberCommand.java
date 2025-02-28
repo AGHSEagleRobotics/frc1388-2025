@@ -50,7 +50,7 @@ public class ClimberCommand extends Command {
     }
     else if(m_DPadRight.get()) {
       m_autoMode = true;
-      m_climberSubsystem.setSetpoint(0.508);
+      m_climberSubsystem.setSetpoint(ClimberConstants.CLIMBER_CENTER_POSITION);
     }
     else if (rightY > 0 || rightY < 0) {
       m_autoMode = false;

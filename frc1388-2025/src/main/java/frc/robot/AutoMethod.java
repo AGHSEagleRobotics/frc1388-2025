@@ -208,7 +208,7 @@ public class AutoMethod extends SubsystemBase {
         .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen(score1ToPickup.cmd()));
-    score1ToPickup.done()
+   score1ToPickup.done()
         .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup1ToScore.cmd()));
     pickup1ToScore.done()
         .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
@@ -235,36 +235,39 @@ public class AutoMethod extends SubsystemBase {
 
   public Command OneScoreCenter() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(5.77, 4.19, 180, m_driveTrainSubsystem).andThen(
-          new ElevatorSetpointCommand(m_elevatorSubsystem, true).andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
+      return new AutoGoToPoint(5.77, 4.19, 180, m_driveTrainSubsystem).withTimeout(2.5).andThen(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
+              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
     } else {
       return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH, 0, m_driveTrainSubsystem)
-          .andThen(
-              new ElevatorSetpointCommand(m_elevatorSubsystem, true)
+          .withTimeout(2.5).andThen(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
                   .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
     }
   }
 
   public Command OneScoreLeft() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(4.97, 5.23, 300, m_driveTrainSubsystem).andThen(
-          new ElevatorSetpointCommand(m_elevatorSubsystem, true).andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
+      return new AutoGoToPoint(4.97, 5.23, 300, m_driveTrainSubsystem).withTimeout(2.5).andThen(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
+              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
     } else {
       return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH, 0, m_driveTrainSubsystem)
-          .andThen(
-              new ElevatorSetpointCommand(m_elevatorSubsystem, true)
+          .withTimeout(2.5).andThen(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
                   .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
     }
   }
 
   public Command OneScoreRight() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(5.28, 3.02, 120, m_driveTrainSubsystem).andThen(
-          new ElevatorSetpointCommand(m_elevatorSubsystem, true).andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
+      return new AutoGoToPoint(5.28, 3.02, 120, m_driveTrainSubsystem).withTimeout(1.5).andThen(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
+              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
     } else {
       return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH, 0, m_driveTrainSubsystem)
-          .andThen(
-              new ElevatorSetpointCommand(m_elevatorSubsystem, true)
+          .withTimeout(2.5).andThen(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
                   .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
     }
   }

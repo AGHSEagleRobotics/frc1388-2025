@@ -207,7 +207,9 @@ public final class Constants {
       ENDATTOP2("2L4Top"),
       ENDATBOT2("2L4Bot"),
       ONESCORECENTER("1L4Cent"),
-      LEAVE("Leave"),
+      ONESCORELEFT("1L4Left"),
+      ONESCORERIGHT("1L4Right"),
+      LEAVE("LeaveCent"),
       CHOREOAUTOROUTINE("choreoAutoRoutine");
 
       public static final Objective Default = CHOREOAUTOROUTINE;
@@ -250,6 +252,8 @@ public final class Constants {
 
     public static final double CLIMBER_UP_POSITION = 0.3;
     public static final double CLIMBER_DOWN_POSITION = 0.75;
+    public static final double CLIMBER_CENTER_POSITION = 0.45;
+
 
     public static final double CLIMBER_POWER_LIMIT = 0.75;
 
