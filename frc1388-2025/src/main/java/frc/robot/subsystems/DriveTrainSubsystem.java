@@ -498,6 +498,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     Pose2d megaTag2Back = new Pose2d(odomTag2Back[0], odomTag2Back[1], getGyroHeading());
 
     LimelightHelpers.SetRobotOrientation("limelight-front", getAngle(), 0, 0, 0, 0, 0);
+    LimelightHelpers.SetRobotOrientation("limelight-back", getAngle(), 0, 0, 0, 0, 0);
     if(m_robotRelativeSpeeds != null) {
     Twist2d robotSpeeds = new Twist2d(m_robotRelativeSpeeds.vxMetersPerSecond,
     m_robotRelativeSpeeds.vyMetersPerSecond, m_robotRelativeSpeeds.omegaRadiansPerSecond);
