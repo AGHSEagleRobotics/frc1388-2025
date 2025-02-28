@@ -189,6 +189,12 @@ public class RobotContainer {
   // }
   }
 
+  public void resetGyro() {
+    if (m_limeLight.getApriltagTargetFound()) {
+      m_driveTrain.limelightResetGyroFront();
+    }
+  }
+
   public Command getAutonomousCommand() {
     return m_autoMethod.getAutonomousCommand();
   }

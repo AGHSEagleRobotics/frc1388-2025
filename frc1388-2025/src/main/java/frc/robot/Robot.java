@@ -120,6 +120,7 @@ public class Robot extends TimedRobot {
       m_neutralModeTimer.reset();
       m_neutralModeTimer.stop();
     }
+    m_robotContainer.resetGyro();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
