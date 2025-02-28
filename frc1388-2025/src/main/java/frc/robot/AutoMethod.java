@@ -245,6 +245,30 @@ public class AutoMethod extends SubsystemBase {
     }
   }
 
+  public Command OneScoreLeft() {
+    if (Alliance.Blue == DriverStation.getAlliance().get()) {
+      return new AutoGoToPoint(4.97, 5.23, 300, m_driveTrainSubsystem).andThen(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
+    } else {
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH, 0, m_driveTrainSubsystem)
+          .andThen(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true)
+                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
+    }
+  }
+
+  public Command OneScoreRight() {
+    if (Alliance.Blue == DriverStation.getAlliance().get()) {
+      return new AutoGoToPoint(5.28, 3.02, 120, m_driveTrainSubsystem).andThen(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
+    } else {
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH, 0, m_driveTrainSubsystem)
+          .andThen(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true)
+                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
+    }
+  }
+
   public Command Leave() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
       return new AutoGoToPoint(5.77, 4.19, 180, m_driveTrainSubsystem);
@@ -281,6 +305,12 @@ public class AutoMethod extends SubsystemBase {
 
       case ONESCORECENTER:
         return OneScoreCenter();
+      
+      case ONESCORELEFT:
+        return OneScoreLeft();
+      
+      case ONESCORERIGHT:
+        return OneScoreRight();
 
       // case CHOREOAUTOROUTINE:
       //   return ChoreoAutoRoutine();

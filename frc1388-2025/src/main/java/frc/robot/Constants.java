@@ -143,30 +143,30 @@ public final class Constants {
     // blue side
     public static final Pose2d SCORING_POSITION_1_RIGHT_BLUE = new Pose2d(3.22, 3.859, new Rotation2d(0));
     public static final Pose2d SCORING_POSITION_1_LEFT_BLUE = new Pose2d(3.22, 4.172, new Rotation2d(0));
-    public static final Pose2d SCORING_POSITION_2_LEFT_BLUE = new Pose2d(3.72, 3.006, new Rotation2d(60));
-    public static final Pose2d SCORING_POSITION_2_RIGHT_BLUE = new Pose2d(4.006, 2.846, new Rotation2d(60));
-    public static final Pose2d SCORING_POSITION_3_LEFT_BLUE = new Pose2d(5.004, 2.86, new Rotation2d(120));
-    public static final Pose2d SCORING_POSITION_3_RIGHT_BLUE = new Pose2d(5.28, 3.019, new Rotation2d(120));
-    public static final Pose2d SCORING_POSITION_4_LEFT_BLUE = new Pose2d(5.746, 4.17, new Rotation2d(180));
-    public static final Pose2d SCORING_POSITION_4_RIGHT_BLUE = new Pose2d(5.746, 3.86, new Rotation2d(180));
-    public static final Pose2d SCORING_POSITION_5_LEFT_BLUE = new Pose2d(5.25, 5.04, new Rotation2d(300));
-    public static final Pose2d SCORING_POSITION_5_RIGHT_BLUE = new Pose2d(4.97, 5.18, new Rotation2d(300));
-    public static final Pose2d SCORING_POSITION_6_LEFT_BLUE = new Pose2d(4.00, 5.20, new Rotation2d(240));
-    public static final Pose2d SCORING_POSITION_6_RIGHT_BLUE = new Pose2d(3.72, 5.04, new Rotation2d(240));
+    public static final Pose2d SCORING_POSITION_2_LEFT_BLUE = new Pose2d(3.72, 3.006, new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d SCORING_POSITION_2_RIGHT_BLUE = new Pose2d(4.006, 2.846, new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d SCORING_POSITION_3_LEFT_BLUE = new Pose2d(5.004, 2.86, new Rotation2d(Math.toRadians(120)));
+    public static final Pose2d SCORING_POSITION_3_RIGHT_BLUE = new Pose2d(5.28, 3.019, new Rotation2d(Math.toRadians(120)));
+    public static final Pose2d SCORING_POSITION_4_LEFT_BLUE = new Pose2d(5.746, 4.17, new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d SCORING_POSITION_4_RIGHT_BLUE = new Pose2d(5.746, 3.86, new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d SCORING_POSITION_5_LEFT_BLUE = new Pose2d(5.25, 5.04, new Rotation2d(Math.toRadians(300)));
+    public static final Pose2d SCORING_POSITION_5_RIGHT_BLUE = new Pose2d(4.97, 5.18, new Rotation2d(Math.toRadians(300)));
+    public static final Pose2d SCORING_POSITION_6_LEFT_BLUE = new Pose2d(4.00, 5.20, new Rotation2d(Math.toRadians(240)));
+    public static final Pose2d SCORING_POSITION_6_RIGHT_BLUE = new Pose2d(3.72, 5.04, new Rotation2d(Math.toRadians(240)));
 
     // red side
-    public static final Pose2d SCORING_POSITION_1_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_1_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_1_RIGHT_BLUE.getY(), new Rotation2d(180));
-    public static final Pose2d SCORING_POSITION_1_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_1_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_1_LEFT_BLUE.getY(), new Rotation2d(180));
-    public static final Pose2d SCORING_POSITION_2_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_2_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_2_LEFT_BLUE.getY(), new Rotation2d(120));
-    public static final Pose2d SCORING_POSITION_2_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_2_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_2_RIGHT_BLUE.getY(), new Rotation2d(120));
-    public static final Pose2d SCORING_POSITION_3_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_3_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_3_LEFT_BLUE.getY(), new Rotation2d(60));
-    public static final Pose2d SCORING_POSITION_3_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_3_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_3_RIGHT_BLUE.getY(), new Rotation2d(60));
-    public static final Pose2d SCORING_POSITION_4_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_4_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_4_LEFT_BLUE.getY(), new Rotation2d(0));
-    public static final Pose2d SCORING_POSITION_4_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_4_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_4_RIGHT_BLUE.getY(), new Rotation2d(0));
-    public static final Pose2d SCORING_POSITION_5_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_5_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_5_LEFT_BLUE.getY(), new Rotation2d(300));
-    public static final Pose2d SCORING_POSITION_5_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_5_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_5_RIGHT_BLUE.getY(), new Rotation2d(300));
-    public static final Pose2d SCORING_POSITION_6_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_6_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_6_LEFT_BLUE.getY(), new Rotation2d(240));
-    public static final Pose2d SCORING_POSITION_6_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_6_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_6_RIGHT_BLUE.getY(), new Rotation2d(240));
+    public static final Pose2d SCORING_POSITION_1_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_1_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_1_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d SCORING_POSITION_1_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_1_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_1_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d SCORING_POSITION_2_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_2_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_2_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(120)));
+    public static final Pose2d SCORING_POSITION_2_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_2_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_2_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(120)));
+    public static final Pose2d SCORING_POSITION_3_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_3_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_3_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d SCORING_POSITION_3_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_3_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_3_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d SCORING_POSITION_4_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_4_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_4_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(0)));
+    public static final Pose2d SCORING_POSITION_4_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_4_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_4_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(0)));
+    public static final Pose2d SCORING_POSITION_5_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_5_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_5_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(300)));
+    public static final Pose2d SCORING_POSITION_5_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_5_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_5_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(300)));
+    public static final Pose2d SCORING_POSITION_6_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_6_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_6_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(240)));
+    public static final Pose2d SCORING_POSITION_6_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_6_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_6_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(240)));
 
 
     public static final Pose2d[] SETPOINTS = new Pose2d[24];
