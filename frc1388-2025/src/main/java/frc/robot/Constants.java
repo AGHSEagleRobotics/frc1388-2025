@@ -204,8 +204,8 @@ public final class Constants {
     public enum Objective {
       LAYINGEGGSBOTTOM("3L4Bot"),
       LAYINGEGGSTOP("3L4Top"),
-      ENDATTOP2("2L4Top"),
-      ENDATBOT2("2L4Bot"),
+      TWOSCORERIGHT("2L4Left"),
+      TWOSCORELEFT("2L4Right"),
       ONESCORECENTER("1L4Cent"),
       ONESCORELEFT("1L4Left"),
       ONESCORERIGHT("1L4Right"),

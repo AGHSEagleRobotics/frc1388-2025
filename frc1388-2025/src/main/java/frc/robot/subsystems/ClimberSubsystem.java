@@ -32,6 +32,8 @@ public class ClimberSubsystem extends SubsystemBase {
     m_climbMotor = climbMotor;
     m_absoluteClimbEncoder = absoluteClimbEncoder;
 
+    m_climberPidController.setTolerance(0);
+
     m_absoluteClimbEncoder.setDutyCycleRange(ClimberConstants.LOWER_PERCENTAGE_ABSOLUTE_ENCODER, ClimberConstants.HIGHER_PERCENTAGE_ABSOLUTE_ENCODER);
   }
 
@@ -105,6 +107,7 @@ public class ClimberSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("climber/Power Output", speed);
       SmartDashboard.putBoolean("climber/isAtTopLimit", isAtTopLimit());
       SmartDashboard.putBoolean("climber/isAtBottomLimit", isAtBottomLimit());
+      SmartDashboard.putBoolean("climber/atSetpoint", m_climberPidController.atSetpoint());
   }
   
 }
