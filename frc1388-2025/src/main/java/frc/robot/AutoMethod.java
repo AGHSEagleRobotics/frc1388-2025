@@ -248,12 +248,12 @@ public class AutoMethod extends SubsystemBase {
 
   public Command OneScoreLeft() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(4.97, 5.23, 240, m_driveTrainSubsystem).withTimeout(2.5).andThen(
+      return new AutoGoToPoint(4.97, 5.23, 240, m_driveTrainSubsystem).withTimeout(4).andThen(
           new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
               .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1));
     } else {
       return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 4.97, FieldLayout.FIELD_WIDTH - 5.23, 60, m_driveTrainSubsystem)
-          .withTimeout(2.5).andThen(
+          .withTimeout(4).andThen(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
                   .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1));
     }
@@ -261,12 +261,12 @@ public class AutoMethod extends SubsystemBase {
 
   public Command OneScoreRight() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(5.28, 3.02, 120, m_driveTrainSubsystem).withTimeout(2.5).andThen(
+      return new AutoGoToPoint(5.28, 3.02, 120, m_driveTrainSubsystem).withTimeout(4).andThen(
           new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
               .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1));
     } else {
       return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.28, FieldLayout.FIELD_WIDTH - 3.02, 60, m_driveTrainSubsystem)
-          .withTimeout(2.5).andThen(
+          .withTimeout(4).andThen(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
                   .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1));
     }
@@ -274,7 +274,7 @@ public class AutoMethod extends SubsystemBase {
 
   public Command TwoScoreRight() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(5.28, 3.02, 120, m_driveTrainSubsystem).withTimeout(2).andThen(
+      return new AutoGoToPoint(5.28, 3.02, 120, m_driveTrainSubsystem).withTimeout(4).andThen(
           new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
               .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
               .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).withTimeout(1).andThen(
@@ -285,7 +285,7 @@ public class AutoMethod extends SubsystemBase {
               .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
     } else {
       return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.28, FieldLayout.FIELD_WIDTH - 3.02, 300, m_driveTrainSubsystem)
-          .withTimeout(2).andThen(
+          .withTimeout(4).andThen(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
                   .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1).andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).withTimeout(1).andThen(
                     new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.60, FieldLayout.FIELD_WIDTH - 0.583, 245.4, m_driveTrainSubsystem))
@@ -298,7 +298,7 @@ public class AutoMethod extends SubsystemBase {
 
   public Command TwoScoreLeft() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(4.97, 5.23, 240, m_driveTrainSubsystem).withTimeout(2).andThen(
+      return new AutoGoToPoint(4.97, 5.23, 240, m_driveTrainSubsystem).withTimeout(4).andThen(
           new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
               .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
           .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).withTimeout(1).andThen(
@@ -310,7 +310,7 @@ public class AutoMethod extends SubsystemBase {
     } else {
       return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 4.97, FieldLayout.FIELD_WIDTH - 5.23, 60,
           m_driveTrainSubsystem)
-          .withTimeout(2).andThen(
+          .withTimeout(4).andThen(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
                   .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
           .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).withTimeout(1).andThen(
@@ -348,11 +348,11 @@ public class AutoMethod extends SubsystemBase {
       // case LAYINGEGGSTOP:
       //   return LayingEggsTop();
 
-      // case ENDATBOT2:
-      //   return EndAt2Bottom();
+      case TWOSCORELEFT:
+        return TwoScoreLeft();
 
-      // case ENDATTOP2:
-      //   return EndAt2Top();
+      case TWOSCORERIGHT:
+        return TwoScoreRight();
 
       case LEAVE:
         return Leave();
