@@ -62,20 +62,20 @@ public class AutoGoToPoint extends Command {
   public void execute() {
 
     double xSpeed = m_xController.calculate(m_driveTrain.getPose().getX(), X_SETPOINT);
-    if (xSpeed > m_lastXSpeed) {
-      xSpeed = m_xAccLimiter.calculate(xSpeed);
-    }
+    // if (xSpeed > m_lastXSpeed) {
+    //   xSpeed = m_xAccLimiter.calculate(xSpeed);
+    // }
 
     double ySpeed = m_yController.calculate(m_driveTrain.getPose().getY(), Y_SETPOINT);
-    if (ySpeed > m_lastYSpeed) {
-      ySpeed = m_yAccLimiter.calculate(ySpeed);
-    }
+    // if (ySpeed > m_lastYSpeed) {
+    //   ySpeed = m_yAccLimiter.calculate(ySpeed);
+    // }
 
     SmartDashboard.putNumber("AutoGoToPoint/rot pid in", m_driveTrain.getAngle());
     SmartDashboard.putBoolean("AutoGoToPoint/is at rot sp", m_rotationController.atSetpoint());
     m_driveTrain.drive(xSpeed, ySpeed, m_rotationController.calculate(m_driveTrain.getAngle(), ROTATION_SETPOINT));
-    m_lastXSpeed = xSpeed;
-    m_lastYSpeed = ySpeed;
+    // m_lastXSpeed = xSpeed;
+    // m_lastYSpeed = ySpeed;
   }
 
   // Called once the command ends or is interrupted.

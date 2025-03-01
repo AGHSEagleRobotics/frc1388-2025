@@ -235,40 +235,40 @@ public class AutoMethod extends SubsystemBase {
 
   public Command OneScoreCenter() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(5.77, 4.19, 180, m_driveTrainSubsystem).withTimeout(2.5).andThen(
-          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
-              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1));
+      return new AutoGoToPoint(5.77, 4.19, 180, m_driveTrainSubsystem).withTimeout(4).andThen(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+              .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     } else {
       return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH - 4.19, 0, m_driveTrainSubsystem)
           .withTimeout(2.5).andThen(
-              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
-                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1));
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     }
   }
 
   public Command OneScoreLeft() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
       return new AutoGoToPoint(4.97, 5.23, 240, m_driveTrainSubsystem).withTimeout(4).andThen(
-          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
-              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1));
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+              .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     } else {
       return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 4.97, FieldLayout.FIELD_WIDTH - 5.23, 60, m_driveTrainSubsystem)
           .withTimeout(4).andThen(
-              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
-                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1));
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     }
   }
 
   public Command OneScoreRight() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
       return new AutoGoToPoint(5.28, 3.02, 120, m_driveTrainSubsystem).withTimeout(4).andThen(
-          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
-              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1));
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+              .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     } else {
       return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.28, FieldLayout.FIELD_WIDTH - 3.02, 60, m_driveTrainSubsystem)
           .withTimeout(4).andThen(
-              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
-                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1));
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     }
   }
 
@@ -281,7 +281,7 @@ public class AutoMethod extends SubsystemBase {
                   new AutoGoToPoint(1.60, 0.583, 54.6, m_driveTrainSubsystem))
               .alongWith(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
               .andThen(new AutoGoToPoint(4.01, 2.82, 60, m_driveTrainSubsystem).withTimeout(4))
-              .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
+              .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
               .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
     } else {
       return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.28, FieldLayout.FIELD_WIDTH - 3.02, 300, m_driveTrainSubsystem)
