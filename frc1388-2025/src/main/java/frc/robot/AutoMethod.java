@@ -239,7 +239,7 @@ public class AutoMethod extends SubsystemBase {
           new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
               .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
     } else {
-      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH, 0, m_driveTrainSubsystem)
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH - 4.19, 0, m_driveTrainSubsystem)
           .withTimeout(2.5).andThen(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
                   .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
@@ -252,7 +252,7 @@ public class AutoMethod extends SubsystemBase {
           new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
               .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
     } else {
-      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH, 0, m_driveTrainSubsystem)
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 4.97, FieldLayout.FIELD_WIDTH - 5.23, 120, m_driveTrainSubsystem)
           .withTimeout(2.5).andThen(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
                   .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
@@ -265,7 +265,7 @@ public class AutoMethod extends SubsystemBase {
           new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
               .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
     } else {
-      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH, 0, m_driveTrainSubsystem)
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.28, FieldLayout.FIELD_WIDTH - 3.02, 60, m_driveTrainSubsystem)
           .withTimeout(2.5).andThen(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
                   .andThen(new EndEffectorShoot(m_endEffectorSubsystem)));
@@ -276,7 +276,7 @@ public class AutoMethod extends SubsystemBase {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
       return new AutoGoToPoint(5.77, 4.19, 180, m_driveTrainSubsystem);
     } else {
-      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH , 0, m_driveTrainSubsystem);
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.77, FieldLayout.FIELD_WIDTH - 4.19, 0, m_driveTrainSubsystem);
     }
   }
 
