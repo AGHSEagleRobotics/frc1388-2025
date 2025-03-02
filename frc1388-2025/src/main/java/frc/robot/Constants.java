@@ -245,13 +245,13 @@ public final class Constants {
     public static final double HIGHER_PERCENTAGE_ABSOLUTE_ENCODER =  1023.0/1024.0;
     public static final double DEGREES_PER_ROTATION = 360;
 
-    public static final double BOTTOM_LIMIT = 0.75;
+    public static final double BOTTOM_LIMIT = 0.79;
     public static final double TOP_LIMIT = 0.3;
 
     public static final double CLIMBER_CONTROLLER_DEADBAND = 0.1;
 
-    public static final double CLIMBER_UP_POSITION = 0.315;
-    public static final double CLIMBER_DOWN_POSITION = 0.75;
+    public static final double CLIMBER_UP_POSITION = 0.305;
+    public static final double CLIMBER_DOWN_POSITION = 0.785;
     public static final double CLIMBER_CENTER_POSITION = 0.5;
 
 
