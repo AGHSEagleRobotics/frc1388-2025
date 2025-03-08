@@ -23,6 +23,7 @@ public class ClimberSubsystem extends SubsystemBase {
    new PIDController(10, 0.0, 0.0);
 
    private double m_targetPosition = 0;
+//TODO: remove unused variables
    private boolean m_autoMode = false;
    private double m_manualPower = 0;
 
@@ -85,6 +86,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
   }
 
+//TODO: call this when enabling the robot
   public void setSetpointToCurrentPosition() {
     setTargetPosition(getPosition());
     m_autoMode = true;

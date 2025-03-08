@@ -86,6 +86,7 @@ public class SwerveModule {
 
   public void setDriveSpeed(double inputSpeed) { 
       // because the robot's max speed is 3 m/s, dividing the speed by 3 results in a power [-1, 1] we can set the motor to 
+//TODO: "3 m/s" is incorrect
       m_driveMotor.set(inputSpeed / Constants.DriveTrainConstants.ROBOT_MAX_SPEED); // probably should be done outside of swerve module
   }
 

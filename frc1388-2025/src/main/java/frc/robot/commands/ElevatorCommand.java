@@ -69,6 +69,7 @@ public class ElevatorCommand extends Command {
       m_isInitialized = true;
       m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL4);
     }
+//TODO: add dealgify setpoints
     else if (leftY > 0 || leftY < 0) {
       m_autoMode = false;
       m_isInitialized = true;

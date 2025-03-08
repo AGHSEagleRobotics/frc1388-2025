@@ -79,6 +79,7 @@ public class RobotContainer {
               new CANcoder(DriveTrainConstants.BACK_RIGHT_CANCODER),
               Preferences.getDouble(DriveTrainConstants.BACK_RIGHT_ENCODER_OFFSET_KEY, 0)),
 
+//TODO: Add a constand for Pigeon2 CAN ID
           new Pigeon2(13), m_limeLight
       );
 
@@ -105,11 +106,12 @@ public class RobotContainer {
   private final boolean robot2025 = true;
       private final CommandXboxController m_driverController = new CommandXboxController(ControllerConstants.DRIVER_CONTROLLER_PORT);
       private final CommandXboxController m_operatorController = new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
+//TODO: fix indentation above
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */ 
   public RobotContainer() {
 
-
+//TODO: Add comment here:  // Define commands here
     m_autoMethod = new AutoMethod(m_driveTrain, m_elevatorSubsystem, m_endEffectorSubsystem, m_dashboard);
     DriveCommand m_driveCommand = new DriveCommand(
         m_driveTrain,
@@ -178,6 +180,7 @@ public class RobotContainer {
 
   public void setBrakeMode(boolean brakeMode) {
     m_driveTrain.setBrakeMode(brakeMode);
+//TODO: should the climber use this brake mode
   }
 
   public void resetSubsystemsAndCommands() {

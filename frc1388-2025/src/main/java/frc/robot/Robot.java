@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import au.grapplerobotics.CanBridge;
 import choreo.auto.AutoRoutine;
+//TODO: remove unused imports
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -119,6 +120,7 @@ public class Robot extends TimedRobot {
       m_robotContainer.setBrakeMode(false);
       m_neutralModeTimer.reset();
       m_neutralModeTimer.stop();
+//TODO: stop before resetting timer
     }
     m_robotContainer.resetGyro();
   }
@@ -132,6 +134,7 @@ public class Robot extends TimedRobot {
     DataLogManager.log("setting neutral mode");
     m_robotContainer.setBrakeMode(true);
     DataLogManager.log("done setting neutral mode");
+//TODO: don't need to log "done"?
 
     // schedule the autonomous command
     if (m_autonomousCommand != null) {

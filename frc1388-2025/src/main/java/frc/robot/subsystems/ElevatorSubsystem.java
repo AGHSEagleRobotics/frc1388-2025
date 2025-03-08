@@ -60,6 +60,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
 
+//TODO: spelling: Algify instead of Aglify
+//TODO: move dealgify setpoints to elevator setpoints enum
   public enum deAglifySetpoints {
     ALGAELEVEL2(0),
     ALGAELEVEL3(0);
@@ -193,6 +195,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     if (m_isInitialized) {
       if (m_autoMode) {
         speed = m_elevatorController.calculate(getElevatorHeight());
+//TODO: use isAtSetpoint() instead of .atSetpoint()
         if (m_elevatorController.atSetpoint()) {
           speed = 0;
         }

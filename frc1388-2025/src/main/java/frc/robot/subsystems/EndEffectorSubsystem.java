@@ -17,9 +17,13 @@ import au.grapplerobotics.LaserCan;
 public class EndEffectorSubsystem extends SubsystemBase {
   SparkMax m_endEffectorMotor; 
   LaserCan m_laserCAN;
+
+  
   /** Creates a new EndEffectorSubsystem. */
   public EndEffectorSubsystem(SparkMax endEffectorMotor, LaserCan laserCAN) {
     m_endEffectorMotor = endEffectorMotor;
+//TODO: configure m_endEffectorMotor: neutral mode (brake), inverted (true/false ?)
+
     m_laserCAN = laserCAN;
     try {
       m_laserCAN.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);

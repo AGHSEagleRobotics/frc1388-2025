@@ -60,14 +60,17 @@ public class EndEffectorCommand extends Command {
         System.out.println("Coral Not Detected Reset");
       }
     }
+
     if (m_coralIsDetected == true) {
+      //TODO change timer values once programming gets robot
       // if(m_endEffectorTimer.get() > EndEffectorCommandConstants.kIntakeKillDelay) {
         SmartDashboard.putNumber("Timer", m_endEffectorTimer.get());
+//TODO: don't println here since it happens repeatedly
         System.out.println("Intake Kill Delay");
         m_endEffectorSubsystem.ShootCoral(0);
       // }
     }
-    //TODO change timer values once programming gets robot
+
     double rightTrigger = m_rightTrigger.get();
     boolean rightBumper = m_rightBumper.get();
     if (rightTrigger > EndEffectorCommandConstants.kRightTriggerPressed) {
@@ -93,7 +96,9 @@ public class EndEffectorCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+//TODO: stop shooter
+  }
 
   // Returns true when the command should end.
   @Override

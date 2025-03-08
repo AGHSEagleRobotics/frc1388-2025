@@ -24,6 +24,7 @@ public class DriveCommand extends Command {
   private final Supplier<Double> m_leftX;
   private final Supplier<Double> m_rightX;
 
+//TODO: eliminate obsolete code
   private final PIDController m_xController = new PIDController(1.8, 0, 0);
   private final PIDController m_yController = new PIDController(1.8, 0, 0);
   

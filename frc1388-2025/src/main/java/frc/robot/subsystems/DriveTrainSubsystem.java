@@ -336,6 +336,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     return closestPose;
   }
 
+//TODO: remove the following three methods?
   public double getXVelocityAuto(double xSetpoint, PIDController goToPointController, SlewRateLimiter xAccLimiter) {
     double m_lastXSpeed = 0;
     double xSpeed = goToPointController.calculate(getPose().getX(), xSetpoint);
@@ -408,6 +409,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backRight.setBrakeMode(brakeMode);
   }
 
+//TODO: add comment indicating what the following methods do
   public boolean shouldResetPoseMegaTag2Front() {
       boolean acceptMegaTag2 = false;
       double[] odomTag2 = m_limelight.getMegaTag2Front();
@@ -439,18 +441,20 @@ public class DriveTrainSubsystem extends SubsystemBase {
         m_robotRelativeSpeeds.vyMetersPerSecond, m_robotRelativeSpeeds.omegaRadiansPerSecond);
     Pose2d megaTag1 = new Pose2d(botPose[0], botPose[1], getGyroHeading());
     if (m_limelight.getApriltagTargetFound()) {
+//TODO: is shouldAccept() correct here?
       acceptPose = visionAcceptor.shouldAccept(megaTag1, robotSpeeds);
-    }
-    return acceptPose;
-  }
+}
+return acceptPose;
+}
 
-  public boolean shouldResetGyroBack() {
+public boolean shouldResetGyroBack() {
     boolean acceptPose = false;
     double[] botPose = m_limelight.getBotPoseBack();
     Twist2d robotSpeeds = new Twist2d(m_robotRelativeSpeeds.vxMetersPerSecond,
-        m_robotRelativeSpeeds.vyMetersPerSecond, m_robotRelativeSpeeds.omegaRadiansPerSecond);
+    m_robotRelativeSpeeds.vyMetersPerSecond, m_robotRelativeSpeeds.omegaRadiansPerSecond);
     Pose2d megaTag1 = new Pose2d(botPose[0], botPose[1], getGyroHeading());
     if (m_limelight.getApriltagTargetFound()) {
+//TODO: is shouldAccept() correct here?
       acceptPose = visionAcceptor.shouldAccept(megaTag1, robotSpeeds);
     }
     return acceptPose;
@@ -492,6 +496,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     double[] odomTag2Back = m_limelight.getMegaTag2Back();
     
     Pose2d position1 = new Pose2d(botPoseFront[0], botPoseFront[1], getGyroHeading());
+//TODO: position2 is not used?
     Pose2d position2 = new Pose2d(botPoseBack[0], botPoseBack[1], getGyroHeading());
 
     Pose2d megaTag2Front = new Pose2d(odomTag2Front[0], odomTag2Front[1], getGyroHeading());
@@ -529,6 +534,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
         m_odometry.addVisionMeasurement(megaTag2Back, timer);
       }
     }
+//TODO: fix indentation
       m_odometry.updateWithTime(
         Timer.getFPGATimestamp(),
         getGyroHeading(),
