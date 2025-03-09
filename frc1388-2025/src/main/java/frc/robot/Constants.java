@@ -81,7 +81,8 @@ public final class Constants {
   public static class EndEffectorSubsystemConstants {
     public static final double kCoralDetectionHeight = 4; //in inches
     public static final double kInchesPerMillimeters = 1 / 25.4;
-    //TODO create constants for endeffectorsubsystem and commands
+//    public static final int    kShooterMaxCurrent = 20;   // Amps
+    public static final int    kShooterMaxCurrent = 40;   // Amps
   }
 
   public static class EndEffectorCommandConstants {
@@ -96,6 +97,8 @@ public final class Constants {
     public static final double kSprocketCircumference = kChainPitch * kSprocketToothCount;  // inches
     public static final double kChainInchesPerMotorRotation = kSprocketCircumference / kGearboxRatio;
     public static final double kCarriageInchesPerMotorRotation = kChainInchesPerMotorRotation * 2;  // carriage moves twice the rate of the chain
+
+    public static final int    kEndCount = 25;
   }
 
   public static class RobotConstants { 
@@ -136,6 +139,8 @@ public final class Constants {
     public static final double MANUAL_CONTROL_ANGLE_DEADBAND = 0.5;
     public static final double LEFT_STICK_SCALE = 2.5;
     public static final double RIGHT_STICK_SCALE = 5;
+
+    public static final int PIGEON_CANID = 13;
   }
 
   public class AutoConstants {

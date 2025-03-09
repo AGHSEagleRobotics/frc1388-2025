@@ -6,12 +6,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.EndEffectorCommandConstants;
-import frc.robot.Constants.EndEffectorSubsystemConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+
+/**
+ * @ brief  EndEffectorShoot command is intended for autonomous use
+ */
 public class EndEffectorShoot extends Command {
   private EndEffectorSubsystem m_endEffectorSubsystem;
+
+  private int m_endCounter;
+
   /** Creates a new EndEffectorShoot. */
   public EndEffectorShoot(EndEffectorSubsystem endEffectorSubsystem) {
     m_endEffectorSubsystem = endEffectorSubsystem;
@@ -21,7 +27,9 @@ public class EndEffectorShoot extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_endCounter = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -31,11 +39,20 @@ public class EndEffectorShoot extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_endEffectorSubsystem.ShootCoral(0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (m_endEffectorSubsystem.isCoralDetected()) {
+      m_endCounter = 0;
+    }
+    else {
+      m_endCounter++;
+    }
+
+    return (m_endCounter >= EndEffectorCommandConstants.kEndCount);
   }
 }
