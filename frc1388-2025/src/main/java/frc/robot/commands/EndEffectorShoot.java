@@ -9,8 +9,6 @@ import frc.robot.Constants.EndEffectorCommandConstants;
 import frc.robot.Constants.EndEffectorSubsystemConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
-//TODO: add comment indicating that this command is intended for Auto
-
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class EndEffectorShoot extends Command {
   private EndEffectorSubsystem m_endEffectorSubsystem;
@@ -33,14 +31,11 @@ public class EndEffectorShoot extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-//TODO: IntakeCoral(0)
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-//TODO: return true after X cycles when !isCoralDetected()
     return false;
   }
 }

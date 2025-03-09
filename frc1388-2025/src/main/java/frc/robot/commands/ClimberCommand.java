@@ -34,7 +34,9 @@ public class ClimberCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+//TODO: call setSetpointToCurrentPosition() so climber doesn't move when enabling the robot
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

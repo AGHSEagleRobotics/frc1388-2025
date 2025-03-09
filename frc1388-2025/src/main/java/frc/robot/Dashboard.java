@@ -18,7 +18,6 @@ public class Dashboard extends SubsystemBase {
     private final static String SHUFFLEBOARD_TAB_NAME = "Competition";
 
     private final ComplexWidget m_complexWidgetObjective;
-//TODO: remove unused variables
     private static SendableChooser<Objective> m_autoObjective = new SendableChooser<>();
 
     /** Creates a new Dashboard. */
