@@ -323,6 +323,178 @@ public class AutoMethod extends SubsystemBase {
   }
 
 
+  public Command ThreeScoreLeft() {
+    if (Alliance.Blue == DriverStation.getAlliance().get()) {
+      return new AutoGoToPoint(4.97, 5.23, 240, m_driveTrainSubsystem).withTimeout(4).andThen(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
+              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).alongWith(
+              new AutoGoToPoint(1.51, 7.39, 306.4, m_driveTrainSubsystem))
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(3.96, 5.23, 300, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
+          .alongWith(new AutoGoToPoint(1.51, 7.39, 306.4, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(3.68, 5.01, 300, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+    } else {
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 4.97, FieldLayout.FIELD_WIDTH - 5.23, 60,
+          m_driveTrainSubsystem)
+          .withTimeout(4).andThen(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
+                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).withTimeout(1).andThen(
+              new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.51, FieldLayout.FIELD_WIDTH - 7.39, 125.4, m_driveTrainSubsystem))
+          .alongWith(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.96, FieldLayout.FIELD_WIDTH - 5.23, 120, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.51, FieldLayout.FIELD_WIDTH - 7.39, 306.4, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.68, FieldLayout.FIELD_WIDTH - 5.01, 300, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+    }
+  }
+
+  public Command ThreeScoreRight() {
+    if (Alliance.Blue == DriverStation.getAlliance().get()) {
+      return new AutoGoToPoint(5.28, 3.02, 240, m_driveTrainSubsystem).withTimeout(4).andThen(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
+              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).alongWith(
+              new AutoGoToPoint(1.61, 0.58, 306.4, m_driveTrainSubsystem))
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(4.01, 2.82, 300, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
+          .alongWith(new AutoGoToPoint(1.60, 0.58, 306.4, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(3.73, 2.99, 300, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+    } else {
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.28, FieldLayout.FIELD_WIDTH - 3.02, 60,
+          m_driveTrainSubsystem)
+          .withTimeout(4).andThen(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
+                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).withTimeout(1).andThen(
+              new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.61, FieldLayout.FIELD_WIDTH - 0.58, 125.4, m_driveTrainSubsystem))
+          .alongWith(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 4.01, FieldLayout.FIELD_WIDTH - 2.82, 120, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.68, FieldLayout.FIELD_WIDTH - 5.01, 306.4, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.73, FieldLayout.FIELD_WIDTH - 2.99, 300, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+    }
+  }
+
+  public Command FourScoreLeft() {
+    if (Alliance.Blue == DriverStation.getAlliance().get()) {
+      return new AutoGoToPoint(4.97, 5.23, 240, m_driveTrainSubsystem).withTimeout(4).andThen(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
+              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).alongWith(
+              new AutoGoToPoint(1.51, 7.39, 306.4, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(2)
+          .andThen(new AutoGoToPoint(3.96, 5.23, 300, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
+          .alongWith(new AutoGoToPoint(1.51, 7.39, 306.4, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(2)
+          .andThen(new AutoGoToPoint(3.68, 5.01, 300, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
+          .alongWith(new AutoGoToPoint(1.51, 7.39, 306.4, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(3.21, 4.19, 0, m_driveTrainSubsystem))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+    } else {
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 4.97, FieldLayout.FIELD_WIDTH - 5.23, 60,
+          m_driveTrainSubsystem)
+          .withTimeout(4).andThen(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
+                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).withTimeout(1).andThen(
+              new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.51, FieldLayout.FIELD_WIDTH - 7.39, 125.4, m_driveTrainSubsystem))
+          .alongWith(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.96, FieldLayout.FIELD_WIDTH - 5.23, 120, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.51, FieldLayout.FIELD_WIDTH - 7.39, 306.4, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.68, FieldLayout.FIELD_WIDTH - 5.01, 300, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
+          .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.51,FieldLayout.FIELD_WIDTH - 7.39, 306.4, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.21, FieldLayout.FIELD_WIDTH - 4.19, 0, m_driveTrainSubsystem))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+    }
+  }
+
+  public Command FourScoreRight() {
+    if (Alliance.Blue == DriverStation.getAlliance().get()) {
+      return new AutoGoToPoint(5.28, 3.02, 240, m_driveTrainSubsystem).withTimeout(4).andThen(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
+              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).alongWith(
+              new AutoGoToPoint(1.61, 0.58, 306.4, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(2)
+          .andThen(new AutoGoToPoint(4.01, 2.82, 300, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
+          .alongWith(new AutoGoToPoint(1.60, 0.58, 306.4, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(2)
+          .andThen(new AutoGoToPoint(3.73, 2.99, 300, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
+          .alongWith(new AutoGoToPoint(1.60, 0.58, 306.4, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(3.20, 3.85, 0, m_driveTrainSubsystem))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+    } else {
+      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.28, FieldLayout.FIELD_WIDTH - 3.02, 60,
+          m_driveTrainSubsystem)
+          .withTimeout(4).andThen(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
+                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).withTimeout(1).andThen(
+              new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.61, FieldLayout.FIELD_WIDTH - 0.58, 125.4, m_driveTrainSubsystem))
+          .alongWith(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 4.01, FieldLayout.FIELD_WIDTH - 2.82, 120, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.60, FieldLayout.FIELD_WIDTH - 0.58, 306.4, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.73, FieldLayout.FIELD_WIDTH - 2.99, 300, m_driveTrainSubsystem)).withTimeout(4)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
+          .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.60,FieldLayout.FIELD_WIDTH - 0.58, 306.4, m_driveTrainSubsystem).withTimeout(4))
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
+          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.20, FieldLayout.FIELD_WIDTH - 3.85, 0, m_driveTrainSubsystem))
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+    }
+  }
+
   public Command Leave() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
       return new AutoGoToPoint(5.77, 4.19, 180, m_driveTrainSubsystem);
