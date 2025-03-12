@@ -69,6 +69,16 @@ public class ElevatorCommand extends Command {
       m_isInitialized = true;
       m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL4);
     }
+    // else if () {
+    //   m_autoMode = true;
+    //   m_isInitialized = true;
+    //   m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.ALGAEREMOVAL1);
+    // }
+    // else if () {
+    //   m_autoMode = true;
+    //   m_isInitialized = true;
+    //   m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.ALGAEREMOVAL2);
+    // }
     else if (leftY > 0 || leftY < 0) {
       m_autoMode = false;
       m_isInitialized = true;

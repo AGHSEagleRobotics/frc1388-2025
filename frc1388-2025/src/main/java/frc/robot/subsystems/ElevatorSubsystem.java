@@ -47,8 +47,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     LEVEL1(0),
     LEVEL2(10),
     LEVEL3(25),
-    LEVEL4(51);
+    LEVEL4(51),
 
+    ALGAEREMOVAL1(39.655),
+    ALGAEREMOVAL2(55.525);
     private double setpoint;
 
     private ElevatorSetPoints(double setpoint) {
@@ -58,22 +60,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     public double getSetPoint() {
       return this.setpoint;
     }
-  }
-
-  public enum deAglifySetpoints {
-    ALGAELEVEL2(0),
-    ALGAELEVEL3(0);
-//replace this after lunch w real setpoints
-    private double setpoint;
-
-    private deAglifySetpoints(double setpoint) {
-      this.setpoint = setpoint;
-    }
-
-    public double getDeAlgifySetpoint() {
-      return this.setpoint;
-    }
-
   }
 
   /** Creates a new ElevatorSubsystem. */
@@ -226,4 +212,4 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 }
 
-//TODO slow down elevator more when its moving downwards
+//slow down elevator more when its moving downwards

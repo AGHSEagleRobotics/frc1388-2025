@@ -13,6 +13,7 @@ public class ElevatorSetpointCommand extends Command {
   private ElevatorSubsystem m_elevatorSubsystem;
   private boolean m_isLevel4;
   /** Creates a new ElevatorSetpointCommand. */
+  //Used for autonomous
   public ElevatorSetpointCommand(ElevatorSubsystem elevatorSubsystem, boolean isLevel4) {
     m_elevatorSubsystem = elevatorSubsystem;
     m_isLevel4 = isLevel4;
