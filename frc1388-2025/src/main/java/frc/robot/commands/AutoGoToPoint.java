@@ -45,7 +45,7 @@ public class AutoGoToPoint extends Command {
     m_xController.setTolerance(0.05);
     m_yController.setTolerance(0.05);
     
-    m_rotationController.setTolerance(3);
+    m_rotationController.setTolerance(1);
     m_rotationController.enableContinuousInput(0, 360);
 
     
