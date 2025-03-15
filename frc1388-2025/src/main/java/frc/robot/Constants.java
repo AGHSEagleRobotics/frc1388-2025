@@ -29,9 +29,14 @@ public final class Constants {
   }
 
   public static class SwerveModuleConstants {
-    public static final double DIST_PER_TICK = (1.0 / 6.75) * (0.3192); // ask calvin about the math
-
-    public static final double DIST_PER_MOTOR_ROTATION = 5.65 / 131.14; // calvins magic numbers
+    // Drive train encoders
+    public static final double SWERVE_MK4I_L2_RATIO = 6.75;
+    public static final double SWERVE_MK4I_L3_RATIO = 6.12;
+    public static final double WHEEL_ROTATIONS_PER_MOTOR_ROTATION = 1 / SWERVE_MK4I_L3_RATIO;
+    public static final double WHEEL_DIAMETER_INCHES = 3.96;
+    public static final double WHEEL_DIAMETER_METERS = WHEEL_DIAMETER_INCHES * 0.0254;
+    public static final double WHEEL_CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER_METERS;
+    public static final double DIST_PER_MOTOR_ROTATION = WHEEL_CIRCUMFERENCE * WHEEL_ROTATIONS_PER_MOTOR_ROTATION;
 
     public static final double DRIVE_MOTOR_P = 0.001;
     public static final double DRIVE_MOTOR_I = 0;
@@ -81,13 +86,14 @@ public final class Constants {
   public static class EndEffectorSubsystemConstants {
     public static final double kCoralDetectionHeight = 4; //in inches
     public static final double kInchesPerMillimeters = 1 / 25.4;
-    //TODO create constants for endeffectorsubsystem and commands
+//    public static final int    kShooterMaxCurrent = 20;   // Amps
+    public static final int    kShooterMaxCurrent = 40;   // Amps
   }
 
   public static class EndEffectorCommandConstants {
     public static final double kRightTriggerPressed = 0.1;
-    public static final double kIntakeCoralPower = 0.4;
-    public static final double kShootCoralPower = 0.6;    
+    public static final double kIntakeCoralPower = 0.5;
+    public static final double kShootCoralPower = 0.9;    
     public static final double kIntakeKillDelay = 0.1; //in seconds    
 
     public static final double kGearboxRatio = 9.0;       // input to output gear reduction
@@ -96,6 +102,8 @@ public final class Constants {
     public static final double kSprocketCircumference = kChainPitch * kSprocketToothCount;  // inches
     public static final double kChainInchesPerMotorRotation = kSprocketCircumference / kGearboxRatio;
     public static final double kCarriageInchesPerMotorRotation = kChainInchesPerMotorRotation * 2;  // carriage moves twice the rate of the chain
+
+    public static final int    kEndCount = 25;
   }
 
   public static class RobotConstants { 
@@ -136,6 +144,8 @@ public final class Constants {
     public static final double MANUAL_CONTROL_ANGLE_DEADBAND = 0.5;
     public static final double LEFT_STICK_SCALE = 2.5;
     public static final double RIGHT_STICK_SCALE = 5;
+
+    public static final int PIGEON_CANID = 13;
   }
 
   public class AutoConstants {

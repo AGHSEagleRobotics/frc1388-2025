@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -17,7 +16,6 @@ public class Dashboard extends SubsystemBase {
   private final ShuffleboardTab m_shuffleboardTab;
     private final static String SHUFFLEBOARD_TAB_NAME = "Competition";
 
-    private final ComplexWidget m_complexWidgetObjective;
     private static SendableChooser<Objective> m_autoObjective = new SendableChooser<>();
 
     /** Creates a new Dashboard. */
@@ -30,7 +28,7 @@ public class Dashboard extends SubsystemBase {
         m_autoObjective.addOption(o.getDashboardDescript(), o);
       }
       m_autoObjective.setDefaultOption(Objective.Default.getDashboardDescript(), Objective.Default);
-      m_complexWidgetObjective = m_shuffleboardTab.add("AutoObjective", m_autoObjective)
+      m_shuffleboardTab.add("AutoObjective", m_autoObjective)
           .withWidget(BuiltInWidgets.kComboBoxChooser)
           .withSize(8, 4)
           .withPosition(20, 4);
