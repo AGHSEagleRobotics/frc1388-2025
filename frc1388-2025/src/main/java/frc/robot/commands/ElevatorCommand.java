@@ -23,18 +23,21 @@ public class ElevatorCommand extends Command {
     private final Supplier<Boolean> m_b;
     private final Supplier<Boolean> m_x;
     private final Supplier<Boolean> m_y;
+    private final Supplier<Boolean> m_leftBumper;
+    private final Supplier<Boolean> m_rightBumper;
     private boolean m_autoMode = false;
     private boolean m_isInitialized = false;
     private boolean m_manualMode = false;
   /** Creates a new ElevatorCommand. */
-  public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, Supplier<Double> leftY, Supplier<Boolean> a, Supplier<Boolean> b, Supplier<Boolean> x, Supplier<Boolean> y) {
+  public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, Supplier<Double> leftY, Supplier<Boolean> a, Supplier<Boolean> b, Supplier<Boolean> x, Supplier<Boolean> y, Supplier<Boolean> leftBumper, Supplier<Boolean> rightBumper) {
     m_elevatorSubsystem = elevatorSubsystem;
     m_leftY = leftY;
     m_a = a;
     m_b = b;
     m_x = x;
     m_y = y;
-
+    m_leftBumper = leftBumper;
+    m_rightBumper = rightBumper;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_elevatorSubsystem);
   }
@@ -69,16 +72,16 @@ public class ElevatorCommand extends Command {
       m_isInitialized = true;
       m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.LEVEL4);
     }
-    // else if () {
-    //   m_autoMode = true;
-    //   m_isInitialized = true;
-    //   m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.ALGAEREMOVAL1);
-    // }
-    // else if () {
-    //   m_autoMode = true;
-    //   m_isInitialized = true;
-    //   m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.ALGAEREMOVAL2);
-    // }
+    else if (m_leftBumper.get()) {
+      m_autoMode = true;
+      m_isInitialized = true;
+      m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.ALGAEREMOVAL1);
+    }
+    else if (m_rightBumper.get()) {
+      m_autoMode = true;
+      m_isInitialized = true;
+      m_elevatorSubsystem.setSetpoint(ElevatorSetPoints.ALGAEREMOVAL2);
+    }
     else if (leftY > 0 || leftY < 0) {
       m_autoMode = false;
       m_isInitialized = true;

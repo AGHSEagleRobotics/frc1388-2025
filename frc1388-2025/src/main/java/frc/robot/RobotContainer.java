@@ -126,15 +126,17 @@ public class RobotContainer {
         () -> m_operatorController.getHID().getAButton(),
         () -> m_operatorController.getHID().getBButton(),
         () -> m_operatorController.getHID().getXButton(),
-        () -> m_operatorController.getHID().getYButton());
+        () -> m_operatorController.getHID().getYButton(),
+        () -> m_operatorController.getHID().getLeftBumperButton(),
+        () -> m_operatorController.getHID().getRightBumperButton());
     m_elevatorSubsystem.setDefaultCommand(m_elevatorCommand);
 
     m_climberCommand = new ClimberCommand(
       m_climberSubsystem, 
       () -> m_operatorController.getRightY(), 
-      () -> m_operatorController.getHID().getPOV() == 0, 
-      () -> m_operatorController.getHID().getPOV() == 180,
-      () -> m_operatorController.getHID().getPOV() == 90);
+      () -> m_operatorController.getHID().getLeftTriggerAxis() == 1, 
+      () -> m_operatorController.getHID().getRightTriggerAxis() == 1,
+      () -> m_operatorController.getHID().getPOV() == 0); 
     m_climberSubsystem.setDefaultCommand(m_climberCommand);
 
     m_endEffectorCommand = new EndEffectorCommand(
