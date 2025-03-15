@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveTrainConstants;
@@ -18,7 +19,7 @@ import frc.robot.Constants.DriveTrainConstants;
 public class VisionAcceptor {
     public static final double robotMargin = 0.5;
     
-    Twist2d m_robotVelocity;
+    ChassisSpeeds m_robotVelocity;
     Pose2d m_lastPosition;
     int m_jumpCount = 0;
     int m_jumpCountMax = 0;
@@ -26,14 +27,14 @@ public class VisionAcceptor {
     boolean m_isMegaTag2;
 
 
-    public VisionAcceptor(boolean isMegaTag2) {
+    public VisionAcceptor(boolean isMegaTag2, ChassisSpeeds robotVelocity) {
         m_isMegaTag2 = isMegaTag2;
+        m_robotVelocity = robotVelocity;
     }
 
-    public boolean shouldAccept(Pose2d currentPosition, Twist2d robotVelocity) {
-         m_robotVelocity = robotVelocity;
+    public boolean shouldAccept(Pose2d currentPosition) {
 
-        if(robotVelocity == null || currentPosition == null) {
+        if(m_robotVelocity == null || currentPosition == null) {
              System.out.println("null check");
             return false;
         }
@@ -89,7 +90,7 @@ public class VisionAcceptor {
             double differenceOfPositionY = currentPosition.getY() - m_lastPosition.getY();
             
             Translation2d positionChange = new Translation2d(differenceOfPositionX, differenceOfPositionY);
-            Translation2d robotDirection = new Translation2d(m_robotVelocity.dx, m_robotVelocity.dy);
+            Translation2d robotDirection = new Translation2d(m_robotVelocity.vxMetersPerSecond, m_robotVelocity.vyMetersPerSecond);
 
             Translation2d robotDirectionNormalized = robotDirection.div(robotDirection.getNorm());
             Translation2d positionChangeNormalized = positionChange.div(positionChange.getNorm());
@@ -120,7 +121,7 @@ public class VisionAcceptor {
         return true;      
     }
 
-    public boolean shouldResetGyro(Twist2d robotVelocity) {
+    public boolean shouldResetGyro() {
         if(norm() == 0.0) {
         return true;
         }
@@ -128,13 +129,10 @@ public class VisionAcceptor {
     }
 
     public double norm() {
-        if (m_robotVelocity != null) {
-        double dx = m_robotVelocity.dx;
-        double dy = m_robotVelocity.dy;
+        double dx = m_robotVelocity.vxMetersPerSecond;
+        double dy = m_robotVelocity.vyMetersPerSecond;
         if (dy == 0.0)
             return Math.abs(dx);
         return Math.hypot(dx, dy);
-        }
-        return 0.1;
     }
 }
