@@ -91,8 +91,8 @@ public final class Constants {
 
   public static class EndEffectorCommandConstants {
     public static final double kRightTriggerPressed = 0.1;
-    public static final double kIntakeCoralPower = 0.4;
-    public static final double kShootCoralPower = 0.6;    
+    public static final double kIntakeCoralPower = 0.5;
+    public static final double kShootCoralPower = 0.9;    
     public static final double kIntakeKillDelay = 0.1; //in seconds    
 
     public static final double kGearboxRatio = 9.0;       // input to output gear reduction
