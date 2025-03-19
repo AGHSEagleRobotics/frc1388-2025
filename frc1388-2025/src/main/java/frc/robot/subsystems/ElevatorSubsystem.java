@@ -47,7 +47,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     LEVEL1(0),
     LEVEL2(10),
     LEVEL3(25),
-    LEVEL4(51);
+    LEVEL4(51.5);
 
     private double setpoint;
 

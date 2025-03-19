@@ -42,7 +42,7 @@ public class VisionAcceptor {
         // if this is the first ever check, then initialize class variable and trust the position
         if(m_lastPosition == null) {
             m_lastPosition = currentPosition;
-            System.out.println("first check");
+            // System.out.println("first check");
             return true;
         }
 
