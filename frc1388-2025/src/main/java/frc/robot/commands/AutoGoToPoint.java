@@ -22,15 +22,15 @@ public class AutoGoToPoint extends Command {
   private final double ROTATION_SETPOINT;
 
   // i was 0.015
-  private final PIDController m_xController = new PIDController(1.8, 0, 0);
+  private final PIDController m_xController = new PIDController(2.5, 0, 0);
   private double m_lastXSpeed = 0;
   private final SlewRateLimiter m_xAccLimiter = new SlewRateLimiter(0.2);
 
-  private final PIDController m_yController = new PIDController(1.8, 0, 0);
+  private final PIDController m_yController = new PIDController(2.5, 0, 0);
   private double m_lastYSpeed = 0;
   private final SlewRateLimiter m_yAccLimiter = new SlewRateLimiter(0.2);
 
-  private PIDController m_rotationController = new PIDController(0.02, 0, 0);
+  private PIDController m_rotationController = new PIDController(0.035, 0, 0);
 
 
   /** Creates a new AutoMove. */

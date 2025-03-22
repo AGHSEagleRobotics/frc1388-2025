@@ -151,18 +151,18 @@ public final class Constants {
   public class AutoConstants {
 
     // blue side
-    public static final Pose2d SCORING_POSITION_1_RIGHT_BLUE = new Pose2d(3.22, 3.859, new Rotation2d(0));
-    public static final Pose2d SCORING_POSITION_1_LEFT_BLUE = new Pose2d(3.22, 4.172, new Rotation2d(0));
-    public static final Pose2d SCORING_POSITION_2_LEFT_BLUE = new Pose2d(3.72, 3.006, new Rotation2d(Math.toRadians(60)));
-    public static final Pose2d SCORING_POSITION_2_RIGHT_BLUE = new Pose2d(4.006, 2.846, new Rotation2d(Math.toRadians(60)));
-    public static final Pose2d SCORING_POSITION_3_LEFT_BLUE = new Pose2d(5.004, 2.86, new Rotation2d(Math.toRadians(120)));
-    public static final Pose2d SCORING_POSITION_3_RIGHT_BLUE = new Pose2d(5.28, 3.019, new Rotation2d(Math.toRadians(120)));
-    public static final Pose2d SCORING_POSITION_4_LEFT_BLUE = new Pose2d(5.746, 4.17, new Rotation2d(Math.toRadians(180)));
-    public static final Pose2d SCORING_POSITION_4_RIGHT_BLUE = new Pose2d(5.746, 3.86, new Rotation2d(Math.toRadians(180)));
-    public static final Pose2d SCORING_POSITION_5_LEFT_BLUE = new Pose2d(5.25, 5.04, new Rotation2d(Math.toRadians(240)));
-    public static final Pose2d SCORING_POSITION_5_RIGHT_BLUE = new Pose2d(4.97, 5.18, new Rotation2d(Math.toRadians(240)));
-    public static final Pose2d SCORING_POSITION_6_LEFT_BLUE = new Pose2d(4.00, 5.20, new Rotation2d(Math.toRadians(300)));
-    public static final Pose2d SCORING_POSITION_6_RIGHT_BLUE = new Pose2d(3.72, 5.04, new Rotation2d(Math.toRadians(300)));
+    public static final Pose2d SCORING_POSITION_1_RIGHT_BLUE = new Pose2d(3.2004, 3.8616, new Rotation2d(0));
+    public static final Pose2d SCORING_POSITION_1_LEFT_BLUE = new Pose2d(3.2004, 4.1902, new Rotation2d(0));
+    public static final Pose2d SCORING_POSITION_2_LEFT_BLUE = new Pose2d(3.7026, 2.9917, new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d SCORING_POSITION_2_RIGHT_BLUE = new Pose2d(3.9872, 2.8274, new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d SCORING_POSITION_3_LEFT_BLUE = new Pose2d(4.9917, 2.8274, new Rotation2d(Math.toRadians(120)));
+    public static final Pose2d SCORING_POSITION_3_RIGHT_BLUE = new Pose2d(5.2763, 2.9917, new Rotation2d(Math.toRadians(120)));
+    public static final Pose2d SCORING_POSITION_4_LEFT_BLUE = new Pose2d(5.7785, 3.8616, new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d SCORING_POSITION_4_RIGHT_BLUE = new Pose2d(5.7785, 4.1902, new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d SCORING_POSITION_5_LEFT_BLUE = new Pose2d(5.2763, 5.0601, new Rotation2d(Math.toRadians(240)));
+    public static final Pose2d SCORING_POSITION_5_RIGHT_BLUE = new Pose2d(4.9917, 5.2244, new Rotation2d(Math.toRadians(240)));
+    public static final Pose2d SCORING_POSITION_6_LEFT_BLUE = new Pose2d(3.9872, 5.2244, new Rotation2d(Math.toRadians(300)));
+    public static final Pose2d SCORING_POSITION_6_RIGHT_BLUE = new Pose2d(3.7026, 5.0601, new Rotation2d(Math.toRadians(300)));
 
     // red side
     public static final Pose2d SCORING_POSITION_1_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_1_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_1_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(180)));

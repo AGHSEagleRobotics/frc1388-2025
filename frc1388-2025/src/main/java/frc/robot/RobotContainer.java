@@ -48,7 +48,7 @@ public class RobotContainer {
 
   private final Dashboard m_dashboard = new Dashboard();
 
-  private final Limelight m_limeLight = new Limelight("limelight-front", "limelight-back");
+  private final Limelight m_limeLight = new Limelight("limelight-front", "limelight-back", "limelight-left");
 
   // Subsystems
   private final DriveTrainSubsystem m_driveTrain = new DriveTrainSubsystem(
@@ -180,7 +180,7 @@ public class RobotContainer {
   }
 
   public void resetGyro() {
-    if (m_limeLight.getApriltagTargetFound()) {
+    if (m_limeLight.getApriltagTargetFoundFront()) {
       m_driveTrain.limelightResetGyroFront();
     }
   }
