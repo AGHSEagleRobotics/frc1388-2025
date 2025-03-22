@@ -8,7 +8,6 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.EndEffectorCommandConstants;
-import frc.robot.Constants;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,7 +22,6 @@ public class EndEffectorCommand extends Command {
   private final Timer m_endEffectorTimer = new Timer();
   private boolean m_coralIsDetected = false;
   private boolean m_rightTriggerWasPressed = false;
-  private boolean m_rightBumperWasPressed = false;
 
   /** Creates a new EndEffectorCommand. */
   // Supplier<Double> leftTrigger, Supplier<Boolean> leftBumper,
@@ -60,14 +58,16 @@ public class EndEffectorCommand extends Command {
         System.out.println("Coral Not Detected Reset");
       }
     }
+
     if (m_coralIsDetected == true) {
+      //TODO change timer values once programming gets robot
       // if(m_endEffectorTimer.get() > EndEffectorCommandConstants.kIntakeKillDelay) {
         SmartDashboard.putNumber("Timer", m_endEffectorTimer.get());
-        System.out.println("Intake Kill Delay");
+        // System.out.println("Intake Kill Delay");
         m_endEffectorSubsystem.ShootCoral(0);
       // }
     }
-    //TODO change timer values once programming gets robot
+
     double rightTrigger = m_rightTrigger.get();
     boolean rightBumper = m_rightBumper.get();
     if (rightTrigger > EndEffectorCommandConstants.kRightTriggerPressed) {
@@ -84,7 +84,6 @@ public class EndEffectorCommand extends Command {
       //endeffectortimer\
       System.out.println("Right Bumper Pressed");
       m_endEffectorSubsystem.IntakeCoral(EndEffectorCommandConstants.kIntakeCoralPower);  
-      m_rightBumperWasPressed = true;//if we dont need it delete it
     }
     
   }
@@ -93,7 +92,9 @@ public class EndEffectorCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_endEffectorSubsystem.ShootCoral(0);
+  }
 
   // Returns true when the command should end.
   @Override

@@ -9,12 +9,18 @@ import frc.robot.Constants.EndEffectorCommandConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+
+/**
+ * @ brief  EndEffectorIntake command is intended for autonomous use
+ */
 public class EndEffectorIntake extends Command {
   private EndEffectorSubsystem m_endEffectorSubsystem;
+
   /** Creates a new EndEffectorIntake. */
   public EndEffectorIntake(EndEffectorSubsystem endEffectorSubsystem) {
     m_endEffectorSubsystem = endEffectorSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_endEffectorSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +35,9 @@ public class EndEffectorIntake extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_endEffectorSubsystem.ShootCoral(0);
+  }
 
   // Returns true when the command should end.
   @Override

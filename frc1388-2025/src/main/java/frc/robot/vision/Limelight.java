@@ -13,11 +13,13 @@ import frc.robot.Constants.LimelightConstants;
 public class Limelight {
     private static NetworkTable m_placerSideTable;
     private static NetworkTable m_intakeSideTable;
+    private static NetworkTable m_placerSideTableLeft;
     private static double[] botPose0 = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
-    public Limelight(String placerSideName, String intakeSideName) {
+    public Limelight(String placerSideName, String intakeSideName, String placerSideLeftName) {
     m_placerSideTable = NetworkTableInstance.getDefault().getTable(placerSideName);
     m_intakeSideTable = NetworkTableInstance.getDefault().getTable(intakeSideName);
+    m_placerSideTableLeft = NetworkTableInstance.getDefault().getTable(placerSideLeftName);
     setShooterPipeline(0);
   }
 
@@ -41,8 +43,28 @@ public class Limelight {
     return m_tid;
    }
 
-   public boolean getApriltagTargetFound() {
+   public boolean getApriltagTargetFoundFront() {
     NetworkTableEntry tv = m_placerSideTable.getEntry("tv");
+    double m_tv = tv.getDouble(0);
+    if (m_tv == 0.0f) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  public boolean getApriltagTargetFoundBack() {
+    NetworkTableEntry tv = m_intakeSideTable.getEntry("tv");
+    double m_tv = tv.getDouble(0);
+    if (m_tv == 0.0f) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  public boolean getApriltagTargetFoundFrontLeft() {
+    NetworkTableEntry tv = m_placerSideTableLeft.getEntry("tv");
     double m_tv = tv.getDouble(0);
     if (m_tv == 0.0f) {
       return false;
@@ -105,6 +127,16 @@ public class Limelight {
         return botPose0;
   }
 
+  public double[] getBotPoseLeft() {
+    double[] botPose;
+      botPose = m_placerSideTableLeft.getEntry("botpose_wpiblue").getDoubleArray(new double[] {});
+
+        if (botPose.length >= 18) {
+        return botPose;
+        }
+        return botPose0;
+  }
+
   public double getBotPoseValue(double[] botPose, int index) {
     if (index < botPose.length) {
       return botPose[index];
@@ -132,6 +164,17 @@ public class Limelight {
         }
         return botPose0;
   }
+
+  public double[] getMegaTag2Left() {
+    double[] botPose;
+      botPose = m_placerSideTableLeft.getEntry("botpose_orb_wpiblue").getDoubleArray(new double[] {});
+
+        if (botPose.length >= 3) {
+        return botPose;
+        }
+        return botPose0;
+  }
+
 
   public void setLimelightLEDsOn(Boolean on) {
     if (on) {

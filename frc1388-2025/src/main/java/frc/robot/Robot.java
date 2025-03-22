@@ -13,9 +13,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import au.grapplerobotics.CanBridge;
-import choreo.auto.AutoRoutine;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -117,8 +114,8 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     if (m_neutralModeTimer.hasElapsed(5)) {
       m_robotContainer.setBrakeMode(false);
-      m_neutralModeTimer.reset();
       m_neutralModeTimer.stop();
+      m_neutralModeTimer.reset();
     }
     m_robotContainer.resetGyro();
   }
@@ -129,14 +126,13 @@ public class Robot extends TimedRobot {
     DataLogManager.log("####### Autonomous Init");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    DataLogManager.log("setting neutral mode");
+    DataLogManager.log("> setting neutral mode");
     m_robotContainer.setBrakeMode(true);
-    DataLogManager.log("done setting neutral mode");
 
     // schedule the autonomous command
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
-      System.out.println("starting auto command");
+      System.out.println("> starting auto command");
     }
 
 

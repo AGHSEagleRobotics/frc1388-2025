@@ -84,8 +84,12 @@ public class SwerveModule {
       }
   }
 
+  /**
+   * @brief set the robot's driving speed
+   * @param inputSpeed meters per second
+   */
   public void setDriveSpeed(double inputSpeed) { 
-      // because the robot's max speed is 3 m/s, dividing the speed by 3 results in a power [-1, 1] we can set the motor to 
+      // dividing the speed by the robot's max speed results in a power [-1, 1] that we can set the motor to 
       m_driveMotor.set(inputSpeed / Constants.DriveTrainConstants.ROBOT_MAX_SPEED); // probably should be done outside of swerve module
   }
 
