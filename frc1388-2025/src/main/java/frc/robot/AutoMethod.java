@@ -332,13 +332,13 @@ public class AutoMethod extends SubsystemBase {
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).alongWith(
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1).alongWith(
               new AutoGoToPoint(1.13, 7.37, 306, m_driveTrainSubsystem).withTimeout(2.5)))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
           .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_6_RIGHT_BLUE.getX(),
               AutoConstants.SCORING_POSITION_6_RIGHT_BLUE.getY(),
               AutoConstants.SCORING_POSITION_6_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
-              .withTimeout(2))
+              .withTimeout(2)
           .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
           .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
@@ -357,13 +357,13 @@ public class AutoMethod extends SubsystemBase {
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).alongWith(
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1).alongWith(
               new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.13, FieldLayout.FIELD_WIDTH - 7.37, 126, m_driveTrainSubsystem).withTimeout(2.5)))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
               .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_6_RIGHT_RED.getX(),
                   AutoConstants.SCORING_POSITION_6_RIGHT_RED.getY(),
                   AutoConstants.SCORING_POSITION_6_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
-                  .withTimeout(2))
+                  .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
           .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
@@ -386,13 +386,13 @@ public class AutoMethod extends SubsystemBase {
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).alongWith(
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1).alongWith(
               new AutoGoToPoint(1.03, 0.66, 54, m_driveTrainSubsystem).withTimeout(2.5)))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)
+          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
           .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_2_RIGHT_BLUE.getX(),
               AutoConstants.SCORING_POSITION_2_RIGHT_BLUE.getY(),
               AutoConstants.SCORING_POSITION_2_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
-              .withTimeout(2))
+              .withTimeout(2)
           .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
           .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
@@ -411,13 +411,13 @@ public class AutoMethod extends SubsystemBase {
       .alongWith(
           new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
       .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
-      .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).alongWith(
+      .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1).alongWith(
           new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.03, FieldLayout.FIELD_WIDTH - 0.66, 234, m_driveTrainSubsystem).withTimeout(2.5)))
-      .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)
+      .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
       .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_2_RIGHT_RED.getX(),
           AutoConstants.SCORING_POSITION_2_RIGHT_RED.getY(),
           AutoConstants.SCORING_POSITION_2_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
-          .withTimeout(2))
+          .withTimeout(2)
       .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
       .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
       .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
