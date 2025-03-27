@@ -46,6 +46,12 @@ import frc.robot.vision.VisionAcceptor;
 public class DriveTrainSubsystem extends SubsystemBase {
 
   StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose2d.struct).publish();
+  StructPublisher<Pose2d> publishPose1 = NetworkTableInstance.getDefault().getStructTopic("pose/pose1", Pose2d.struct).publish();
+  StructPublisher<Pose2d> publishPose2 = NetworkTableInstance.getDefault().getStructTopic("pose/pose2", Pose2d.struct).publish();
+  StructPublisher<Pose2d> publishPose3 = NetworkTableInstance.getDefault().getStructTopic("pose/pose3", Pose2d.struct).publish();
+  StructPublisher<Pose2d> publishMegaTag2FrontRight = NetworkTableInstance.getDefault().getStructTopic("pose/megatag2FrontRight", Pose2d.struct).publish();
+  StructPublisher<Pose2d> publishMegaTag2FrontLeft = NetworkTableInstance.getDefault().getStructTopic("pose/megatag2FrontLeft", Pose2d.struct).publish();
+  StructPublisher<Pose2d> publishMegaTag2Back = NetworkTableInstance.getDefault().getStructTopic("pose/megatag2Back", Pose2d.struct).publish();
 
   private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(); 
 
@@ -591,13 +597,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("drivetrain/backLeft encoder angle", m_backLeft.getRotationAngle());
     SmartDashboard.putNumber("drivetrain/backRight encoder angle", m_backRight.getRotationAngle());
 
-    // SmartDashboard.putData("pose/position1", position1);
-    // SmartDashboard.putData("pose/position2", position2);
-    // SmartDashboard.putData("pose/position3", position3);
-    // SmartDashboard.putData("pose/megatag2FrontRight", megaTag2Front);
-    // SmartDashboard.putData("pose/megatag2FrontLeft", megaTag2FrontLeft);
-    // SmartDashboard.putData("pose/megatag2Back", megaTag2Back);
-
     publisher.set(getPose());
+    publishPose1.set(position1);
+    publishPose2.set(position2);
+    publishPose3.set(position3);
+    publishMegaTag2FrontRight.set(megaTag2Front);
+    publishMegaTag2FrontLeft.set(megaTag2FrontLeft);
+    publishMegaTag2Back.set(megaTag2Back);
   }
 }
