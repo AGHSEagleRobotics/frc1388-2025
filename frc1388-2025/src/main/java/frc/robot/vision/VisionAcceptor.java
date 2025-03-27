@@ -113,7 +113,7 @@ public class VisionAcceptor {
         }
 
         // checks if robot is moving too fast for camera to update
-        if (norm() > 4.0) {
+        if (norm() > 2.5) { //changed from 4
             return false;
         }
         m_lastPosition = currentPosition;

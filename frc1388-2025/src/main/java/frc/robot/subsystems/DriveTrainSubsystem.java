@@ -25,10 +25,12 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -474,7 +476,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     
     VisionAcceptor visionAcceptorGyroFront = new VisionAcceptor(false, m_robotRelativeSpeeds);
     VisionAcceptor visionAcceptorGyroBack = new VisionAcceptor(false, m_robotRelativeSpeeds);
-    VisionAcceptor visionAcceptorGyroFrontLeft = new VisionAcceptor(false, chassisSpeeds);
+    VisionAcceptor visionAcceptorGyroFrontLeft = new VisionAcceptor(false, chassisSpeeds); //ask alex
     VisionAcceptor visionAcceptorMegaTag2FrontLeft = new VisionAcceptor(true, chassisSpeeds);
     VisionAcceptor visionAcceptorMegaTag2Front = new VisionAcceptor(true, m_robotRelativeSpeeds);
     VisionAcceptor visionAcceptorMegaTag2Back = new VisionAcceptor(true, m_robotRelativeSpeeds);
@@ -493,7 +495,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     
     double[] botPoseFront = m_limelight.getBotPoseFront();
     double[] botPoseBack = m_limelight.getBotPoseBack();
-    double [] botPoseFrontLeft = m_limelight.getBotPoseLeft();
+    double[] botPoseFrontLeft = m_limelight.getBotPoseLeft();
 
     double[] odomTag2Front = m_limelight.getMegaTag2Front();
     double[] odomTag2Back = m_limelight.getMegaTag2Back();
@@ -506,6 +508,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
     Pose2d megaTag2Front = new Pose2d(odomTag2Front[0], odomTag2Front[1], getGyroHeading());
     Pose2d megaTag2Back = new Pose2d(odomTag2Back[0], odomTag2Back[1], getGyroHeading());
     Pose2d megaTag2FrontLeft = new Pose2d(odomTag2FrontLeft[0], odomTag2FrontLeft[1], getGyroHeading());
+
+    // Field2d fieldPose1 = new Field2d();
 
     LimelightHelpers.SetRobotOrientation("limelight-front", getAngle(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetRobotOrientation("limelight-back", getAngle(), 0, 0, 0, 0, 0);
@@ -570,9 +574,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
     }
 
     SmartDashboard.putNumber("drivetrain/gyro angle", getAngle());
-    SmartDashboard.putBoolean("VisionAcceptor/is Accepting Front", acceptPoseFront);
-    SmartDashboard.putBoolean("VisionAcceptor/is Accepting megatag2Front", acceptMegaTag2Front);
-    SmartDashboard.putBoolean("VisionAcceptor/is Accepting Pose Back", acceptPoseFront);
+    SmartDashboard.putBoolean("VisionAcceptor/is Accepting FrontRight", acceptPoseFront);
+    SmartDashboard.putBoolean("VisionAcceptor/is Accepting megatag2FrontRight", acceptMegaTag2Front);
+    SmartDashboard.putBoolean("VisionAcceptor/is Accepting FrontLeft", acceptPoseFrontLeft);
+    SmartDashboard.putBoolean("VisionAcceptor/is Accepting megatag2FrontLeft", acceptMegaTag2FrontLeft);
+    SmartDashboard.putBoolean("VisionAcceptor/is Accepting Pose Back", acceptPoseBack);
     SmartDashboard.putBoolean("VisionAcceptor/is Accepting megatag2Back", acceptMegaTag2Back);
 
     SmartDashboard.putNumber("drivetrain/closestPoseX", getClosestTargetPose().getX());
@@ -584,6 +590,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("drivetrain/frontLeft encoder angle", m_frontLeft.getRotationAngle());
     SmartDashboard.putNumber("drivetrain/backLeft encoder angle", m_backLeft.getRotationAngle());
     SmartDashboard.putNumber("drivetrain/backRight encoder angle", m_backRight.getRotationAngle());
+
+    // SmartDashboard.putData("pose/position1", position1);
+    // SmartDashboard.putData("pose/position2", position2);
+    // SmartDashboard.putData("pose/position3", position3);
+    // SmartDashboard.putData("pose/megatag2FrontRight", megaTag2Front);
+    // SmartDashboard.putData("pose/megatag2FrontLeft", megaTag2FrontLeft);
+    // SmartDashboard.putData("pose/megatag2Back", megaTag2Back);
 
     publisher.set(getPose());
   }
