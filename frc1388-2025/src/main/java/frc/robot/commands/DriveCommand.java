@@ -12,6 +12,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.subsystems.DriveTrainSubsystem;
 
@@ -23,6 +24,7 @@ public class DriveCommand extends Command {
   private final Supplier<Double> m_leftY;
   private final Supplier<Double> m_leftX;
   private final Supplier<Double> m_rightX;
+  private final Supplier<Boolean> m_start;
 
   private final PIDController m_xController = new PIDController(1.8, 0, 0);
   private final PIDController m_yController = new PIDController(1.8, 0, 0);
@@ -36,12 +38,14 @@ public class DriveCommand extends Command {
   private boolean m_lineUp = false;
 
   /** Creates a new DriveCommand. */
-  public DriveCommand(DriveTrainSubsystem driveTrain, Supplier<Double> leftY, Supplier<Double> leftX, Supplier<Double> rightX, Supplier<Boolean> a) {
+  public DriveCommand(DriveTrainSubsystem driveTrain, Supplier<Double> leftY, Supplier<Double> leftX, Supplier<Double> rightX, Supplier<Boolean> a, Supplier<Boolean> start) {
     m_driveTrain = driveTrain;
     m_leftY = leftY;
     m_leftX = leftX;
     m_rightX = rightX;
     m_a =  a;
+    m_start = start;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_driveTrain);
   }
@@ -56,10 +60,15 @@ public class DriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+
     double leftX = MathUtil.applyDeadband(m_leftX.get(), DriveTrainConstants.CONTROLLER_DEADBAND);
     double leftY = MathUtil.applyDeadband(m_leftY.get(), DriveTrainConstants.CONTROLLER_DEADBAND);
     double rightX = -MathUtil.applyDeadband(m_rightX.get(), DriveTrainConstants.CONTROLLER_DEADBAND);
+
+    if(m_start.get()) {
+      m_driveTrain.limelightResetGyroFront();
+      m_driveTrain.limelightResetGyroBack();
+    }
 
     if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
       leftX = -leftX;
