@@ -15,17 +15,17 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class ClimberCommand extends Command {
   private final ClimberSubsystem m_climberSubsystem;
   private final Supplier<Double> m_rightY; 
-  private final Supplier<Boolean> m_leftTrigger;
-  private final Supplier<Boolean> m_rightTrigger;
+  private final Supplier<Boolean> m_DPadUp;
+  private final Supplier<Boolean> m_DPadDown;
   private final Supplier<Boolean> m_DPadRight;
   private boolean m_autoMode = false;
 
   /** Creates a new ClimberCommand. */
-  public ClimberCommand(ClimberSubsystem climberSubsystem, Supplier<Double> rightY, Supplier<Boolean> leftTrigger, Supplier<Boolean> rightTrigger, Supplier<Boolean> DPadRight) {
+  public ClimberCommand(ClimberSubsystem climberSubsystem, Supplier<Double> rightY, Supplier<Boolean> DPadUp, Supplier<Boolean> DPadDown, Supplier<Boolean> DPadRight) {
     m_climberSubsystem = climberSubsystem;
     m_rightY = rightY;
-    m_leftTrigger = leftTrigger;
-    m_rightTrigger = rightTrigger;
+    m_DPadUp = DPadUp;
+    m_DPadDown = DPadDown;
     m_DPadRight = DPadRight;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -40,11 +40,11 @@ public class ClimberCommand extends Command {
   @Override
   public void execute() {
     double rightY = MathUtil.applyDeadband(m_rightY.get(), ClimberConstants.CLIMBER_CONTROLLER_DEADBAND);
-    if(m_leftTrigger.get()) {
+    if(m_DPadDown.get()) {
       m_autoMode = true;
       m_climberSubsystem.setSetpoint(ClimberConstants.CLIMBER_DOWN_POSITION);
     }
-    else if(m_rightTrigger.get()) {
+    else if(m_DPadUp.get()) {
       m_autoMode = true;
       m_climberSubsystem.setSetpoint(ClimberConstants.CLIMBER_UP_POSITION);
     }
