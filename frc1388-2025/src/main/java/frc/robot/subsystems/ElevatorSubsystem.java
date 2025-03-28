@@ -47,7 +47,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     LEVEL1(0),
     LEVEL2(10),
     LEVEL3(26),
-    LEVEL4(51.5);
+    LEVEL4(51.5),
 
     ALGAEREMOVAL1(39.655), //algae betwen reef levels 2 and 3
     ALGAEREMOVAL2(55.525); //algae between reef levels 3 and 4
