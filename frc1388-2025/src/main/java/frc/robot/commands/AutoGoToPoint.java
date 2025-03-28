@@ -30,7 +30,7 @@ public class AutoGoToPoint extends Command {
   private double m_lastYSpeed = 0;
   private final SlewRateLimiter m_yAccLimiter = new SlewRateLimiter(0.2);
 
-  private PIDController m_rotationController = new PIDController(0.002, 0, 0);
+  private PIDController m_rotationController = new PIDController(0.035, 0, 0);
 
 
   /** Creates a new AutoMove. */
@@ -45,7 +45,7 @@ public class AutoGoToPoint extends Command {
     m_xController.setTolerance(0.05);
     m_yController.setTolerance(0.05);
     
-    m_rotationController.setTolerance(3);
+    m_rotationController.setTolerance(1);
     m_rotationController.enableContinuousInput(0, 360);
 
     

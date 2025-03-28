@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
-import frc.robot.subsystems.ElevatorSubsystem.ElevatorSetPoints;
 
 public class ClimberSubsystem extends SubsystemBase {
 
@@ -22,7 +21,6 @@ public class ClimberSubsystem extends SubsystemBase {
   private final PIDController m_climberPidController = 
    new PIDController(10, 0.0, 0.0);
 
-   private double m_targetPosition = 0;
    private boolean m_autoMode = false;
    private double m_manualPower = 0;
 
@@ -55,7 +53,6 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void setTargetPosition(double position) {
-    m_targetPosition = position;
     m_climberPidController.setSetpoint(position);
   }
 

@@ -29,9 +29,14 @@ public final class Constants {
   }
 
   public static class SwerveModuleConstants {
-    public static final double DIST_PER_TICK = (1.0 / 6.75) * (0.3192); // ask calvin about the math
-
-    public static final double DIST_PER_MOTOR_ROTATION = 5.65 / 131.14; // calvins magic numbers
+    // Drive train encoders
+    public static final double SWERVE_MK4I_L2_RATIO = 6.75;
+    public static final double SWERVE_MK4I_L3_RATIO = 6.12;
+    public static final double WHEEL_ROTATIONS_PER_MOTOR_ROTATION = 1 / SWERVE_MK4I_L3_RATIO;
+    public static final double WHEEL_DIAMETER_INCHES = 3.96;
+    public static final double WHEEL_DIAMETER_METERS = WHEEL_DIAMETER_INCHES * 0.0254;
+    public static final double WHEEL_CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER_METERS;
+    public static final double DIST_PER_MOTOR_ROTATION = WHEEL_CIRCUMFERENCE * WHEEL_ROTATIONS_PER_MOTOR_ROTATION;
 
     public static final double DRIVE_MOTOR_P = 0.001;
     public static final double DRIVE_MOTOR_I = 0;
@@ -81,13 +86,14 @@ public final class Constants {
   public static class EndEffectorSubsystemConstants {
     public static final double kCoralDetectionHeight = 4; //in inches
     public static final double kInchesPerMillimeters = 1 / 25.4;
-    //TODO create constants for endeffectorsubsystem and commands
+//    public static final int    kShooterMaxCurrent = 20;   // Amps
+    public static final int    kShooterMaxCurrent = 40;   // Amps
   }
 
   public static class EndEffectorCommandConstants {
     public static final double kRightTriggerPressed = 0.1;
-    public static final double kIntakeCoralPower = 0.4;
-    public static final double kShootCoralPower = 0.6;    
+    public static final double kIntakeCoralPower = 0.5;
+    public static final double kShootCoralPower = 0.9;    
     public static final double kIntakeKillDelay = 0.1; //in seconds    
 
     public static final double kGearboxRatio = 9.0;       // input to output gear reduction
@@ -96,6 +102,8 @@ public final class Constants {
     public static final double kSprocketCircumference = kChainPitch * kSprocketToothCount;  // inches
     public static final double kChainInchesPerMotorRotation = kSprocketCircumference / kGearboxRatio;
     public static final double kCarriageInchesPerMotorRotation = kChainInchesPerMotorRotation * 2;  // carriage moves twice the rate of the chain
+
+    public static final int    kEndCount = 25;
   }
 
   public static class RobotConstants { 
@@ -136,23 +144,25 @@ public final class Constants {
     public static final double MANUAL_CONTROL_ANGLE_DEADBAND = 0.5;
     public static final double LEFT_STICK_SCALE = 2.5;
     public static final double RIGHT_STICK_SCALE = 5;
+
+    public static final int PIGEON_CANID = 13;
   }
 
   public class AutoConstants {
 
     // blue side
-    public static final Pose2d SCORING_POSITION_1_RIGHT_BLUE = new Pose2d(3.22, 3.859, new Rotation2d(0));
-    public static final Pose2d SCORING_POSITION_1_LEFT_BLUE = new Pose2d(3.22, 4.172, new Rotation2d(0));
-    public static final Pose2d SCORING_POSITION_2_LEFT_BLUE = new Pose2d(3.72, 3.006, new Rotation2d(Math.toRadians(60)));
-    public static final Pose2d SCORING_POSITION_2_RIGHT_BLUE = new Pose2d(4.006, 2.846, new Rotation2d(Math.toRadians(60)));
-    public static final Pose2d SCORING_POSITION_3_LEFT_BLUE = new Pose2d(5.004, 2.86, new Rotation2d(Math.toRadians(120)));
-    public static final Pose2d SCORING_POSITION_3_RIGHT_BLUE = new Pose2d(5.28, 3.019, new Rotation2d(Math.toRadians(120)));
-    public static final Pose2d SCORING_POSITION_4_LEFT_BLUE = new Pose2d(5.746, 4.17, new Rotation2d(Math.toRadians(180)));
-    public static final Pose2d SCORING_POSITION_4_RIGHT_BLUE = new Pose2d(5.746, 3.86, new Rotation2d(Math.toRadians(180)));
-    public static final Pose2d SCORING_POSITION_5_LEFT_BLUE = new Pose2d(5.25, 5.04, new Rotation2d(Math.toRadians(240)));
-    public static final Pose2d SCORING_POSITION_5_RIGHT_BLUE = new Pose2d(4.97, 5.18, new Rotation2d(Math.toRadians(240)));
-    public static final Pose2d SCORING_POSITION_6_LEFT_BLUE = new Pose2d(4.00, 5.20, new Rotation2d(Math.toRadians(300)));
-    public static final Pose2d SCORING_POSITION_6_RIGHT_BLUE = new Pose2d(3.72, 5.04, new Rotation2d(Math.toRadians(300)));
+    public static final Pose2d SCORING_POSITION_1_RIGHT_BLUE = new Pose2d(3.2004, 3.8616, new Rotation2d(0));
+    public static final Pose2d SCORING_POSITION_1_LEFT_BLUE = new Pose2d(3.2004, 4.1902, new Rotation2d(0));
+    public static final Pose2d SCORING_POSITION_2_LEFT_BLUE = new Pose2d(3.7026, 2.9917, new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d SCORING_POSITION_2_RIGHT_BLUE = new Pose2d(3.9872, 2.8274, new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d SCORING_POSITION_3_LEFT_BLUE = new Pose2d(4.9917, 2.8274, new Rotation2d(Math.toRadians(120)));
+    public static final Pose2d SCORING_POSITION_3_RIGHT_BLUE = new Pose2d(5.2763, 2.9917, new Rotation2d(Math.toRadians(120)));
+    public static final Pose2d SCORING_POSITION_4_LEFT_BLUE = new Pose2d(5.7785, 3.8616, new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d SCORING_POSITION_4_RIGHT_BLUE = new Pose2d(5.7785, 4.1902, new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d SCORING_POSITION_5_LEFT_BLUE = new Pose2d(5.2763, 5.0601, new Rotation2d(Math.toRadians(240)));
+    public static final Pose2d SCORING_POSITION_5_RIGHT_BLUE = new Pose2d(4.9917, 5.2244, new Rotation2d(Math.toRadians(240)));
+    public static final Pose2d SCORING_POSITION_6_LEFT_BLUE = new Pose2d(3.9872, 5.2244, new Rotation2d(Math.toRadians(300)));
+    public static final Pose2d SCORING_POSITION_6_RIGHT_BLUE = new Pose2d(3.7026, 5.0601, new Rotation2d(Math.toRadians(300)));
 
     // red side
     public static final Pose2d SCORING_POSITION_1_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_1_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_1_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(180)));
@@ -202,8 +212,8 @@ public final class Constants {
     }
 
     public enum Objective {
-      LAYINGEGGSBOTTOM("3L4Bot"),
-      LAYINGEGGSTOP("3L4Top"),
+      LAYINGEGGSBOTTOM("3L4Right"),
+      LAYINGEGGSTOP("3L4Left"),
       TWOSCORERIGHT("2L4Left"),
       TWOSCORELEFT("2L4Right"),
       ONESCORECENTER("1L4Cent"),
@@ -245,13 +255,13 @@ public final class Constants {
     public static final double HIGHER_PERCENTAGE_ABSOLUTE_ENCODER =  1023.0/1024.0;
     public static final double DEGREES_PER_ROTATION = 360;
 
-    public static final double BOTTOM_LIMIT = 0.75;
+    public static final double BOTTOM_LIMIT = 0.79;
     public static final double TOP_LIMIT = 0.3;
 
     public static final double CLIMBER_CONTROLLER_DEADBAND = 0.1;
 
-    public static final double CLIMBER_UP_POSITION = 0.3;
-    public static final double CLIMBER_DOWN_POSITION = 0.75;
+    public static final double CLIMBER_UP_POSITION = 0.305;
+    public static final double CLIMBER_DOWN_POSITION = 0.785;
     public static final double CLIMBER_CENTER_POSITION = 0.5;
 
 

@@ -5,8 +5,6 @@
 package frc.robot;
 
 
-import static edu.wpi.first.units.Units.Newton;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -17,7 +15,6 @@ import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.EndEffectorCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -32,12 +29,10 @@ import frc.robot.subsystems.DriveTrainSubsystem;
 import com.revrobotics.spark.SparkFlex;
 import frc.robot.vision.Limelight;
 
-import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import au.grapplerobotics.LaserCan;
-import choreo.auto.AutoRoutine;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -49,75 +44,77 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  // private final boolean robot2025 = true;
+
   private final Dashboard m_dashboard = new Dashboard();
 
-  private final Limelight m_limeLight = new Limelight("limelight-front", "limelight-back");
+  private final Limelight m_limeLight = new Limelight("limelight-front", "limelight-back", "limelight-left");
 
-    private final DriveTrainSubsystem m_driveTrain = new DriveTrainSubsystem(
-          new SwerveModule(
-              new TalonFX(DriveTrainConstants.FRONT_RIGHT_DRIVE_MOTOR_CANID),
-              new TalonFX(DriveTrainConstants.FRONT_RIGHT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(), new TalonFXConfiguration(),
-              new CANcoder(DriveTrainConstants.FRONT_RIGHT_CANCODER),
-              Preferences.getDouble(DriveTrainConstants.FRONT_RIGHT_ENCODER_OFFSET_KEY, 0)),
-          new SwerveModule(
-              new TalonFX(DriveTrainConstants.FRONT_LEFT_DRIVE_MOTOR_CANID),
-              new TalonFX(DriveTrainConstants.FRONT_LEFT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(), new TalonFXConfiguration(),
-              new CANcoder(DriveTrainConstants.FRONT_LEFT_CANCODER),
-                            Preferences.getDouble(DriveTrainConstants.FRONT_LEFT_ENCODER_OFFSET_KEY, 0)),
-          new SwerveModule(
-              new TalonFX(DriveTrainConstants.BACK_LEFT_DRIVE_MOTOR_CANID),
-              new TalonFX(DriveTrainConstants.BACK_LEFT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(), new TalonFXConfiguration(),
-              new CANcoder(DriveTrainConstants.BACK_LEFT_CANCODER),
-                            Preferences.getDouble(DriveTrainConstants.BACK_LEFT_ENCODER_OFFSET_KEY, 0)),
-          new SwerveModule(
-              new TalonFX(DriveTrainConstants.BACK_RIGHT_DRIVE_MOTOR_CANID),
-              new TalonFX(DriveTrainConstants.BACK_RIGHT_ROTATION_MOTOR_CANID),
-              new TalonFXConfiguration(), new TalonFXConfiguration(),
-              new CANcoder(DriveTrainConstants.BACK_RIGHT_CANCODER),
-              Preferences.getDouble(DriveTrainConstants.BACK_RIGHT_ENCODER_OFFSET_KEY, 0)),
+  // Subsystems
+  private final DriveTrainSubsystem m_driveTrain = new DriveTrainSubsystem(
+      new SwerveModule(
+          new TalonFX(DriveTrainConstants.FRONT_RIGHT_DRIVE_MOTOR_CANID),
+          new TalonFX(DriveTrainConstants.FRONT_RIGHT_ROTATION_MOTOR_CANID),
+          new TalonFXConfiguration(), new TalonFXConfiguration(),
+          new CANcoder(DriveTrainConstants.FRONT_RIGHT_CANCODER),
+          Preferences.getDouble(DriveTrainConstants.FRONT_RIGHT_ENCODER_OFFSET_KEY, 0)),
+      new SwerveModule(
+          new TalonFX(DriveTrainConstants.FRONT_LEFT_DRIVE_MOTOR_CANID),
+          new TalonFX(DriveTrainConstants.FRONT_LEFT_ROTATION_MOTOR_CANID),
+          new TalonFXConfiguration(), new TalonFXConfiguration(),
+          new CANcoder(DriveTrainConstants.FRONT_LEFT_CANCODER),
+          Preferences.getDouble(DriveTrainConstants.FRONT_LEFT_ENCODER_OFFSET_KEY, 0)),
+      new SwerveModule(
+          new TalonFX(DriveTrainConstants.BACK_LEFT_DRIVE_MOTOR_CANID),
+          new TalonFX(DriveTrainConstants.BACK_LEFT_ROTATION_MOTOR_CANID),
+          new TalonFXConfiguration(), new TalonFXConfiguration(),
+          new CANcoder(DriveTrainConstants.BACK_LEFT_CANCODER),
+          Preferences.getDouble(DriveTrainConstants.BACK_LEFT_ENCODER_OFFSET_KEY, 0)),
+      new SwerveModule(
+          new TalonFX(DriveTrainConstants.BACK_RIGHT_DRIVE_MOTOR_CANID),
+          new TalonFX(DriveTrainConstants.BACK_RIGHT_ROTATION_MOTOR_CANID),
+          new TalonFXConfiguration(), new TalonFXConfiguration(),
+          new CANcoder(DriveTrainConstants.BACK_RIGHT_CANCODER),
+          Preferences.getDouble(DriveTrainConstants.BACK_RIGHT_ENCODER_OFFSET_KEY, 0)),
 
-          new Pigeon2(13), m_limeLight
-      );
+      new Pigeon2(DriveTrainConstants.PIGEON_CANID), m_limeLight);
 
-      ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(
-        new SparkFlex(Constants.RobotContainerConstants.kElevatorMotorCANID, MotorType.kBrushless), // motor
-        new DigitalInput(Constants.RobotContainerConstants.kElevatorTopLimitChannel), //toplimitswitch
-        new DigitalInput(Constants.RobotContainerConstants.kElevatorBottomLimitChannel) //bottomlimitswitch
-      );
+  ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem(
+      new SparkFlex(Constants.RobotContainerConstants.kElevatorMotorCANID, MotorType.kBrushless), // motor
+      new DigitalInput(Constants.RobotContainerConstants.kElevatorTopLimitChannel), // toplimitswitch
+      new DigitalInput(Constants.RobotContainerConstants.kElevatorBottomLimitChannel) // bottomlimitswitch
+  );
 
-      ClimberSubsystem m_climberSubsystem = new ClimberSubsystem(
-        new SparkFlex(Constants.RobotContainerConstants.kClimberMotorCANID, MotorType.kBrushless), 
-        new DutyCycleEncoder(Constants.RobotContainerConstants.kClimberAbsoluteEncoderDIO)); 
+  ClimberSubsystem m_climberSubsystem = new ClimberSubsystem(
+      new SparkFlex(Constants.RobotContainerConstants.kClimberMotorCANID, MotorType.kBrushless),
+      new DutyCycleEncoder(Constants.RobotContainerConstants.kClimberAbsoluteEncoderDIO));
 
-      EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem(
-        new SparkMax(RobotContainerConstants.kEndEffectorCANID, MotorType.kBrushless),
-        new LaserCan(RobotContainerConstants.kLaserCanCANID));
+  EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem(
+      new SparkMax(RobotContainerConstants.kEndEffectorCANID, MotorType.kBrushless),
+      new LaserCan(RobotContainerConstants.kLaserCanCANID));
 
-      DriveCommand m_driveCommand;
-      ElevatorCommand m_elevatorCommand;
-      ClimberCommand m_climberCommand;
-      EndEffectorCommand m_endEffectorCommand;
+  DriveCommand m_driveCommand;
+  ElevatorCommand m_elevatorCommand;
+  ClimberCommand m_climberCommand;
+  EndEffectorCommand m_endEffectorCommand;
 
-      private final AutoMethod m_autoMethod;
-  private final boolean robot2025 = true;
-      private final CommandXboxController m_driverController = new CommandXboxController(ControllerConstants.DRIVER_CONTROLLER_PORT);
-      private final CommandXboxController m_operatorController = new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
+  private final AutoMethod m_autoMethod;
+
+  private final CommandXboxController m_driverController = new CommandXboxController(ControllerConstants.DRIVER_CONTROLLER_PORT);
+  private final CommandXboxController m_operatorController = new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */ 
   public RobotContainer() {
 
-
+    // Commands
     m_autoMethod = new AutoMethod(m_driveTrain, m_elevatorSubsystem, m_endEffectorSubsystem, m_dashboard);
+
     DriveCommand m_driveCommand = new DriveCommand(
         m_driveTrain,
         () -> m_driverController.getLeftY(),
         () -> m_driverController.getLeftX(),
         () -> m_driverController.getRightX(),
         () -> m_driverController.getHID().getAButton());
-      
     m_driveTrain.setDefaultCommand(m_driveCommand);
 
     m_elevatorCommand = new ElevatorCommand(
@@ -145,17 +142,10 @@ public class RobotContainer {
         // () -> m_driverController.getHID().getLeftBumperButton(), 
         () -> m_driverController.getHID().getRightTriggerAxis(),
         () -> m_driverController.getHID().getRightBumperButton());
-        
     m_endEffectorSubsystem.setDefaultCommand(m_endEffectorCommand);
+
     // Configure the trigger bindings
     configureBindings();
-
-
-  // Bottom sparkmax canid: 8 on left side looking at the motor
-  // Top sparkmax canid: 7 on the right side
-  //positive goes up negative goes down
-  // bottom limit switch is DIO 8 top is 9
-
 }
 
   /**
@@ -192,7 +182,7 @@ public class RobotContainer {
   }
 
   public void resetGyro() {
-    if (m_limeLight.getApriltagTargetFound()) {
+    if (m_limeLight.getApriltagTargetFoundFront()) {
       m_driveTrain.limelightResetGyroFront();
     }
   }
