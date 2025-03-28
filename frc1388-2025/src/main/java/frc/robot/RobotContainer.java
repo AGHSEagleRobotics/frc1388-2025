@@ -144,6 +144,8 @@ public class RobotContainer {
         () -> m_driverController.getHID().getRightBumperButton());
     m_endEffectorSubsystem.setDefaultCommand(m_endEffectorCommand);
 
+setBrakeMode(true);
+
     // Configure the trigger bindings
     configureBindings();
 }

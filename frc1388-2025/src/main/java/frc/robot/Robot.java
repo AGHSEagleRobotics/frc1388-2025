@@ -112,11 +112,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if (m_neutralModeTimer.hasElapsed(5)) {
-      m_robotContainer.setBrakeMode(false);
-      m_neutralModeTimer.stop();
-      m_neutralModeTimer.reset();
-    }
+    // if (m_neutralModeTimer.hasElapsed(5)) {
+    //   m_robotContainer.setBrakeMode(false);
+    //   m_neutralModeTimer.stop();
+    //   m_neutralModeTimer.reset();
+    // }
     m_robotContainer.resetGyro();
   }
 
@@ -126,8 +126,8 @@ public class Robot extends TimedRobot {
     DataLogManager.log("####### Autonomous Init");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    DataLogManager.log("> setting neutral mode");
-    m_robotContainer.setBrakeMode(true);
+    // DataLogManager.log("> setting neutral mode");
+    // m_robotContainer.setBrakeMode(true);
 
     // schedule the autonomous command
     if (m_autonomousCommand != null) {
@@ -175,7 +175,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    m_robotContainer.setBrakeMode(true);
+    // m_robotContainer.setBrakeMode(true);
   }
 
   /** This function is called periodically during operator control. */
