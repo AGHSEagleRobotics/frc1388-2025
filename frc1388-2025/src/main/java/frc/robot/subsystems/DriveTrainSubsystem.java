@@ -550,13 +550,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
       }
 
       if (m_odometry != null) {
-        if (acceptMegaTag2Front && m_limelight.getApriltagTargetFoundFront()) {
+        if (acceptMegaTag2Front && (megaTag2Front.getX() != 0 && megaTag2Front.getY() != 0) && m_limelight.getApriltagTargetFoundFront()) {
           m_odometry.addVisionMeasurement(megaTag2Front, timer);
         }
-        if (acceptMegaTag2Back && m_limelight.getApriltagTargetFoundBack()) {
+        if (acceptMegaTag2Back && (megaTag2Back.getX() != 0 && megaTag2Back.getY() != 0) && m_limelight.getApriltagTargetFoundBack()) {
           m_odometry.addVisionMeasurement(megaTag2Back, timer);
         }
-        if (acceptMegaTag2FrontLeft && m_limelight.getApriltagTargetFoundFrontLeft()) {
+        if (acceptMegaTag2FrontLeft && (megaTag2FrontLeft.getX() != 0 && megaTag2FrontLeft.getY() != 0) && m_limelight.getApriltagTargetFoundFrontLeft()) {
           m_odometry.addVisionMeasurement(megaTag2FrontLeft, timer);
         }
       }
