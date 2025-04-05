@@ -310,9 +310,42 @@ public class DriveTrainSubsystem extends SubsystemBase {
     return distanceFromPose;
   }
 
-  public Pose2d getClosestTargetPose() {
+  public Pose2d getClosestTargetPoseRight() {
 
-    Pose2d[] SETPOINTS = AutoConstants.SETPOINTS;
+    Pose2d[] SETPOINTS = AutoConstants.SETPOINTS_RIGHT;
+    
+    // double distance;
+    // double nextSetpointDistance;
+    // Pose2d[] setpoints = SETPOINTS;
+    // Pose2d closestPose = setpoints[0];
+    // for (int i = 0; i < setpoints.length - 1; i++) {
+    //   distance = calculateDistancePose(setpoints[i]);
+    //   nextSetpointDistance = calculateDistancePose(setpoints[i + 1]);
+    //   if (distance < nextSetpointDistance) {
+    //     closestPose = setpoints[i];
+    //   }
+    //   else {
+    //     closestPose = setpoints[i + 1];
+    //   }
+    // }
+    
+    double distance;
+    Pose2d[] setpoints = SETPOINTS;
+    double closestDistance = calculateDistancePose(setpoints[0]);
+    Pose2d closestPose = setpoints[0];
+    for (int i = 0; i < setpoints.length; i++) {
+      distance = calculateDistancePose(setpoints[i]);
+      if (distance < closestDistance) {
+        closestPose = setpoints[i];
+        closestDistance = distance;
+      }
+    }
+    return closestPose;
+  }
+
+  public Pose2d getClosestTargetPoseLeft() {
+
+    Pose2d[] SETPOINTS = AutoConstants.SETPOINTS_LEFT;
     
     // double distance;
     // double nextSetpointDistance;
