@@ -620,10 +620,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("VisionAcceptor/is Accepting Pose Back", acceptPoseBack);
     SmartDashboard.putBoolean("VisionAcceptor/is Accepting megatag2Back", acceptMegaTag2Back);
 
-    SmartDashboard.putNumber("drivetrain/closestPoseX", getClosestTargetPose().getX());
-    SmartDashboard.putNumber("drivetrain/closestPoseY", getClosestTargetPose().getY());
-    SmartDashboard.putNumber("drivetrain/closestPoseRotation", getClosestTargetPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("drivetrain/closestPoseXRight", getClosestTargetPoseRight().getX());
+    SmartDashboard.putNumber("drivetrain/closestPoseYRight", getClosestTargetPoseRight().getY());
+    SmartDashboard.putNumber("drivetrain/closestPoseRotationRight", getClosestTargetPoseRight().getRotation().getDegrees());
     SmartDashboard.putNumber("Angle Rotation2d", getGyroHeading().getRadians());
+
+    SmartDashboard.putNumber("drivetrain/closestPoseXLeft", getClosestTargetPoseLeft().getX());
+    SmartDashboard.putNumber("drivetrain/closestPoseYLeft", getClosestTargetPoseLeft().getY());
+    SmartDashboard.putNumber("drivetrain/closestPoseRotationLeft", getClosestTargetPoseLeft().getRotation().getDegrees());
 
     SmartDashboard.putNumber("drivetrain/frontRight encoder angle", m_frontRight.getRotationAngle());
     SmartDashboard.putNumber("drivetrain/frontLeft encoder angle", m_frontLeft.getRotationAngle());
