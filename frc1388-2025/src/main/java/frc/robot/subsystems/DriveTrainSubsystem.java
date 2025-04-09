@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -41,7 +42,8 @@ import frc.robot.Robot;
 import frc.robot.SwerveModule;
 import frc.robot.vision.Limelight;
 import frc.robot.vision.LimelightHelpers;
-import frc.robot.vision.VisionAcceptor; 
+import frc.robot.vision.VisionAcceptor;
+import frc.robot.vision.LimelightHelpers.PoseEstimate; 
 
 public class DriveTrainSubsystem extends SubsystemBase {
 
@@ -499,69 +501,80 @@ public class DriveTrainSubsystem extends SubsystemBase {
     boolean acceptGyroBack = false;
 
     
-    double[] botPoseFront = m_limelight.getBotPoseFront();
-    double[] botPoseBack = m_limelight.getBotPoseBack();
-    double[] botPoseFrontLeft = m_limelight.getBotPoseLeft();
-
-    double[] odomTag2Front = m_limelight.getMegaTag2Front();
-    double[] odomTag2Back = m_limelight.getMegaTag2Back();
-    double[] odomTag2FrontLeft = m_limelight.getMegaTag2Left();
     
-    Pose2d position1 = new Pose2d(botPoseFront[0], botPoseFront[1], getGyroHeading());
-    Pose2d position2 = new Pose2d(botPoseBack[0], botPoseBack[1], getGyroHeading());
-    Pose2d position3 = new Pose2d(botPoseFrontLeft[0], botPoseFrontLeft[1], getGyroHeading());
-
-    Pose2d megaTag2Front = new Pose2d(odomTag2Front[0], odomTag2Front[1], getGyroHeading());
-    Pose2d megaTag2Back = new Pose2d(odomTag2Back[0], odomTag2Back[1], getGyroHeading());
-    Pose2d megaTag2FrontLeft = new Pose2d(odomTag2FrontLeft[0], odomTag2FrontLeft[1], getGyroHeading());
 
     // Field2d fieldPose1 = new Field2d();
 
     LimelightHelpers.SetRobotOrientation("limelight-front", getAngle(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetRobotOrientation("limelight-back", getAngle(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetRobotOrientation("limelight-left", getAngle(), 0, 0, 0, 0, 0);
-    double timer = 1.5;
-    if (Timer.getFPGATimestamp() > 1.5 ) {
-      timer = Timer.getFPGATimestamp();
-    }
-    if (m_robotRelativeSpeeds != null) {
-      if (m_limelight.getApriltagTargetFoundFront()) {
-        acceptPoseFront = visionAcceptor.shouldAccept(position1);
-        acceptMegaTag2Front = visionAcceptorMegaTag2Front.shouldAccept(megaTag2Front);
-        acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro();
-      }
-      if (m_limelight.getApriltagTargetFoundBack()) {
-        acceptPoseBack = visionAcceptor.shouldAccept(position2);
-        acceptMegaTag2Back = visionAcceptorMegaTag2Back.shouldAccept(megaTag2Back);
-        acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro();
-      }
-      if (m_limelight.getApriltagTargetFoundFrontLeft()) {
-        acceptPoseFrontLeft = visionAcceptor.shouldAccept(position3);
-        acceptMegaTag2FrontLeft = visionAcceptorMegaTag2FrontLeft.shouldAccept(megaTag2FrontLeft);
-        acceptGyroFrontLeft = visionAcceptorGyroFrontLeft.shouldResetGyro();
-      }
-      if (acceptGyroFront && acceptPoseFront) {
-        limelightResetGyroFront();
-      } else if (acceptGyroBack && acceptPoseBack) {
-        limelightResetGyroBack();
-      }
-      else if (acceptGyroFrontLeft && acceptPoseFrontLeft) {
-        limelightResetGyroFrontLeft();
-      }
 
-      if (m_odometry != null) {
-        if (acceptMegaTag2Front && (megaTag2Front.getX() != 0 && megaTag2Front.getY() != 0) && m_limelight.getApriltagTargetFoundFront()) {
-          m_odometry.addVisionMeasurement(megaTag2Front, timer);
+    PoseEstimate botPoseFront = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front");
+    PoseEstimate botPoseBack = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-back");
+    PoseEstimate botPoseFrontLeft = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-left");
+
+    PoseEstimate odomTag2Front = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
+    PoseEstimate odomTag2Back = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
+    PoseEstimate odomTag2FrontLeft = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-left");
+    
+    Pose2d position1 = botPoseFront.pose;
+    Pose2d position2 = botPoseBack.pose;
+    Pose2d position3 = botPoseFrontLeft.pose;
+
+    Pose2d megaTag2Front = odomTag2Front.pose;
+    Pose2d megaTag2Back = odomTag2Back.pose;
+    Pose2d megaTag2FrontLeft = odomTag2FrontLeft.pose;
+
+    if (m_odometry != null) {
+      if (m_robotRelativeSpeeds != null) {
+        if (LimelightHelpers.getTV("limelight-front")) {
+          acceptPoseFront = visionAcceptor.shouldAccept(position1, m_odometry.getEstimatedPosition());
+          acceptMegaTag2Front = visionAcceptorMegaTag2Front.shouldAccept(megaTag2Front,
+              m_odometry.getEstimatedPosition());
+          acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro();
         }
-        if (acceptMegaTag2Back && (megaTag2Back.getX() != 0 && megaTag2Back.getY() != 0) && m_limelight.getApriltagTargetFoundBack()) {
-          m_odometry.addVisionMeasurement(megaTag2Back, timer);
+        if (LimelightHelpers.getTV("limelight-back")) {
+          acceptPoseBack = visionAcceptor.shouldAccept(position2, m_odometry.getEstimatedPosition());
+          acceptMegaTag2Back = visionAcceptorMegaTag2Back.shouldAccept(megaTag2Back, m_odometry.getEstimatedPosition());
+          acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro();
         }
-        if (acceptMegaTag2FrontLeft && (megaTag2FrontLeft.getX() != 0 && megaTag2FrontLeft.getY() != 0) && m_limelight.getApriltagTargetFoundFrontLeft()) {
-          m_odometry.addVisionMeasurement(megaTag2FrontLeft, timer);
+        if (LimelightHelpers.getTV("limelight-left")) {
+          acceptPoseFrontLeft = visionAcceptor.shouldAccept(position3, m_odometry.getEstimatedPosition());
+          acceptMegaTag2FrontLeft = visionAcceptorMegaTag2FrontLeft.shouldAccept(megaTag2FrontLeft,
+              m_odometry.getEstimatedPosition());
+          acceptGyroFrontLeft = visionAcceptorGyroFrontLeft.shouldResetGyro();
+        }
+        if (acceptGyroFront && acceptPoseFront) {
+          limelightResetGyroFront();
+        } else if (acceptGyroBack && acceptPoseBack) {
+          limelightResetGyroBack();
+        } else if (acceptGyroFrontLeft && acceptPoseFrontLeft) {
+          limelightResetGyroFrontLeft();
+        }
+
+        if (acceptMegaTag2Front && (megaTag2Front.getX() != 0 && megaTag2Front.getY() != 0)
+            && LimelightHelpers.getTV("limelight-front")) {
+          m_odometry.addVisionMeasurement(megaTag2Front, odomTag2Front.timestampSeconds);
+        }
+        if (acceptMegaTag2Back && (megaTag2Back.getX() != 0 && megaTag2Back.getY() != 0)
+            && LimelightHelpers.getTV("limelight-back")) {
+          m_odometry.addVisionMeasurement(megaTag2Back, odomTag2Back.timestampSeconds);
+        }
+        if (acceptMegaTag2FrontLeft && (megaTag2FrontLeft.getX() != 0 && megaTag2FrontLeft.getY() != 0)
+            && LimelightHelpers.getTV("limelight-left")) {
+          m_odometry.addVisionMeasurement(megaTag2FrontLeft, odomTag2FrontLeft.timestampSeconds);
         }
       }
-      m_odometry.updateWithTime(
-          Timer.getFPGATimestamp(),
+      // m_odometry.updateWithTime(
+      //     Timer.getFPGATimestamp(),
+      //     getGyroHeading(),
+      //     new SwerveModulePosition[] {
+      //         m_frontRight.getPosition(),
+      //         m_frontLeft.getPosition(),
+      //         m_backLeft.getPosition(),
+      //         m_backRight.getPosition()
+      //     });
+      m_odometry.update(
           getGyroHeading(),
           new SwerveModulePosition[] {
               m_frontRight.getPosition(),
@@ -570,8 +583,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
               m_backRight.getPosition()
           });
     }
-    SmartDashboard.putNumber("Limelight ODO X", odomTag2Front[0]);
-    SmartDashboard.putNumber("Limelight ODO Y", odomTag2Front[1]);
 
     SmartDashboard.putNumber("drivetrain/odo x", getPose().getX());
     SmartDashboard.putNumber("drivetrain/odo y", getPose().getY());

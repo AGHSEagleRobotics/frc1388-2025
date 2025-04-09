@@ -32,10 +32,15 @@ public class VisionAcceptor {
         m_robotVelocity = robotVelocity;
     }
 
-    public boolean shouldAccept(Pose2d currentPosition) {
+    public boolean shouldAccept(Pose2d currentPosition, Pose2d lastPosition) {
 
         if(m_robotVelocity == null || currentPosition == null) {
              System.out.println("null check");
+            return false;
+        }
+
+
+        if(currentPosition.getX() == 0 && currentPosition.getY() == 0) {
             return false;
         }
 
@@ -64,18 +69,22 @@ public class VisionAcceptor {
 
         // check if the current position compared to the last position is greater than the velocity per tick of the robot
         
-        if(Math.abs(currentPosition.getX() - m_lastPosition.getX()) > velocityTimesJumpCount
-        || Math.abs(currentPosition.getY() - m_lastPosition.getY()) > velocityTimesJumpCount) {
-            m_jumpCount++;
-            if(m_jumpCount > m_jumpCountMax) {
-                m_jumpCountMax = m_jumpCount;
-            }
-            if(m_jumpCount > 4) {
-                m_lastPosition = currentPosition;
-            }
-        }
-        else {
-            m_jumpCount = 0;
+        // if(Math.abs(currentPosition.getX() - m_lastPosition.getX()) > velocityTimesJumpCount
+        // || Math.abs(currentPosition.getY() - m_lastPosition.getY()) > velocityTimesJumpCount) {
+        //     m_jumpCount++;
+        //     if(m_jumpCount > m_jumpCountMax) {
+        //         m_jumpCountMax = m_jumpCount;
+        //     }
+        //     if(m_jumpCount > 4) {
+        //         // m_lastPosition = currentPosition;
+        //     }
+        // }
+        // else {
+        //     m_jumpCount = 0;
+        // }
+
+        if(currentPosition.getTranslation().getDistance(m_lastPosition.getTranslation()) > DriveTrainConstants.ROBOT_MAX_SPEED * DriveTrainConstants.DT_SECONDS) {
+            return false;
         }
 
         //checks if robot is outside of field
@@ -116,7 +125,7 @@ public class VisionAcceptor {
         if (norm() > 2.5) { //changed from 4
             return false;
         }
-        m_lastPosition = currentPosition;
+        // m_lastPosition = currentPosition;
         
         return true;      
     }
