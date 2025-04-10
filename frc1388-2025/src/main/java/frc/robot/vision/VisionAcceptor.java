@@ -27,18 +27,17 @@ public class VisionAcceptor {
     boolean m_isMegaTag2;
 
 
-    public VisionAcceptor(boolean isMegaTag2, ChassisSpeeds robotVelocity) {
+    public VisionAcceptor(boolean isMegaTag2) {
         m_isMegaTag2 = isMegaTag2;
-        m_robotVelocity = robotVelocity;
     }
 
-    public boolean shouldAccept(Pose2d currentPosition, Pose2d lastPosition) {
+    public boolean shouldAccept(Pose2d currentPosition, Pose2d lastPosition, ChassisSpeeds robotVelocity) {
 
         if(m_robotVelocity == null || currentPosition == null) {
              System.out.println("null check");
             return false;
         }
-
+        m_robotVelocity = robotVelocity;
 
         if(currentPosition.getX() == 0 && currentPosition.getY() == 0) {
             return false;

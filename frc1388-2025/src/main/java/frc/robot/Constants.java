@@ -178,6 +178,13 @@ public final class Constants {
     public static final Pose2d SCORING_POSITION_6_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_6_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_6_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(120)));
     public static final Pose2d SCORING_POSITION_6_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_6_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_6_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(120)));
 
+    // coral station setpoints
+    public static final Pose2d CORAL_STATION_LEFT_BLUE = new Pose2d(1.13, 7.37, new Rotation2d(Math.toRadians(306)));
+    public static final Pose2d CORAL_STATION_RIGHT_BLUE = new Pose2d(1.06, 0.867, new Rotation2d(Math.toRadians(54)));
+
+    
+    public static final Pose2d CORAL_STATION_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - 1.13, FieldLayout.FIELD_WIDTH - 7.37, new Rotation2d(Math.toRadians(126)));
+    public static final Pose2d CORAL_STATION_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - 1.06, FieldLayout.FIELD_WIDTH - 0.867, new Rotation2d(Math.toRadians(234)));
 
     public static final Pose2d[] SETPOINTS = new Pose2d[24];
 

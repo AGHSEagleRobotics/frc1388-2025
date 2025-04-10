@@ -482,13 +482,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backRight.periodic();
 
     
-    VisionAcceptor visionAcceptorGyroFront = new VisionAcceptor(false, m_robotRelativeSpeeds);
-    VisionAcceptor visionAcceptorGyroBack = new VisionAcceptor(false, m_robotRelativeSpeeds);
-    VisionAcceptor visionAcceptorGyroFrontLeft = new VisionAcceptor(false, chassisSpeeds); //ask alex
-    VisionAcceptor visionAcceptorMegaTag2FrontLeft = new VisionAcceptor(true, chassisSpeeds);
-    VisionAcceptor visionAcceptorMegaTag2Front = new VisionAcceptor(true, m_robotRelativeSpeeds);
-    VisionAcceptor visionAcceptorMegaTag2Back = new VisionAcceptor(true, m_robotRelativeSpeeds);
-    VisionAcceptor visionAcceptor = new VisionAcceptor(false, m_robotRelativeSpeeds);
+    VisionAcceptor visionAcceptorGyroFront = new VisionAcceptor(false);
+    VisionAcceptor visionAcceptorGyroBack = new VisionAcceptor(false);
+    VisionAcceptor visionAcceptorGyroFrontLeft = new VisionAcceptor(false); //ask alex
+    VisionAcceptor visionAcceptorMegaTag2FrontLeft = new VisionAcceptor(true);
+    VisionAcceptor visionAcceptorMegaTag2Front = new VisionAcceptor(true);
+    VisionAcceptor visionAcceptorMegaTag2Back = new VisionAcceptor(true);
+    VisionAcceptor visionAcceptor = new VisionAcceptor(false);
 
     boolean acceptPoseFront = false;
     boolean acceptPoseBack = false;
@@ -528,29 +528,29 @@ public class DriveTrainSubsystem extends SubsystemBase {
     if (m_odometry != null) {
       if (m_robotRelativeSpeeds != null) {
         if (LimelightHelpers.getTV("limelight-front")) {
-          acceptPoseFront = visionAcceptor.shouldAccept(position1, m_odometry.getEstimatedPosition());
+          acceptPoseFront = visionAcceptor.shouldAccept(position1, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
           acceptMegaTag2Front = visionAcceptorMegaTag2Front.shouldAccept(megaTag2Front,
-              m_odometry.getEstimatedPosition());
+              m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
           acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro();
         }
         if (LimelightHelpers.getTV("limelight-back")) {
-          acceptPoseBack = visionAcceptor.shouldAccept(position2, m_odometry.getEstimatedPosition());
-          acceptMegaTag2Back = visionAcceptorMegaTag2Back.shouldAccept(megaTag2Back, m_odometry.getEstimatedPosition());
+          acceptPoseBack = visionAcceptor.shouldAccept(position2, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
+          acceptMegaTag2Back = visionAcceptorMegaTag2Back.shouldAccept(megaTag2Back, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
           acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro();
         }
         if (LimelightHelpers.getTV("limelight-left")) {
-          acceptPoseFrontLeft = visionAcceptor.shouldAccept(position3, m_odometry.getEstimatedPosition());
+          acceptPoseFrontLeft = visionAcceptor.shouldAccept(position3, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
           acceptMegaTag2FrontLeft = visionAcceptorMegaTag2FrontLeft.shouldAccept(megaTag2FrontLeft,
-              m_odometry.getEstimatedPosition());
+              m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
           acceptGyroFrontLeft = visionAcceptorGyroFrontLeft.shouldResetGyro();
         }
-        if (acceptGyroFront && acceptPoseFront) {
-          limelightResetGyroFront();
-        } else if (acceptGyroBack && acceptPoseBack) {
-          limelightResetGyroBack();
-        } else if (acceptGyroFrontLeft && acceptPoseFrontLeft) {
-          limelightResetGyroFrontLeft();
-        }
+        // if (acceptGyroFront && acceptPoseFront) {
+        //   limelightResetGyroFront();
+        // } else if (acceptGyroBack && acceptPoseBack) {
+        //   limelightResetGyroBack();
+        // } else if (acceptGyroFrontLeft && acceptPoseFrontLeft) {
+        //   limelightResetGyroFrontLeft();
+        // }
 
         if (acceptMegaTag2Front && (megaTag2Front.getX() != 0 && megaTag2Front.getY() != 0)
             && LimelightHelpers.getTV("limelight-front")) {
