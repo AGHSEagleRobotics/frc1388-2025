@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -56,9 +58,11 @@ public class AutoAllignRight extends Command {
 
     double ySpeed = m_yController.calculate(m_driveTrain.getPose().getY(), m_driveTrain.getClosestTargetPoseRight().getY());
 
+    double rotation = m_rotationController.calculate(m_driveTrain.getAngle(), m_driveTrain.getClosestTargetPoseRight().getRotation().getDegrees());
+
     SmartDashboard.putNumber("AutoGoToPoint/rot pid in", m_driveTrain.getAngle());
     SmartDashboard.putBoolean("AutoGoToPoint/is at rot sp", m_rotationController.atSetpoint());
-    m_driveTrain.drive(xSpeed, ySpeed, m_rotationController.calculate(m_driveTrain.getAngle(), m_driveTrain.getClosestTargetPoseRight().getRotation().getDegrees()));
+    m_driveTrain.drive(xSpeed, ySpeed, rotation);
     m_lastXSpeed = xSpeed;
     m_lastYSpeed = ySpeed;
   }
