@@ -178,6 +178,34 @@ public final class Constants {
     public static final Pose2d SCORING_POSITION_6_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_6_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_6_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(120)));
     public static final Pose2d SCORING_POSITION_6_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - SCORING_POSITION_6_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - SCORING_POSITION_6_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(120)));
 
+    // blue side
+    public static final Pose2d L1_POSITION_1_RIGHT_BLUE = new Pose2d(3.2004, 3.8616, new Rotation2d(0));
+    public static final Pose2d L1_POSITION_1_LEFT_BLUE = new Pose2d(3.2004, 4.1902, new Rotation2d(0));
+    public static final Pose2d L1_POSITION_2_LEFT_BLUE = new Pose2d(3.7026, 2.9917, new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d L1_POSITION_2_RIGHT_BLUE = new Pose2d(3.9872, 2.8274, new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d L1_POSITION_3_LEFT_BLUE = new Pose2d(4.9917, 2.8274, new Rotation2d(Math.toRadians(120)));
+    public static final Pose2d L1_POSITION_3_RIGHT_BLUE = new Pose2d(5.2763, 2.9917, new Rotation2d(Math.toRadians(120)));
+    public static final Pose2d L1_POSITION_4_LEFT_BLUE = new Pose2d(5.7785, 3.8616, new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d L1_POSITION_4_RIGHT_BLUE = new Pose2d(5.7785, 4.1902, new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d L1_POSITION_5_LEFT_BLUE = new Pose2d(5.2763, 5.0601, new Rotation2d(Math.toRadians(240)));
+    public static final Pose2d L1_POSITION_5_RIGHT_BLUE = new Pose2d(4.9917, 5.2244, new Rotation2d(Math.toRadians(240)));
+    public static final Pose2d L1_POSITION_6_LEFT_BLUE = new Pose2d(3.9872, 5.2244, new Rotation2d(Math.toRadians(300)));
+    public static final Pose2d L1_POSITION_6_RIGHT_BLUE = new Pose2d(3.7026, 5.0601, new Rotation2d(Math.toRadians(300)));
+
+    // red side
+    public static final Pose2d L1_POSITION_1_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_1_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_1_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d L1_POSITION_1_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_1_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_1_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d L1_POSITION_2_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_2_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_2_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(240)));
+    public static final Pose2d L1_POSITION_2_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_2_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_2_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(240)));
+    public static final Pose2d L1_POSITION_3_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_3_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_3_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(300)));
+    public static final Pose2d L1_POSITION_3_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_3_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_3_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(300)));
+    public static final Pose2d L1_POSITION_4_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_4_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_4_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(0)));
+    public static final Pose2d L1_POSITION_4_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_4_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_4_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(0)));
+    public static final Pose2d L1_POSITION_5_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_5_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_5_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d L1_POSITION_5_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_5_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_5_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(60)));
+    public static final Pose2d L1_POSITION_6_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_6_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_6_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(120)));
+    public static final Pose2d L1_POSITION_6_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - L1_POSITION_6_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - L1_POSITION_6_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(120)));
+
 
     public static final Pose2d[] SETPOINTS_RIGHT = new Pose2d[12];
 
@@ -217,6 +245,38 @@ public final class Constants {
       SETPOINTS_LEFT[9] = SCORING_POSITION_4_LEFT_RED;
       SETPOINTS_LEFT[10] = SCORING_POSITION_5_LEFT_RED;
       SETPOINTS_LEFT[11] = SCORING_POSITION_6_LEFT_RED;
+    }
+
+    public static final Pose2d[] SETPOINTS_L1 = new Pose2d[12];
+    
+    static {
+      //blue
+      SETPOINTS_L1[0] = L1_POSITION_1_LEFT_BLUE;
+      SETPOINTS_L1[1] = L1_POSITION_1_RIGHT_BLUE;
+      SETPOINTS_L1[2] = L1_POSITION_2_LEFT_BLUE;
+      SETPOINTS_L1[3] = L1_POSITION_2_RIGHT_BLUE;
+      SETPOINTS_L1[4] = L1_POSITION_3_LEFT_BLUE;
+      SETPOINTS_L1[5] = L1_POSITION_3_RIGHT_BLUE;
+      SETPOINTS_L1[6] = L1_POSITION_4_LEFT_BLUE;
+      SETPOINTS_L1[7] = L1_POSITION_4_RIGHT_BLUE;
+      SETPOINTS_L1[8] = L1_POSITION_5_LEFT_BLUE;
+      SETPOINTS_L1[9] = L1_POSITION_5_RIGHT_BLUE;
+      SETPOINTS_L1[10] = L1_POSITION_6_LEFT_BLUE;
+      SETPOINTS_L1[11] = L1_POSITION_6_RIGHT_BLUE;
+
+      //red
+      SETPOINTS_L1[12] =  L1_POSITION_1_LEFT_RED;
+      SETPOINTS_L1[13] =  L1_POSITION_1_RIGHT_RED;
+      SETPOINTS_L1[14] =  L1_POSITION_2_LEFT_RED;
+      SETPOINTS_L1[15] =  L1_POSITION_2_RIGHT_RED;
+      SETPOINTS_L1[16] =  L1_POSITION_3_LEFT_RED;
+      SETPOINTS_L1[17] =  L1_POSITION_3_RIGHT_RED;
+      SETPOINTS_L1[18] =  L1_POSITION_4_LEFT_RED;
+      SETPOINTS_L1[19] =  L1_POSITION_4_RIGHT_RED;
+      SETPOINTS_L1[20] = L1_POSITION_5_LEFT_RED;
+      SETPOINTS_L1[21] = L1_POSITION_5_RIGHT_RED;
+      SETPOINTS_L1[22] = L1_POSITION_6_LEFT_RED;
+      SETPOINTS_L1[23] = L1_POSITION_6_RIGHT_RED;
     }
 
     public enum Objective {
