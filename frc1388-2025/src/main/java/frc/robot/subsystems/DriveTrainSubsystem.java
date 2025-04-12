@@ -551,41 +551,33 @@ public class DriveTrainSubsystem extends SubsystemBase {
     PoseEstimate odomTag2Front = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
     PoseEstimate odomTag2Back = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
     PoseEstimate odomTag2FrontLeft = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-left");
-    
-    Pose2d position1 = botPoseFront.pose;
-    Pose2d position2 = botPoseBack.pose;
-    Pose2d position3 = botPoseFrontLeft.pose;
-
-    Pose2d megaTag2Front = odomTag2Front.pose;
-    Pose2d megaTag2Back = odomTag2Back.pose;
-    Pose2d megaTag2FrontLeft = odomTag2FrontLeft.pose;
 
     if (m_odometry != null) {
       if (m_robotRelativeSpeeds != null) {
-          acceptPoseFront = visionAcceptor.shouldAccept(position1, previousPosition1, m_robotRelativeSpeeds);
-          previousPosition1 = position1;
+          acceptPoseFront = visionAcceptor.shouldAccept(botPoseFront.pose, previousPosition1, m_robotRelativeSpeeds);
+          previousPosition1 = botPoseFront.pose;
 
-          acceptMegaTag2Front = visionAcceptorMegaTag2Front.shouldAccept(megaTag2Front,
+          acceptMegaTag2Front = visionAcceptorMegaTag2Front.shouldAccept(odomTag2Front.pose,
               previousMegaTag2Front, m_robotRelativeSpeeds);
           // acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro();
-          previousMegaTag2Front = megaTag2Front;
+          previousMegaTag2Front = odomTag2Front.pose;
 
 
-          acceptPoseBack = visionAcceptor.shouldAccept(position2, previousPosition2, m_robotRelativeSpeeds);
-          previousPosition2 = position2;
+          acceptPoseBack = visionAcceptor.shouldAccept(botPoseBack.pose, previousPosition2, m_robotRelativeSpeeds);
+          previousPosition2 = botPoseBack.pose;
 
-          acceptMegaTag2Back = visionAcceptorMegaTag2Back.shouldAccept(megaTag2Back, previousMegaTag2Back, m_robotRelativeSpeeds);
-          previousMegaTag2Back = megaTag2Back;
+          acceptMegaTag2Back = visionAcceptorMegaTag2Back.shouldAccept(odomTag2Back.pose, previousMegaTag2Back, m_robotRelativeSpeeds);
+          previousMegaTag2Back = odomTag2Back.pose;
           // acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro();
 
 
-          acceptPoseFrontLeft = visionAcceptor.shouldAccept(position3, previousPosition3, m_robotRelativeSpeeds);
-          previousPosition3 = position3;
-          acceptMegaTag2FrontLeft = visionAcceptorMegaTag2FrontLeft.shouldAccept(megaTag2FrontLeft,
+          acceptPoseFrontLeft = visionAcceptor.shouldAccept(botPoseFrontLeft.pose, previousPosition3, m_robotRelativeSpeeds);
+          previousPosition3 = botPoseFrontLeft.pose;
+          acceptMegaTag2FrontLeft = visionAcceptorMegaTag2FrontLeft.shouldAccept(odomTag2FrontLeft.pose,
               previousMegaTagFrontLeft, m_robotRelativeSpeeds);
-              previousMegaTagFrontLeft = megaTag2FrontLeft;
+              previousMegaTagFrontLeft = odomTag2FrontLeft.pose;
           // acceptGyroFrontLeft = visionAcceptorGyroFrontLeft.shouldResetGyro();
-
+        
           
         // if (acceptGyroFront && acceptPoseFront) {
         //   limelightResetGyroFront();
@@ -596,13 +588,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
         // }
 
         if (acceptMegaTag2Front && LimelightHelpers.getTV("limelight-front")) {
-          m_odometry.addVisionMeasurement(megaTag2Front, odomTag2Front.timestampSeconds);
+          m_odometry.addVisionMeasurement(odomTag2Front.pose, odomTag2Front.timestampSeconds);
         }
         if (acceptMegaTag2Back && LimelightHelpers.getTV("limelight-back")) {
-          m_odometry.addVisionMeasurement(megaTag2Back, odomTag2Back.timestampSeconds);
+          m_odometry.addVisionMeasurement(odomTag2Back.pose, odomTag2Back.timestampSeconds);
         }
         if (acceptMegaTag2FrontLeft && LimelightHelpers.getTV("limelight-left")) {
-          m_odometry.addVisionMeasurement(megaTag2FrontLeft, odomTag2FrontLeft.timestampSeconds);
+          m_odometry.addVisionMeasurement(odomTag2FrontLeft.pose, odomTag2FrontLeft.timestampSeconds);
         }
       }
       // m_odometry.updateWithTime(
@@ -653,11 +645,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("drivetrain/backRight encoder angle", m_backRight.getRotationAngle());
 
     publisher.set(getPose());
-    publishPose1.set(position1);
-    publishPose2.set(position2);
-    publishPose3.set(position3);
-    publishMegaTag2FrontRight.set(megaTag2Front);
-    publishMegaTag2FrontLeft.set(megaTag2FrontLeft);
-    publishMegaTag2Back.set(megaTag2Back);
+    publishPose1.set(botPoseFront.pose);
+    publishPose2.set(botPoseBack.pose);
+    publishPose3.set(botPoseFrontLeft.pose);
+    publishMegaTag2FrontRight.set(odomTag2Front.pose);
+    publishMegaTag2FrontLeft.set(odomTag2FrontLeft.pose);
+    publishMegaTag2Back.set(odomTag2Back.pose);
   }
 }
