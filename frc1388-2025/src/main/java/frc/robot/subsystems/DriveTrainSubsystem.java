@@ -552,7 +552,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
     PoseEstimate odomTag2Back = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
     PoseEstimate odomTag2FrontLeft = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-left");
 
-    if (m_odometry != null) {
+    if (m_odometry != null && botPoseFront != null && botPoseBack != null && botPoseFrontLeft != null && 
+        odomTag2Front != null && odomTag2Back != null && odomTag2FrontLeft != null) {
       if (m_robotRelativeSpeeds != null) {
           acceptPoseFront = visionAcceptor.shouldAccept(botPoseFront.pose, previousPosition1, m_robotRelativeSpeeds);
           previousPosition1 = botPoseFront.pose;
