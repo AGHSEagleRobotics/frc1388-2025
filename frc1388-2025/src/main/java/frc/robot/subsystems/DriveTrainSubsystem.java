@@ -320,9 +320,42 @@ public class DriveTrainSubsystem extends SubsystemBase {
     return distanceFromPose;
   }
 
-  public Pose2d getClosestTargetPose() {
+  public Pose2d getClosestTargetPoseRight() {
 
-    Pose2d[] SETPOINTS = AutoConstants.SETPOINTS;
+    Pose2d[] SETPOINTS = AutoConstants.SETPOINTS_RIGHT;
+    
+    // double distance;
+    // double nextSetpointDistance;
+    // Pose2d[] setpoints = SETPOINTS;
+    // Pose2d closestPose = setpoints[0];
+    // for (int i = 0; i < setpoints.length - 1; i++) {
+    //   distance = calculateDistancePose(setpoints[i]);
+    //   nextSetpointDistance = calculateDistancePose(setpoints[i + 1]);
+    //   if (distance < nextSetpointDistance) {
+    //     closestPose = setpoints[i];
+    //   }
+    //   else {
+    //     closestPose = setpoints[i + 1];
+    //   }
+    // }
+    
+    double distance;
+    Pose2d[] setpoints = SETPOINTS;
+    double closestDistance = calculateDistancePose(setpoints[0]);
+    Pose2d closestPose = setpoints[0];
+    for (int i = 0; i < setpoints.length; i++) {
+      distance = calculateDistancePose(setpoints[i]);
+      if (distance < closestDistance) {
+        closestPose = setpoints[i];
+        closestDistance = distance;
+      }
+    }
+    return closestPose;
+  }
+
+  public Pose2d getClosestTargetPoseLeft() {
+
+    Pose2d[] SETPOINTS = AutoConstants.SETPOINTS_LEFT;
     
     // double distance;
     // double nextSetpointDistance;
@@ -588,10 +621,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("VisionAcceptor/is Accepting Pose Back", acceptPoseBack);
     SmartDashboard.putBoolean("VisionAcceptor/is Accepting megatag2Back", acceptMegaTag2Back);
 
-    SmartDashboard.putNumber("drivetrain/closestPoseX", getClosestTargetPose().getX());
-    SmartDashboard.putNumber("drivetrain/closestPoseY", getClosestTargetPose().getY());
-    SmartDashboard.putNumber("drivetrain/closestPoseRotation", getClosestTargetPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("drivetrain/closestPoseXRight", getClosestTargetPoseRight().getX());
+    SmartDashboard.putNumber("drivetrain/closestPoseYRight", getClosestTargetPoseRight().getY());
+    SmartDashboard.putNumber("drivetrain/closestPoseRotationRight", getClosestTargetPoseRight().getRotation().getDegrees());
     SmartDashboard.putNumber("Angle Rotation2d", getGyroHeading().getRadians());
+
+    SmartDashboard.putNumber("drivetrain/closestPoseXLeft", getClosestTargetPoseLeft().getX());
+    SmartDashboard.putNumber("drivetrain/closestPoseYLeft", getClosestTargetPoseLeft().getY());
+    SmartDashboard.putNumber("drivetrain/closestPoseRotationLeft", getClosestTargetPoseLeft().getRotation().getDegrees());
 
     SmartDashboard.putNumber("drivetrain/frontRight encoder angle", m_frontRight.getRotationAngle());
     SmartDashboard.putNumber("drivetrain/frontLeft encoder angle", m_frontLeft.getRotationAngle());

@@ -11,8 +11,6 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-import choreo.trajectory.SwerveSample;
-import choreo.trajectory.Trajectory;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -25,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.FieldLayout;
-import frc.robot.commands.AutoAllign;
+import frc.robot.commands.AutoAllignRight;
 import frc.robot.commands.AutoGoToPoint;
 import frc.robot.commands.ElevatorSetpointCommand;
 import frc.robot.commands.EndEffectorCommand;
@@ -97,7 +95,6 @@ public class AutoMethod extends SubsystemBase {
     return routine;
   }
   
-
   public AutoRoutine LayingEggsTop() {
     AutoRoutine routine = m_autoFactory.newRoutine("LayingEggsTop");
 
@@ -112,19 +109,19 @@ public class AutoMethod extends SubsystemBase {
             startToScore.resetOdometry(),
             startToScore.cmd()));
     startToScore.done()
-        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+        .onTrue(new AutoAllignRight(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen(score1ToPickup.cmd()));
     score1ToPickup.done()
         .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup1ToScore.cmd()));
     pickup1ToScore.done()
-        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+        .onTrue(new AutoAllignRight(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen((score2ToPickup.cmd())));
     score2ToPickup.done()
         .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup2ToScore.cmd()));
     pickup2ToScore.done()
-        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+        .onTrue(new AutoAllignRight(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)));
 
@@ -149,19 +146,19 @@ public class AutoMethod extends SubsystemBase {
             startToScore.resetOdometry(),
             startToScore.cmd()));
     startToScore.done()
-        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+        .onTrue(new AutoAllignRight(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen(score1ToPickup.cmd()));
     score1ToPickup.done()
         .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup1ToScore.cmd()));
     pickup1ToScore.done()
-        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+        .onTrue(new AutoAllignRight(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen((score2ToPickup.cmd())));
     score2ToPickup.done()
         .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup2ToScore.cmd()));
     pickup2ToScore.done()
-        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+        .onTrue(new AutoAllignRight(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)));
 
@@ -180,13 +177,13 @@ public class AutoMethod extends SubsystemBase {
             startToScore.resetOdometry(),
             startToScore.cmd()));
     startToScore.done()
-        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+        .onTrue(new AutoAllignRight(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen(score1ToPickup.cmd()));
     score1ToPickup.done()
         .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup1ToScore.cmd()));
     pickup1ToScore.done()
-        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+        .onTrue(new AutoAllignRight(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)));
 
@@ -205,13 +202,13 @@ public class AutoMethod extends SubsystemBase {
             startToScore.resetOdometry(),
             startToScore.cmd()));
     startToScore.done()
-        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+        .onTrue(new AutoAllignRight(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).andThen(score1ToPickup.cmd()));
    score1ToPickup.done()
         .onTrue(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(1.5).andThen(pickup1ToScore.cmd()));
     pickup1ToScore.done()
-        .onTrue(new AutoAllign(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
+        .onTrue(new AutoAllignRight(m_driveTrainSubsystem).alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true))
             .andThen(new EndEffectorShoot(m_endEffectorSubsystem))
             .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)));
     return routine;
@@ -322,7 +319,6 @@ public class AutoMethod extends SubsystemBase {
     }
   }
 
-  
 
   public Command ThreeScoreLeft() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
@@ -675,11 +671,11 @@ public class AutoMethod extends SubsystemBase {
 
     switch (objective) {
 
-      case LAYINGEGGSTOP:
-        return ThreeScoreLeft();
+      // case LAYINGEGGSBOTTOM:
+      //   return LayingEggsBottom();
 
-      case LAYINGEGGSBOTTOM:
-        return ThreeScoreRight();
+      // case LAYINGEGGSTOP:
+      //   return LayingEggsTop();
 
       case TWOSCORELEFT:
         return TwoScoreLeft();
