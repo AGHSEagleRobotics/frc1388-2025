@@ -4,22 +4,19 @@
 
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DriveTrainSubsystem;
 
 /** this command moves the robot to an x, y location */
-public class AutoGoToPoint extends Command {
+public class AutoAllignRight extends Command {
 
   private final DriveTrainSubsystem m_driveTrain;
-
-  private final double X_SETPOINT;
-  private final double Y_SETPOINT;
-  private final double ROTATION_SETPOINT;
 
   // i was 0.015
   private final PIDController m_xController = new PIDController(2.5, 0, 0);
@@ -34,18 +31,14 @@ public class AutoGoToPoint extends Command {
 
 
   /** Creates a new AutoMove. */
-  public AutoGoToPoint(double xSetpoint, double ySetpoint, double rotationSetpoint, DriveTrainSubsystem drivetrain) {
+  public AutoAllignRight(DriveTrainSubsystem drivetrain) {
 
     m_driveTrain =  drivetrain;
-
-    X_SETPOINT = xSetpoint;
-    Y_SETPOINT = ySetpoint;
-    ROTATION_SETPOINT = rotationSetpoint;
 
     m_xController.setTolerance(0.05);
     m_yController.setTolerance(0.05);
     
-    m_rotationController.setTolerance(1);
+    m_rotationController.setTolerance(3);
     m_rotationController.enableContinuousInput(0, 360);
 
     
@@ -61,21 +54,17 @@ public class AutoGoToPoint extends Command {
   @Override
   public void execute() {
 
-    double xSpeed = m_xController.calculate(m_driveTrain.getPose().getX(), X_SETPOINT);
-    // if (xSpeed > m_lastXSpeed) {
-    //   xSpeed = m_xAccLimiter.calculate(xSpeed);
-    // }
+    double xSpeed = m_xController.calculate(m_driveTrain.getPose().getX(), m_driveTrain.getClosestTargetPoseRight().getX());
 
-    double ySpeed = m_yController.calculate(m_driveTrain.getPose().getY(), Y_SETPOINT);
-    // if (ySpeed > m_lastYSpeed) {
-    //   ySpeed = m_yAccLimiter.calculate(ySpeed);
-    // }
+    double ySpeed = m_yController.calculate(m_driveTrain.getPose().getY(), m_driveTrain.getClosestTargetPoseRight().getY());
+
+    double rotation = m_rotationController.calculate(m_driveTrain.getAngle(), m_driveTrain.getClosestTargetPoseRight().getRotation().getDegrees());
 
     SmartDashboard.putNumber("AutoGoToPoint/rot pid in", m_driveTrain.getAngle());
     SmartDashboard.putBoolean("AutoGoToPoint/is at rot sp", m_rotationController.atSetpoint());
-    m_driveTrain.drive(xSpeed, ySpeed, m_rotationController.calculate(m_driveTrain.getAngle(), ROTATION_SETPOINT));
-    // m_lastXSpeed = xSpeed;
-    // m_lastYSpeed = ySpeed;
+    m_driveTrain.drive(xSpeed, ySpeed, rotation);
+    m_lastXSpeed = xSpeed;
+    m_lastYSpeed = ySpeed;
   }
 
   // Called once the command ends or is interrupted.

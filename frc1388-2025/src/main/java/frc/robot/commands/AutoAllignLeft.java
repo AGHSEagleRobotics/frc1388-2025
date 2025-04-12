@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrainSubsystem;
 
 /** this command moves the robot to an x, y location */
-public class AutoAllign extends Command {
+public class AutoAllignLeft extends Command {
 
   private final DriveTrainSubsystem m_driveTrain;
 
@@ -29,7 +29,7 @@ public class AutoAllign extends Command {
 
 
   /** Creates a new AutoMove. */
-  public AutoAllign(DriveTrainSubsystem drivetrain) {
+  public AutoAllignLeft(DriveTrainSubsystem drivetrain) {
 
     m_driveTrain =  drivetrain;
 
@@ -52,13 +52,15 @@ public class AutoAllign extends Command {
   @Override
   public void execute() {
 
-    double xSpeed = m_xController.calculate(m_driveTrain.getPose().getX(), m_driveTrain.getClosestTargetPose().getX());
+    double xSpeed = m_xController.calculate(m_driveTrain.getPose().getX(), m_driveTrain.getClosestTargetPoseLeft().getX());
 
-    double ySpeed = m_yController.calculate(m_driveTrain.getPose().getY(), m_driveTrain.getClosestTargetPose().getY());
+    double ySpeed = m_yController.calculate(m_driveTrain.getPose().getY(), m_driveTrain.getClosestTargetPoseLeft().getY());
+
+    double rotation = m_rotationController.calculate(m_driveTrain.getAngle(), m_driveTrain.getClosestTargetPoseLeft().getRotation().getDegrees());
 
     SmartDashboard.putNumber("AutoGoToPoint/rot pid in", m_driveTrain.getAngle());
     SmartDashboard.putBoolean("AutoGoToPoint/is at rot sp", m_rotationController.atSetpoint());
-    m_driveTrain.drive(xSpeed, ySpeed, m_rotationController.calculate(m_driveTrain.getAngle(), m_driveTrain.getClosestTargetPose().getRotation().getDegrees()));
+    m_driveTrain.drive(xSpeed, ySpeed, rotation);
     m_lastXSpeed = xSpeed;
     m_lastYSpeed = ySpeed;
   }
