@@ -52,11 +52,11 @@ public class AutoAllignL1 extends Command {
   @Override
   public void execute() {
 
-    double xSpeed = m_xController.calculate(m_driveTrain.getPose().getX(), m_driveTrain.getClosestTargetPoseLeft().getX());
+    double xSpeed = m_xController.calculate(m_driveTrain.getPose().getX(), m_driveTrain.getClosestTargetPoseL1().getX());
 
-    double ySpeed = m_yController.calculate(m_driveTrain.getPose().getY(), m_driveTrain.getClosestTargetPoseLeft().getY());
+    double ySpeed = m_yController.calculate(m_driveTrain.getPose().getY(), m_driveTrain.getClosestTargetPoseL1().getY());
 
-    double rotation = m_rotationController.calculate(m_driveTrain.getAngle(), m_driveTrain.getClosestTargetPoseLeft().getRotation().getDegrees());
+    double rotation = m_rotationController.calculate(m_driveTrain.getAngle(), m_driveTrain.getClosestTargetPoseL1().getRotation().getDegrees());
 
     SmartDashboard.putNumber("AutoGoToPoint/rot pid in", m_driveTrain.getAngle());
     SmartDashboard.putBoolean("AutoGoToPoint/is at rot sp", m_rotationController.atSetpoint());
