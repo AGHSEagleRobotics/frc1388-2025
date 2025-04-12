@@ -100,6 +100,15 @@ public class DriveTrainSubsystem extends SubsystemBase {
   VisionAcceptor visionAcceptorMegaTag2Back = new VisionAcceptor(true);
   VisionAcceptor visionAcceptor = new VisionAcceptor(false);
 
+  
+  Pose2d previousPosition1 = new Pose2d(0, 0, new Rotation2d(0));
+  Pose2d previousPosition2 = new Pose2d(0, 0, new Rotation2d(0));
+  Pose2d previousPosition3 = new Pose2d(0, 0, new Rotation2d(0));
+
+  Pose2d previousMegaTag2Front = new Pose2d(0, 0, new Rotation2d(0));
+  Pose2d previousMegaTag2Back = new Pose2d(0, 0, new Rotation2d(0));
+  Pose2d previousMegaTagFrontLeft = new Pose2d(0, 0, new Rotation2d(0));
+
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_swerveTranslation2d);
   /** The odometry object keeps track of the robots position */
   private SwerveDrivePoseEstimator m_odometry;
@@ -553,20 +562,28 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     if (m_odometry != null) {
       if (m_robotRelativeSpeeds != null) {
-          acceptPoseFront = visionAcceptor.shouldAccept(position1, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
+          acceptPoseFront = visionAcceptor.shouldAccept(position1, previousPosition1, m_robotRelativeSpeeds);
+          previousPosition1 = position1;
+
           acceptMegaTag2Front = visionAcceptorMegaTag2Front.shouldAccept(megaTag2Front,
-              m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
+              previousMegaTag2Front, m_robotRelativeSpeeds);
           // acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro();
+          previousMegaTag2Front = megaTag2Front;
 
 
-          acceptPoseBack = visionAcceptor.shouldAccept(position2, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
-          acceptMegaTag2Back = visionAcceptorMegaTag2Back.shouldAccept(megaTag2Back, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
+          acceptPoseBack = visionAcceptor.shouldAccept(position2, previousPosition2, m_robotRelativeSpeeds);
+          previousPosition2 = position2;
+
+          acceptMegaTag2Back = visionAcceptorMegaTag2Back.shouldAccept(megaTag2Back, previousMegaTag2Back, m_robotRelativeSpeeds);
+          previousMegaTag2Back = megaTag2Back;
           // acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro();
 
 
-          acceptPoseFrontLeft = visionAcceptor.shouldAccept(position3, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
+          acceptPoseFrontLeft = visionAcceptor.shouldAccept(position3, previousPosition3, m_robotRelativeSpeeds);
+          previousPosition3 = position3;
           acceptMegaTag2FrontLeft = visionAcceptorMegaTag2FrontLeft.shouldAccept(megaTag2FrontLeft,
-              m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
+              previousMegaTagFrontLeft, m_robotRelativeSpeeds);
+              previousMegaTagFrontLeft = megaTag2FrontLeft;
           // acceptGyroFrontLeft = visionAcceptorGyroFrontLeft.shouldResetGyro();
 
           
