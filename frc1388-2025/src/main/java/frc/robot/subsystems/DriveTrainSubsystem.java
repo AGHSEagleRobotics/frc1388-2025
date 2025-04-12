@@ -92,6 +92,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(Math.pow(0.02, 1), Math.pow(0.02, 1),
       Units.degreesToRadians(10));
 
+  VisionAcceptor visionAcceptorGyroFront = new VisionAcceptor(false);
+  VisionAcceptor visionAcceptorGyroBack = new VisionAcceptor(false);
+  VisionAcceptor visionAcceptorGyroFrontLeft = new VisionAcceptor(false); // ask alex
+  VisionAcceptor visionAcceptorMegaTag2FrontLeft = new VisionAcceptor(true);
+  VisionAcceptor visionAcceptorMegaTag2Front = new VisionAcceptor(true);
+  VisionAcceptor visionAcceptorMegaTag2Back = new VisionAcceptor(true);
+  VisionAcceptor visionAcceptor = new VisionAcceptor(false);
+
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_swerveTranslation2d);
   /** The odometry object keeps track of the robots position */
   private SwerveDrivePoseEstimator m_odometry;
@@ -481,27 +489,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backLeft.periodic();
     m_backRight.periodic();
 
-    
-    VisionAcceptor visionAcceptorGyroFront = new VisionAcceptor(false);
-    VisionAcceptor visionAcceptorGyroBack = new VisionAcceptor(false);
-    VisionAcceptor visionAcceptorGyroFrontLeft = new VisionAcceptor(false); //ask alex
-    VisionAcceptor visionAcceptorMegaTag2FrontLeft = new VisionAcceptor(true);
-    VisionAcceptor visionAcceptorMegaTag2Front = new VisionAcceptor(true);
-    VisionAcceptor visionAcceptorMegaTag2Back = new VisionAcceptor(true);
-    VisionAcceptor visionAcceptor = new VisionAcceptor(false);
-
     boolean acceptPoseFront = false;
     boolean acceptPoseBack = false;
     boolean acceptPoseFrontLeft = false;
     boolean acceptMegaTag2Front = false;
     boolean acceptMegaTag2Back = false;
-    boolean acceptMegaTag2FrontLeft = false;
-    boolean acceptGyroFront = false;
-    boolean acceptGyroFrontLeft = false;
-    boolean acceptGyroBack = false;
-
-    
-    
+    boolean acceptMegaTag2FrontLeft = false;  
 
     // Field2d fieldPose1 = new Field2d();
 
@@ -527,23 +520,23 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     if (m_odometry != null) {
       if (m_robotRelativeSpeeds != null) {
-        if (LimelightHelpers.getTV("limelight-front")) {
           acceptPoseFront = visionAcceptor.shouldAccept(position1, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
           acceptMegaTag2Front = visionAcceptorMegaTag2Front.shouldAccept(megaTag2Front,
               m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
-          acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro();
-        }
-        if (LimelightHelpers.getTV("limelight-back")) {
+          // acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro();
+
+
           acceptPoseBack = visionAcceptor.shouldAccept(position2, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
           acceptMegaTag2Back = visionAcceptorMegaTag2Back.shouldAccept(megaTag2Back, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
-          acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro();
-        }
-        if (LimelightHelpers.getTV("limelight-left")) {
+          // acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro();
+
+
           acceptPoseFrontLeft = visionAcceptor.shouldAccept(position3, m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
           acceptMegaTag2FrontLeft = visionAcceptorMegaTag2FrontLeft.shouldAccept(megaTag2FrontLeft,
               m_odometry.getEstimatedPosition(), m_robotRelativeSpeeds);
-          acceptGyroFrontLeft = visionAcceptorGyroFrontLeft.shouldResetGyro();
-        }
+          // acceptGyroFrontLeft = visionAcceptorGyroFrontLeft.shouldResetGyro();
+
+          
         // if (acceptGyroFront && acceptPoseFront) {
         //   limelightResetGyroFront();
         // } else if (acceptGyroBack && acceptPoseBack) {
@@ -552,16 +545,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
         //   limelightResetGyroFrontLeft();
         // }
 
-        if (acceptMegaTag2Front && (megaTag2Front.getX() != 0 && megaTag2Front.getY() != 0)
-            && LimelightHelpers.getTV("limelight-front")) {
+        if (acceptMegaTag2Front && LimelightHelpers.getTV("limelight-front")) {
           m_odometry.addVisionMeasurement(megaTag2Front, odomTag2Front.timestampSeconds);
         }
-        if (acceptMegaTag2Back && (megaTag2Back.getX() != 0 && megaTag2Back.getY() != 0)
-            && LimelightHelpers.getTV("limelight-back")) {
+        if (acceptMegaTag2Back && LimelightHelpers.getTV("limelight-back")) {
           m_odometry.addVisionMeasurement(megaTag2Back, odomTag2Back.timestampSeconds);
         }
-        if (acceptMegaTag2FrontLeft && (megaTag2FrontLeft.getX() != 0 && megaTag2FrontLeft.getY() != 0)
-            && LimelightHelpers.getTV("limelight-left")) {
+        if (acceptMegaTag2FrontLeft && LimelightHelpers.getTV("limelight-left")) {
           m_odometry.addVisionMeasurement(megaTag2FrontLeft, odomTag2FrontLeft.timestampSeconds);
         }
       }

@@ -20,7 +20,6 @@ public class VisionAcceptor {
     public static final double robotMargin = 0.5;
     
     ChassisSpeeds m_robotVelocity;
-    Pose2d m_lastPosition;
     int m_jumpCount = 0;
     int m_jumpCountMax = 0;
     double m_angle = 0;
@@ -29,6 +28,7 @@ public class VisionAcceptor {
 
     public VisionAcceptor(boolean isMegaTag2) {
         m_isMegaTag2 = isMegaTag2;
+        m_robotVelocity = new ChassisSpeeds(0, 0, 0);
     }
 
     public boolean shouldAccept(Pose2d currentPosition, Pose2d lastPosition, ChassisSpeeds robotVelocity) {
@@ -44,14 +44,14 @@ public class VisionAcceptor {
         }
 
         // if this is the first ever check, then initialize class variable and trust the position
-        if(m_lastPosition == null) {
-            m_lastPosition = currentPosition;
+        if(lastPosition == null) {
+            lastPosition = currentPosition;
             // System.out.println("first check");
             return true;
         }
 
-        SmartDashboard.putNumber("difference of x", Math.abs(currentPosition.getX() - m_lastPosition.getX()));
-        SmartDashboard.putNumber("difference of y", Math.abs(currentPosition.getY() - m_lastPosition.getY()));
+        SmartDashboard.putNumber("difference of x", Math.abs(currentPosition.getX() - lastPosition.getX()));
+        SmartDashboard.putNumber("difference of y", Math.abs(currentPosition.getY() - lastPosition.getY()));
 
         double velocityPerTick =  DriveTrainConstants.DISTANCE_PER_TICK;
 
@@ -82,7 +82,7 @@ public class VisionAcceptor {
         //     m_jumpCount = 0;
         // }
 
-        if(currentPosition.getTranslation().getDistance(m_lastPosition.getTranslation()) > DriveTrainConstants.ROBOT_MAX_SPEED * DriveTrainConstants.DT_SECONDS) {
+        if(currentPosition.getTranslation().getDistance(lastPosition.getTranslation()) > DriveTrainConstants.ROBOT_MAX_SPEED * DriveTrainConstants.DT_SECONDS) {
             return false;
         }
 
@@ -94,8 +94,8 @@ public class VisionAcceptor {
             return false;
         }
         if (norm() > 0) {
-            double differenceOfPositionX = currentPosition.getX() - m_lastPosition.getX();
-            double differenceOfPositionY = currentPosition.getY() - m_lastPosition.getY();
+            double differenceOfPositionX = currentPosition.getX() - lastPosition.getX();
+            double differenceOfPositionY = currentPosition.getY() - lastPosition.getY();
             
             Translation2d positionChange = new Translation2d(differenceOfPositionX, differenceOfPositionY);
             Translation2d robotDirection = new Translation2d(m_robotVelocity.vxMetersPerSecond, m_robotVelocity.vyMetersPerSecond);
