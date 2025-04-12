@@ -19,7 +19,7 @@ import frc.robot.Constants.DriveTrainConstants;
 public class VisionAcceptor {
     public static final double robotMargin = 0.5;
     
-    ChassisSpeeds m_robotVelocity;
+    ChassisSpeeds m_robotVelocity = new ChassisSpeeds(0, 0, 0);
     int m_jumpCount = 0;
     int m_jumpCountMax = 0;
     double m_angle = 0;
@@ -28,7 +28,6 @@ public class VisionAcceptor {
 
     public VisionAcceptor(boolean isMegaTag2) {
         m_isMegaTag2 = isMegaTag2;
-        m_robotVelocity = new ChassisSpeeds(0, 0, 0);
     }
 
     public boolean shouldAccept(Pose2d currentPosition, Pose2d lastPosition, ChassisSpeeds robotVelocity) {
