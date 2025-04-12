@@ -47,8 +47,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
     m_endEffectorMotor.set(power);
   }
 
-  private void RunEndEffectorReverse(double power) {
-    m_endEffectorMotor.set(+power);
+  public void ShootCoralReverse(double power) {
+    m_endEffectorMotor.set(-power);
   }
 
   public void IntakeCoral(double power) {

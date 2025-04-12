@@ -52,7 +52,7 @@ public final class Constants {
   public static class ElevatorSubsystemConstants {
     public static final double kElevatorPowerLimit = 1;
     public static final double kElevatorPowerLimitDown = 0.4;
-    public static final double kElevatorEndRangePowerLimit = 0.1;
+    public static final double kElevatorEndRangePowerLimit = 0.2;
 
     public static final double kElevatorEndRange = 5.25; //inches 2
     public static final double kElevatorMaxHeight = 50.5; //inches
@@ -92,8 +92,8 @@ public final class Constants {
 
   public static class EndEffectorCommandConstants {
     public static final double kRightTriggerPressed = 0.1;
-    public static final double kIntakeCoralPower = 0.5;
-    public static final double kShootCoralPower = 0.9;    
+    public static final double kIntakeCoralPower = 0.6;
+    public static final double kShootCoralPower = 1;    
     public static final double kIntakeKillDelay = 0.1; //in seconds    
 
     public static final double kGearboxRatio = 9.0;       // input to output gear reduction
@@ -308,8 +308,10 @@ public final class Constants {
     }
 
     public enum Objective {
-      LAYINGEGGSBOTTOM("3L4Right"),
-      LAYINGEGGSTOP("3L4Left"),
+      FOURSCORERIGHT("4L4RIGHT"),
+      FOURSCORELEFT("4L4LEFT"),
+      THREESCORERIGHT("3L4Right"),
+      THREESCORELEFT("3L4Left"),
       TWOSCORERIGHT("2L4Left"),
       TWOSCORELEFT("2L4Right"),
       ONESCORECENTER("1L4Cent"),

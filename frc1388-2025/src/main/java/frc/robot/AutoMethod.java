@@ -695,6 +695,18 @@ public class AutoMethod extends SubsystemBase {
       case ONESCORERIGHT:
         return OneScoreRight();
 
+      case THREESCORELEFT:
+        return ThreeScoreLeft();
+
+      case THREESCORERIGHT:
+        return ThreeScoreRight();
+
+      case FOURSCORELEFT:
+        return FourScoreLeft();
+
+      case FOURSCORERIGHT:
+        return FourScoreRight();
+
       // case CHOREOAUTOROUTINE:
       //   return ChoreoAutoRoutine();
     }

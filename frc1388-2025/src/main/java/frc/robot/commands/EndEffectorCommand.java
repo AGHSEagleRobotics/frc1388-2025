@@ -19,16 +19,19 @@ public class EndEffectorCommand extends Command {
   // private final Supplier<Boolean> m_leftBumper;
   private final Supplier<Double> m_rightTrigger;
   private final Supplier<Boolean> m_rightBumper;
+  private final Supplier<Double> m_rightTriggerOperator;
   private final Timer m_endEffectorTimer = new Timer();
   private boolean m_coralIsDetected = false;
   private boolean m_rightTriggerWasPressed = false;
+  private boolean m_rightTriggerWasPressedOperator = false;
 
   /** Creates a new EndEffectorCommand. */
   // Supplier<Double> leftTrigger, Supplier<Boolean> leftBumper,
-  public EndEffectorCommand(EndEffectorSubsystem endEffectorSubsystem, Supplier<Double> rightTrigger, Supplier<Boolean> rightBumper) {
+  public EndEffectorCommand(EndEffectorSubsystem endEffectorSubsystem, Supplier<Double> rightTrigger, Supplier<Boolean> rightBumper, Supplier<Double> rightTriggerOperator) {
   m_endEffectorSubsystem = endEffectorSubsystem;
   m_rightTrigger = rightTrigger;
   m_rightBumper = rightBumper;
+  m_rightTriggerOperator = rightTriggerOperator;
   addRequirements(m_endEffectorSubsystem);
     // m_leftTrigger = leftTrigger;
     // m_leftBumper = leftBumper;
@@ -70,15 +73,24 @@ public class EndEffectorCommand extends Command {
 
     double rightTrigger = m_rightTrigger.get();
     boolean rightBumper = m_rightBumper.get();
+    double rightTriggerOperator = m_rightTriggerOperator.get();
     if (rightTrigger > EndEffectorCommandConstants.kRightTriggerPressed) {
       m_endEffectorSubsystem.ShootCoral(EndEffectorCommandConstants.kShootCoralPower);
       m_rightTriggerWasPressed = true;
       System.out.println("Right Trigger Pressed");
     } 
+    else if (rightTriggerOperator > EndEffectorCommandConstants.kRightTriggerPressed) {
+      m_endEffectorSubsystem.ShootCoralReverse(EndEffectorCommandConstants.kShootCoralPower);
+      m_rightTriggerWasPressedOperator = true;
+    }
     else if (m_rightTriggerWasPressed == true) {
       System.out.println("Right Trigger Released");
       m_endEffectorSubsystem.ShootCoral(0);
       m_rightTriggerWasPressed = false;
+    }
+    else if (m_rightTriggerWasPressedOperator == true) {
+      m_endEffectorSubsystem.ShootCoral(0);
+      m_rightTriggerWasPressedOperator = false;
     }
     else if (rightBumper == true) {
       //endeffectortimer\
