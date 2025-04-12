@@ -191,6 +191,9 @@ public final class Constants {
     public static final Pose2d L1_POSITION_5_RIGHT_BLUE = new Pose2d(4.8047, 5.3323, new Rotation2d(Math.toRadians(240)));
     public static final Pose2d L1_POSITION_6_LEFT_BLUE = new Pose2d(4.1742, 5.3323, new Rotation2d(Math.toRadians(300)));
     public static final Pose2d L1_POSITION_6_RIGHT_BLUE = new Pose2d(3.5156, 4.9522, new Rotation2d(Math.toRadians(300)));
+    // coral station setpoints
+    public static final Pose2d CORAL_STATION_LEFT_BLUE = new Pose2d(1.19, 7.24, new Rotation2d(Math.toRadians(306)));
+    public static final Pose2d CORAL_STATION_RIGHT_BLUE = new Pose2d(1.06, 0.867, new Rotation2d(Math.toRadians(54)));
 
     public static final Pose2d CLIMBER_POSITION_LEFT_BLUE = new Pose2d(7.769, 7.215, new Rotation2d(Math.toRadians(270)));
     public static final Pose2d CLIMBER_POSITION_MIDDLE_BLUE = new Pose2d(7.769, 6.135, new Rotation2d(Math.toRadians(270)));
@@ -216,7 +219,11 @@ public final class Constants {
     public static final Pose2d CLIMBER_POSITION_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - CLIMBER_POSITION_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - CLIMBER_POSITION_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(90)));
 
 
-    public static final Pose2d[] SETPOINTS_RIGHT = new Pose2d[12];
+    
+    public static final Pose2d CORAL_STATION_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - CORAL_STATION_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - CORAL_STATION_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(126)));
+    public static final Pose2d CORAL_STATION_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - CORAL_STATION_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - CORAL_STATION_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(234)));
+
+    public static final Pose2d[] SETPOINTS_RIGHT = new Pose2d[16];
 
     static {
     //blue side
@@ -234,6 +241,11 @@ public final class Constants {
     SETPOINTS_RIGHT[9] = SCORING_POSITION_4_RIGHT_RED;
     SETPOINTS_RIGHT[10] = SCORING_POSITION_5_RIGHT_RED;
     SETPOINTS_RIGHT[11] = SCORING_POSITION_6_RIGHT_RED;
+
+    SETPOINTS_RIGHT[12] = CORAL_STATION_RIGHT_BLUE;
+    SETPOINTS_RIGHT[13] = CORAL_STATION_LEFT_BLUE;
+    SETPOINTS_RIGHT[14] = CORAL_STATION_RIGHT_RED;
+    SETPOINTS_RIGHT[15] = CORAL_STATION_LEFT_RED;
     }
 
     public static final Pose2d[] SETPOINTS_LEFT = new Pose2d[12];

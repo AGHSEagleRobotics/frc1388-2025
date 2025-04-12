@@ -328,18 +328,26 @@ public class AutoMethod extends SubsystemBase {
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
           .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1).alongWith(
-              new AutoGoToPoint(1.13, 7.37, 306, m_driveTrainSubsystem).withTimeout(2.5)))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
+              new AutoGoToPoint(AutoConstants.CORAL_STATION_LEFT_BLUE.getX(), AutoConstants.CORAL_STATION_LEFT_BLUE.getY(), AutoConstants.CORAL_STATION_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem))
+          .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
           .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_6_RIGHT_BLUE.getX(),
               AutoConstants.SCORING_POSITION_6_RIGHT_BLUE.getY(),
               AutoConstants.SCORING_POSITION_6_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
           .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
           .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
-              .alongWith(new AutoGoToPoint(1.13, 7.37, 306, m_driveTrainSubsystem).withTimeout(2)))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
+              .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_LEFT_BLUE.getX(), AutoConstants.CORAL_STATION_LEFT_BLUE.getY(), AutoConstants.CORAL_STATION_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem))
+          .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
           .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_6_LEFT_BLUE.getX(),
               AutoConstants.SCORING_POSITION_6_LEFT_BLUE.getY(),
               AutoConstants.SCORING_POSITION_6_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
@@ -353,18 +361,26 @@ public class AutoMethod extends SubsystemBase {
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
           .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1).alongWith(
-              new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.13, FieldLayout.FIELD_WIDTH - 7.37, 126, m_driveTrainSubsystem).withTimeout(2.5)))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
+              new AutoGoToPoint(AutoConstants.CORAL_STATION_LEFT_RED.getX(), AutoConstants.CORAL_STATION_LEFT_RED.getY(), AutoConstants.CORAL_STATION_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem))
+          .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
               .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_6_RIGHT_RED.getX(),
                   AutoConstants.SCORING_POSITION_6_RIGHT_RED.getY(),
                   AutoConstants.SCORING_POSITION_6_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
                   .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
           .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
-              .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.13, FieldLayout.FIELD_WIDTH - 7.37, 126, m_driveTrainSubsystem).withTimeout(2)))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
+              .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_LEFT_RED.getX(), AutoConstants.CORAL_STATION_LEFT_RED.getY(), AutoConstants.CORAL_STATION_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem))
+          .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
           .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_6_LEFT_RED.getX(),
               AutoConstants.SCORING_POSITION_6_LEFT_RED.getY(),
               AutoConstants.SCORING_POSITION_6_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
@@ -382,18 +398,26 @@ public class AutoMethod extends SubsystemBase {
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1).alongWith(
-              new AutoGoToPoint(1.03, 0.66, 54, m_driveTrainSubsystem).withTimeout(2.5)))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
+
+          // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
+            .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_RIGHT_BLUE.getX(), AutoConstants.CORAL_STATION_RIGHT_BLUE.getY(), AutoConstants.CORAL_STATION_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem))
+            .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+            
+            // drive to score then shoot
           .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_2_RIGHT_BLUE.getX(),
               AutoConstants.SCORING_POSITION_2_RIGHT_BLUE.getY(),
               AutoConstants.SCORING_POSITION_2_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
-          .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+              .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
           .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
-              .alongWith(new AutoGoToPoint(1.03, 0.66, 54, m_driveTrainSubsystem).withTimeout(2)))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
+              .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_RIGHT_BLUE.getX(), AutoConstants.CORAL_STATION_RIGHT_BLUE.getY(), AutoConstants.CORAL_STATION_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem))
+          .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
           .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_2_LEFT_BLUE.getX(),
               AutoConstants.SCORING_POSITION_2_LEFT_BLUE.getY(),
               AutoConstants.SCORING_POSITION_2_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
@@ -407,18 +431,26 @@ public class AutoMethod extends SubsystemBase {
       .alongWith(
           new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
       .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+      
+      // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
       .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1).alongWith(
-          new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.03, FieldLayout.FIELD_WIDTH - 0.66, 234, m_driveTrainSubsystem).withTimeout(2.5)))
-      .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
+          new AutoGoToPoint(AutoConstants.CORAL_STATION_RIGHT_RED.getX(), AutoConstants.CORAL_STATION_RIGHT_RED.getY(), AutoConstants.CORAL_STATION_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem))
+      .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+      // drive to score then shoot
       .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_2_RIGHT_RED.getX(),
           AutoConstants.SCORING_POSITION_2_RIGHT_RED.getY(),
           AutoConstants.SCORING_POSITION_2_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
           .withTimeout(2)
       .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
       .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+     
+      // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
       .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
-          .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.03, FieldLayout.FIELD_WIDTH - 0.66, 234, m_driveTrainSubsystem).withTimeout(2)))
-      .andThen(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4))
+          .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_RIGHT_RED.getX(), AutoConstants.CORAL_STATION_RIGHT_RED.getY(), AutoConstants.CORAL_STATION_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem))
+      .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+      // drive to score then shoot
       .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_2_LEFT_RED.getX(),
           AutoConstants.SCORING_POSITION_2_LEFT_RED.getY(),
           AutoConstants.SCORING_POSITION_2_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
@@ -430,99 +462,193 @@ public class AutoMethod extends SubsystemBase {
 
   public Command FourScoreLeft() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(4.97, 5.23, 240, m_driveTrainSubsystem).withTimeout(4).andThen(
-          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
-              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).alongWith(
-              new AutoGoToPoint(1.51, 7.39, 306.4, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(2)
-          .andThen(new AutoGoToPoint(3.96, 5.23, 300, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
-          .alongWith(new AutoGoToPoint(1.51, 7.39, 306.4, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(2)
-          .andThen(new AutoGoToPoint(3.68, 5.01, 300, m_driveTrainSubsystem)).withTimeout(4)
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
-          .alongWith(new AutoGoToPoint(1.51, 7.39, 306.4, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
-          .andThen(new AutoGoToPoint(3.21, 4.19, 0, m_driveTrainSubsystem))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+      return new AutoGoToPoint(AutoConstants.SCORING_POSITION_5_RIGHT_BLUE.getX(),
+          AutoConstants.SCORING_POSITION_5_RIGHT_BLUE.getY(),
+          AutoConstants.SCORING_POSITION_5_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
+          .alongWith(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1).alongWith(
+              new AutoGoToPoint(AutoConstants.CORAL_STATION_LEFT_BLUE.getX(), AutoConstants.CORAL_STATION_LEFT_BLUE.getY(), AutoConstants.CORAL_STATION_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem))
+          .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
+          .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_6_RIGHT_BLUE.getX(),
+              AutoConstants.SCORING_POSITION_6_RIGHT_BLUE.getY(),
+              AutoConstants.SCORING_POSITION_6_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
+              .withTimeout(2)
+          .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
+              .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_LEFT_BLUE.getX(), AutoConstants.CORAL_STATION_LEFT_BLUE.getY(), AutoConstants.CORAL_STATION_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem))
+          .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
+          .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_6_LEFT_BLUE.getX(),
+              AutoConstants.SCORING_POSITION_6_LEFT_BLUE.getY(),
+              AutoConstants.SCORING_POSITION_6_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
+              .withTimeout(2)
+          .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          //drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
+              .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_LEFT_BLUE.getX(), AutoConstants.CORAL_STATION_LEFT_BLUE.getY(), AutoConstants.CORAL_STATION_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem))
+              .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
+          .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_1_LEFT_BLUE.getX(),
+              AutoConstants.SCORING_POSITION_1_LEFT_BLUE.getY(),
+              AutoConstants.SCORING_POSITION_1_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
+              .withTimeout(2)
+              .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     } else {
-      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 4.97, FieldLayout.FIELD_WIDTH - 5.23, 60,
-          m_driveTrainSubsystem)
-          .withTimeout(4).andThen(
-              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
-                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).withTimeout(1).andThen(
-              new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.51, FieldLayout.FIELD_WIDTH - 7.39, 125.4, m_driveTrainSubsystem))
-          .alongWith(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
-          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.96, FieldLayout.FIELD_WIDTH - 5.23, 120, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
-          .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.51, FieldLayout.FIELD_WIDTH - 7.39, 306.4, m_driveTrainSubsystem)).withTimeout(4)
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
-          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.68, FieldLayout.FIELD_WIDTH - 5.01, 300, m_driveTrainSubsystem)).withTimeout(4)
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
-          .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.51,FieldLayout.FIELD_WIDTH - 7.39, 306.4, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
-          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.21, FieldLayout.FIELD_WIDTH - 4.19, 0, m_driveTrainSubsystem))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+      return new AutoGoToPoint(AutoConstants.SCORING_POSITION_5_RIGHT_RED.getX(),
+          AutoConstants.SCORING_POSITION_5_RIGHT_RED.getY(),
+          AutoConstants.SCORING_POSITION_5_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2.5)
+          .alongWith(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1).alongWith(
+              new AutoGoToPoint(AutoConstants.CORAL_STATION_LEFT_RED.getX(), AutoConstants.CORAL_STATION_LEFT_RED.getY(), AutoConstants.CORAL_STATION_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem))
+          .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
+              .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_6_RIGHT_RED.getX(),
+                  AutoConstants.SCORING_POSITION_6_RIGHT_RED.getY(),
+                  AutoConstants.SCORING_POSITION_6_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
+                  .withTimeout(2)
+              .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
+              .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_LEFT_RED.getX(), AutoConstants.CORAL_STATION_LEFT_RED.getY(), AutoConstants.CORAL_STATION_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem))
+          .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
+          .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_6_LEFT_RED.getX(),
+              AutoConstants.SCORING_POSITION_6_LEFT_RED.getY(),
+              AutoConstants.SCORING_POSITION_6_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
+              .withTimeout(2)
+              .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          //drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
+              .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_LEFT_RED.getX(), AutoConstants.CORAL_STATION_LEFT_RED.getY(), AutoConstants.CORAL_STATION_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem))
+              .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
+          .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_1_LEFT_RED.getX(),
+              AutoConstants.SCORING_POSITION_1_LEFT_RED.getY(),
+              AutoConstants.SCORING_POSITION_1_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
+              .withTimeout(2)
+              .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     }
   }
 
   public Command FourScoreRight() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(5.28, 3.02, 240, m_driveTrainSubsystem).withTimeout(4).andThen(
-          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
-              .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).alongWith(
-              new AutoGoToPoint(1.61, 0.58, 306.4, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(2)
-          .andThen(new AutoGoToPoint(4.01, 2.82, 300, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
-          .alongWith(new AutoGoToPoint(1.60, 0.58, 306.4, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(2)
-          .andThen(new AutoGoToPoint(3.73, 2.99, 300, m_driveTrainSubsystem)).withTimeout(4)
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
-          .alongWith(new AutoGoToPoint(1.60, 0.58, 306.4, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
-          .andThen(new AutoGoToPoint(3.20, 3.85, 0, m_driveTrainSubsystem))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+      return new AutoGoToPoint(AutoConstants.SCORING_POSITION_3_RIGHT_BLUE.getX(),
+          AutoConstants.SCORING_POSITION_3_RIGHT_BLUE.getY(),
+          AutoConstants.SCORING_POSITION_3_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
+          .alongWith(
+              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
+            .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_RIGHT_BLUE.getX(), AutoConstants.CORAL_STATION_RIGHT_BLUE.getY(), AutoConstants.CORAL_STATION_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem))
+            .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+            
+            // drive to score then shoot
+          .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_2_RIGHT_BLUE.getX(),
+              AutoConstants.SCORING_POSITION_2_RIGHT_BLUE.getY(),
+              AutoConstants.SCORING_POSITION_2_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
+              .withTimeout(2)
+              .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
+              .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_RIGHT_BLUE.getX(), AutoConstants.CORAL_STATION_RIGHT_BLUE.getY(), AutoConstants.CORAL_STATION_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem))
+          .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
+          .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_2_LEFT_BLUE.getX(),
+              AutoConstants.SCORING_POSITION_2_LEFT_BLUE.getY(),
+              AutoConstants.SCORING_POSITION_2_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
+              .withTimeout(2)
+          .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+          //drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
+          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
+              .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_RIGHT_BLUE.getX(), AutoConstants.CORAL_STATION_RIGHT_BLUE.getY(), AutoConstants.CORAL_STATION_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem))
+              .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+          // drive to score then shoot
+          .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_1_RIGHT_BLUE.getX(),
+              AutoConstants.SCORING_POSITION_1_RIGHT_BLUE.getY(),
+              AutoConstants.SCORING_POSITION_1_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
+              .withTimeout(2)
+              .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     } else {
-      return new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 5.28, FieldLayout.FIELD_WIDTH - 3.02, 60,
-          m_driveTrainSubsystem)
-          .withTimeout(4).andThen(
-              new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)
-                  .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false)).withTimeout(1).andThen(
-              new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.61, FieldLayout.FIELD_WIDTH - 0.58, 125.4, m_driveTrainSubsystem))
-          .alongWith(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
-          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 4.01, FieldLayout.FIELD_WIDTH - 2.82, 120, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout((1))
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
-          .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.60, FieldLayout.FIELD_WIDTH - 0.58, 306.4, m_driveTrainSubsystem)).withTimeout(4)
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
-          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.73, FieldLayout.FIELD_WIDTH - 2.99, 300, m_driveTrainSubsystem)).withTimeout(4)
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1)
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false))
-          .alongWith(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 1.60,FieldLayout.FIELD_WIDTH - 0.58, 306.4, m_driveTrainSubsystem).withTimeout(4))
-          .andThen(new EndEffectorIntake(m_endEffectorSubsystem)).withTimeout(4)
-          .andThen(new AutoGoToPoint(FieldLayout.FIELD_LENGTH - 3.20, FieldLayout.FIELD_WIDTH - 3.85, 0, m_driveTrainSubsystem))
-          .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, true)).withTimeout(1)
-          .andThen(new EndEffectorShoot(m_endEffectorSubsystem)).withTimeout(1);
+      return new AutoGoToPoint(AutoConstants.SCORING_POSITION_3_RIGHT_RED.getX(),
+      AutoConstants.SCORING_POSITION_3_RIGHT_RED.getY(),
+      AutoConstants.SCORING_POSITION_3_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
+      .alongWith(
+          new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+      .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+      
+      // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
+      .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1).alongWith(
+          new AutoGoToPoint(AutoConstants.CORAL_STATION_RIGHT_RED.getX(), AutoConstants.CORAL_STATION_RIGHT_RED.getY(), AutoConstants.CORAL_STATION_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem))
+      .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+      // drive to score then shoot
+      .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_2_RIGHT_RED.getX(),
+          AutoConstants.SCORING_POSITION_2_RIGHT_RED.getY(),
+          AutoConstants.SCORING_POSITION_2_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
+          .withTimeout(2)
+      .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+      .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+     
+      // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
+      .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
+          .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_RIGHT_RED.getX(), AutoConstants.CORAL_STATION_RIGHT_RED.getY(), AutoConstants.CORAL_STATION_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem))
+      .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+      // drive to score then shoot
+      .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_2_LEFT_RED.getX(),
+          AutoConstants.SCORING_POSITION_2_LEFT_RED.getY(),
+          AutoConstants.SCORING_POSITION_2_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
+          .withTimeout(2)
+      .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+      .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
+
+      //drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
+      .andThen(new ElevatorSetpointCommand(m_elevatorSubsystem, false).withTimeout(1)
+      .alongWith(new AutoGoToPoint(AutoConstants.CORAL_STATION_RIGHT_RED.getX(), AutoConstants.CORAL_STATION_RIGHT_RED.getY(), AutoConstants.CORAL_STATION_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem))
+      .deadlineFor(new EndEffectorIntake(m_endEffectorSubsystem).withTimeout(4)))
+
+  // drive to score then shoot
+  .andThen(new AutoGoToPoint(AutoConstants.SCORING_POSITION_1_RIGHT_RED.getX(),
+      AutoConstants.SCORING_POSITION_1_RIGHT_RED.getY(),
+      AutoConstants.SCORING_POSITION_1_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
+      .withTimeout(2)
+      .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+  .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     }
   }
 

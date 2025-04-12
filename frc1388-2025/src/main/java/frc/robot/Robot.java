@@ -86,6 +86,7 @@ public class Robot extends TimedRobot {
 
       if (m_userButtonCounter == 1) {
         DataLogManager.log("### UserButtonPressed");
+        m_robotContainer.m_lightBarSubsystem.ToggleLightBar();
         // RobotController.setRadioLEDState(RadioLEDState.kGreen);
       } else if (m_userButtonCounter == 100) { // when held for 2 seconds (100 tics)
         DataLogManager.log("### UserButtonHeld");
@@ -108,6 +109,9 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     m_neutralModeTimer.restart();
     m_robotContainer.resetSubsystemsAndCommands();
+
+    m_robotContainer.m_lightBarSubsystem.SetLightBar(false);
+
   }
 
   @Override
@@ -155,6 +159,8 @@ public class Robot extends TimedRobot {
       DataLogManager.log("Match number:\t" + DriverStation.getMatchNumber());
     }
 
+    m_robotContainer.m_lightBarSubsystem.SetLightBar(true);
+
   }
 
   /** This function is called periodically during autonomous. */
@@ -174,6 +180,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    m_robotContainer.m_lightBarSubsystem.SetLightBar(true);
 
     // m_robotContainer.setBrakeMode(true);
   }

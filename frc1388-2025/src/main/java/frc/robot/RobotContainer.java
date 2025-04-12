@@ -15,6 +15,7 @@ import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.EndEffectorCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.LightBarSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -38,6 +39,7 @@ import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.PowerDistribution;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -94,6 +96,8 @@ public class RobotContainer {
   EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem(
       new SparkMax(RobotContainerConstants.kEndEffectorCANID, MotorType.kBrushless),
       new LaserCan(RobotContainerConstants.kLaserCanCANID));
+
+  LightBarSubsystem m_lightBarSubsystem = new LightBarSubsystem(new PowerDistribution());
 
   DriveCommand m_driveCommand;
   ElevatorCommand m_elevatorCommand;

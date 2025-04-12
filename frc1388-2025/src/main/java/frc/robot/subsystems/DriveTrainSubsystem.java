@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -41,7 +42,8 @@ import frc.robot.Robot;
 import frc.robot.SwerveModule;
 import frc.robot.vision.Limelight;
 import frc.robot.vision.LimelightHelpers;
-import frc.robot.vision.VisionAcceptor; 
+import frc.robot.vision.VisionAcceptor;
+import frc.robot.vision.LimelightHelpers.PoseEstimate; 
 
 public class DriveTrainSubsystem extends SubsystemBase {
 
@@ -89,6 +91,23 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(Math.pow(0.02, 1), Math.pow(0.02, 1),
       Units.degreesToRadians(10));
+
+  VisionAcceptor visionAcceptorGyroFront = new VisionAcceptor(false);
+  VisionAcceptor visionAcceptorGyroBack = new VisionAcceptor(false);
+  VisionAcceptor visionAcceptorGyroFrontLeft = new VisionAcceptor(false); // ask alex
+  VisionAcceptor visionAcceptorMegaTag2FrontLeft = new VisionAcceptor(true);
+  VisionAcceptor visionAcceptorMegaTag2Front = new VisionAcceptor(true);
+  VisionAcceptor visionAcceptorMegaTag2Back = new VisionAcceptor(true);
+  VisionAcceptor visionAcceptor = new VisionAcceptor(false);
+
+  
+  Pose2d previousPosition1 = new Pose2d(0, 0, new Rotation2d(0));
+  Pose2d previousPosition2 = new Pose2d(0, 0, new Rotation2d(0));
+  Pose2d previousPosition3 = new Pose2d(0, 0, new Rotation2d(0));
+
+  Pose2d previousMegaTag2Front = new Pose2d(0, 0, new Rotation2d(0));
+  Pose2d previousMegaTag2Back = new Pose2d(0, 0, new Rotation2d(0));
+  Pose2d previousMegaTagFrontLeft = new Pose2d(0, 0, new Rotation2d(0));
 
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_swerveTranslation2d);
   /** The odometry object keeps track of the robots position */
@@ -545,89 +564,83 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backLeft.periodic();
     m_backRight.periodic();
 
-    
-    VisionAcceptor visionAcceptorGyroFront = new VisionAcceptor(false, m_robotRelativeSpeeds);
-    VisionAcceptor visionAcceptorGyroBack = new VisionAcceptor(false, m_robotRelativeSpeeds);
-    VisionAcceptor visionAcceptorGyroFrontLeft = new VisionAcceptor(false, chassisSpeeds); //ask alex
-    VisionAcceptor visionAcceptorMegaTag2FrontLeft = new VisionAcceptor(true, chassisSpeeds);
-    VisionAcceptor visionAcceptorMegaTag2Front = new VisionAcceptor(true, m_robotRelativeSpeeds);
-    VisionAcceptor visionAcceptorMegaTag2Back = new VisionAcceptor(true, m_robotRelativeSpeeds);
-    VisionAcceptor visionAcceptor = new VisionAcceptor(false, m_robotRelativeSpeeds);
-
     boolean acceptPoseFront = false;
     boolean acceptPoseBack = false;
     boolean acceptPoseFrontLeft = false;
     boolean acceptMegaTag2Front = false;
     boolean acceptMegaTag2Back = false;
-    boolean acceptMegaTag2FrontLeft = false;
-    boolean acceptGyroFront = false;
-    boolean acceptGyroFrontLeft = false;
-    boolean acceptGyroBack = false;
-
-    
-    double[] botPoseFront = m_limelight.getBotPoseFront();
-    double[] botPoseBack = m_limelight.getBotPoseBack();
-    double[] botPoseFrontLeft = m_limelight.getBotPoseLeft();
-
-    double[] odomTag2Front = m_limelight.getMegaTag2Front();
-    double[] odomTag2Back = m_limelight.getMegaTag2Back();
-    double[] odomTag2FrontLeft = m_limelight.getMegaTag2Left();
-    
-    Pose2d position1 = new Pose2d(botPoseFront[0], botPoseFront[1], getGyroHeading());
-    Pose2d position2 = new Pose2d(botPoseBack[0], botPoseBack[1], getGyroHeading());
-    Pose2d position3 = new Pose2d(botPoseFrontLeft[0], botPoseFrontLeft[1], getGyroHeading());
-
-    Pose2d megaTag2Front = new Pose2d(odomTag2Front[0], odomTag2Front[1], getGyroHeading());
-    Pose2d megaTag2Back = new Pose2d(odomTag2Back[0], odomTag2Back[1], getGyroHeading());
-    Pose2d megaTag2FrontLeft = new Pose2d(odomTag2FrontLeft[0], odomTag2FrontLeft[1], getGyroHeading());
+    boolean acceptMegaTag2FrontLeft = false;  
 
     // Field2d fieldPose1 = new Field2d();
 
     LimelightHelpers.SetRobotOrientation("limelight-front", getAngle(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetRobotOrientation("limelight-back", getAngle(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetRobotOrientation("limelight-left", getAngle(), 0, 0, 0, 0, 0);
-    double timer = 1.5;
-    if (Timer.getFPGATimestamp() > 1.5 ) {
-      timer = Timer.getFPGATimestamp();
-    }
-    if (m_robotRelativeSpeeds != null) {
-      if (m_limelight.getApriltagTargetFoundFront()) {
-        acceptPoseFront = visionAcceptor.shouldAccept(position1);
-        acceptMegaTag2Front = visionAcceptorMegaTag2Front.shouldAccept(megaTag2Front);
-        acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro();
-      }
-      if (m_limelight.getApriltagTargetFoundBack()) {
-        acceptPoseBack = visionAcceptor.shouldAccept(position2);
-        acceptMegaTag2Back = visionAcceptorMegaTag2Back.shouldAccept(megaTag2Back);
-        acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro();
-      }
-      if (m_limelight.getApriltagTargetFoundFrontLeft()) {
-        acceptPoseFrontLeft = visionAcceptor.shouldAccept(position3);
-        acceptMegaTag2FrontLeft = visionAcceptorMegaTag2FrontLeft.shouldAccept(megaTag2FrontLeft);
-        acceptGyroFrontLeft = visionAcceptorGyroFrontLeft.shouldResetGyro();
-      }
-      if (acceptGyroFront && acceptPoseFront) {
-        limelightResetGyroFront();
-      } else if (acceptGyroBack && acceptPoseBack) {
-        limelightResetGyroBack();
-      }
-      else if (acceptGyroFrontLeft && acceptPoseFrontLeft) {
-        limelightResetGyroFrontLeft();
-      }
 
-      if (m_odometry != null) {
-        if (acceptMegaTag2Front && (megaTag2Front.getX() != 0 && megaTag2Front.getY() != 0) && m_limelight.getApriltagTargetFoundFront()) {
-          m_odometry.addVisionMeasurement(megaTag2Front, timer);
+    PoseEstimate botPoseFront = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front");
+    PoseEstimate botPoseBack = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-back");
+    PoseEstimate botPoseFrontLeft = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-left");
+
+    PoseEstimate odomTag2Front = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
+    PoseEstimate odomTag2Back = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
+    PoseEstimate odomTag2FrontLeft = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-left");
+
+    if (m_odometry != null && botPoseFront != null && botPoseBack != null && botPoseFrontLeft != null && 
+        odomTag2Front != null && odomTag2Back != null && odomTag2FrontLeft != null) {
+      if (m_robotRelativeSpeeds != null) {
+          acceptPoseFront = visionAcceptor.shouldAccept(botPoseFront.pose, previousPosition1, m_robotRelativeSpeeds);
+          previousPosition1 = botPoseFront.pose;
+
+          acceptMegaTag2Front = visionAcceptorMegaTag2Front.shouldAccept(odomTag2Front.pose,
+              previousMegaTag2Front, m_robotRelativeSpeeds);
+          // acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro();
+          previousMegaTag2Front = odomTag2Front.pose;
+
+
+          acceptPoseBack = visionAcceptor.shouldAccept(botPoseBack.pose, previousPosition2, m_robotRelativeSpeeds);
+          previousPosition2 = botPoseBack.pose;
+
+          acceptMegaTag2Back = visionAcceptorMegaTag2Back.shouldAccept(odomTag2Back.pose, previousMegaTag2Back, m_robotRelativeSpeeds);
+          previousMegaTag2Back = odomTag2Back.pose;
+          // acceptGyroBack = visionAcceptorGyroBack.shouldResetGyro();
+
+
+          acceptPoseFrontLeft = visionAcceptor.shouldAccept(botPoseFrontLeft.pose, previousPosition3, m_robotRelativeSpeeds);
+          previousPosition3 = botPoseFrontLeft.pose;
+          acceptMegaTag2FrontLeft = visionAcceptorMegaTag2FrontLeft.shouldAccept(odomTag2FrontLeft.pose,
+              previousMegaTagFrontLeft, m_robotRelativeSpeeds);
+              previousMegaTagFrontLeft = odomTag2FrontLeft.pose;
+          // acceptGyroFrontLeft = visionAcceptorGyroFrontLeft.shouldResetGyro();
+        
+          
+        // if (acceptGyroFront && acceptPoseFront) {
+        //   limelightResetGyroFront();
+        // } else if (acceptGyroBack && acceptPoseBack) {
+        //   limelightResetGyroBack();
+        // } else if (acceptGyroFrontLeft && acceptPoseFrontLeft) {
+        //   limelightResetGyroFrontLeft();
+        // }
+
+        if (acceptMegaTag2Front && LimelightHelpers.getTV("limelight-front")) {
+          m_odometry.addVisionMeasurement(odomTag2Front.pose, odomTag2Front.timestampSeconds);
         }
-        if (acceptMegaTag2Back && (megaTag2Back.getX() != 0 && megaTag2Back.getY() != 0) && m_limelight.getApriltagTargetFoundBack()) {
-          m_odometry.addVisionMeasurement(megaTag2Back, timer);
+        if (acceptMegaTag2Back && LimelightHelpers.getTV("limelight-back")) {
+          m_odometry.addVisionMeasurement(odomTag2Back.pose, odomTag2Back.timestampSeconds);
         }
-        if (acceptMegaTag2FrontLeft && (megaTag2FrontLeft.getX() != 0 && megaTag2FrontLeft.getY() != 0) && m_limelight.getApriltagTargetFoundFrontLeft()) {
-          m_odometry.addVisionMeasurement(megaTag2FrontLeft, timer);
+        if (acceptMegaTag2FrontLeft && LimelightHelpers.getTV("limelight-left")) {
+          m_odometry.addVisionMeasurement(odomTag2FrontLeft.pose, odomTag2FrontLeft.timestampSeconds);
         }
       }
-      m_odometry.updateWithTime(
-          Timer.getFPGATimestamp(),
+      // m_odometry.updateWithTime(
+      //     Timer.getFPGATimestamp(),
+      //     getGyroHeading(),
+      //     new SwerveModulePosition[] {
+      //         m_frontRight.getPosition(),
+      //         m_frontLeft.getPosition(),
+      //         m_backLeft.getPosition(),
+      //         m_backRight.getPosition()
+      //     });
+      m_odometry.update(
           getGyroHeading(),
           new SwerveModulePosition[] {
               m_frontRight.getPosition(),
@@ -636,8 +649,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
               m_backRight.getPosition()
           });
     }
-    SmartDashboard.putNumber("Limelight ODO X", odomTag2Front[0]);
-    SmartDashboard.putNumber("Limelight ODO Y", odomTag2Front[1]);
 
     SmartDashboard.putNumber("drivetrain/odo x", getPose().getX());
     SmartDashboard.putNumber("drivetrain/odo y", getPose().getY());
@@ -668,11 +679,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("drivetrain/backRight encoder angle", m_backRight.getRotationAngle());
 
     publisher.set(getPose());
-    publishPose1.set(position1);
-    publishPose2.set(position2);
-    publishPose3.set(position3);
-    publishMegaTag2FrontRight.set(megaTag2Front);
-    publishMegaTag2FrontLeft.set(megaTag2FrontLeft);
-    publishMegaTag2Back.set(megaTag2Back);
+    publishPose1.set(botPoseFront.pose);
+    publishPose2.set(botPoseBack.pose);
+    publishPose3.set(botPoseFrontLeft.pose);
+    publishMegaTag2FrontRight.set(odomTag2Front.pose);
+    publishMegaTag2FrontLeft.set(odomTag2FrontLeft.pose);
+    publishMegaTag2Back.set(odomTag2Back.pose);
   }
 }
