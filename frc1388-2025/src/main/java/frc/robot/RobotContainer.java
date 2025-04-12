@@ -22,6 +22,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.Constants.RobotContainerConstants;
 import frc.robot.commands.AutoAllignRight;
+import frc.robot.commands.AutoAllignL1;
 import frc.robot.commands.AutoAllignLeft;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
@@ -166,7 +167,10 @@ setBrakeMode(true);
 
     m_driverController.leftBumper().whileTrue(new AutoAllignRight(m_driveTrain));
     m_driverController.leftTrigger().whileTrue(new AutoAllignLeft(m_driveTrain));
+    m_driverController.a().whileTrue(new AutoAllignL1(m_driveTrain));
   }
+
+
 
   public void setAllEncoderOffsets() {
     m_driveTrain.setAllEncoderOffsets();
