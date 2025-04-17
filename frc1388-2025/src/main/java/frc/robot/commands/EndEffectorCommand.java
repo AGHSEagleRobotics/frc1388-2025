@@ -7,10 +7,14 @@ package frc.robot.commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.EndEffectorCommandConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class EndEffectorCommand extends Command {
@@ -20,6 +24,7 @@ public class EndEffectorCommand extends Command {
   private final Supplier<Double> m_rightTrigger;
   private final Supplier<Boolean> m_rightBumper;
   private final Supplier<Double> m_rightTriggerOperator;
+  private CommandXboxController m_operatorController = null;
   private final Timer m_endEffectorTimer = new Timer();
   private boolean m_coralIsDetected = false;
   private boolean m_rightTriggerWasPressed = false;
@@ -27,16 +32,30 @@ public class EndEffectorCommand extends Command {
 
   /** Creates a new EndEffectorCommand. */
   // Supplier<Double> leftTrigger, Supplier<Boolean> leftBumper,
-  public EndEffectorCommand(EndEffectorSubsystem endEffectorSubsystem, Supplier<Double> rightTrigger, Supplier<Boolean> rightBumper, Supplier<Double> rightTriggerOperator) {
-  m_endEffectorSubsystem = endEffectorSubsystem;
-  m_rightTrigger = rightTrigger;
-  m_rightBumper = rightBumper;
-  m_rightTriggerOperator = rightTriggerOperator;
-  addRequirements(m_endEffectorSubsystem);
+  public EndEffectorCommand(EndEffectorSubsystem endEffectorSubsystem, Supplier<Double> rightTrigger,
+      Supplier<Boolean> rightBumper, Supplier<Double> rightTriggerOperator) {
+    m_endEffectorSubsystem = endEffectorSubsystem;
+    m_rightTrigger = rightTrigger;
+    m_rightBumper = rightBumper;
+    m_rightTriggerOperator = rightTriggerOperator;
+    addRequirements(m_endEffectorSubsystem);
     // m_leftTrigger = leftTrigger;
     // m_leftBumper = leftBumper;
     // Use addRequirements() here to declare subsystem dependencies.
   }
+  
+  //this constructor used for controller rumble
+  public EndEffectorCommand(EndEffectorSubsystem endEffectorSubsystem, Supplier<Double> rightTrigger,
+  Supplier<Boolean> rightBumper, Supplier<Double> rightTriggerOperator, CommandXboxController operatorController) {
+    this(endEffectorSubsystem,
+         rightTrigger, 
+         rightBumper, 
+         rightTriggerOperator);
+    m_operatorController = operatorController;
+  }
+
+
+
 
 //TODO all left trigger and left bumper stuff is for algae intaking
   // Called when the command is initially scheduled.
@@ -63,12 +82,19 @@ public class EndEffectorCommand extends Command {
     }
 
     if (m_coralIsDetected == true) {
-      //TODO change timer values once programming gets robot
-      // if(m_endEffectorTimer.get() > EndEffectorCommandConstants.kIntakeKillDelay) {
-        SmartDashboard.putNumber("Timer", m_endEffectorTimer.get());
-        // System.out.println("Intake Kill Delay");
-        m_endEffectorSubsystem.ShootCoral(0);
+      // //TODO change timer values once programming gets robot
+      // // if(m_endEffectorTimer.get() > EndEffectorCommandConstants.kIntakeKillDelay) {
+      //   SmartDashboard.putNumber("Timer", m_endEffectorTimer.get());
+      //   // System.out.println("Intake Kill Delay");
       // }
+      m_endEffectorSubsystem.ShootCoral(0);
+      if (m_endEffectorTimer.get() < EndEffectorCommandConstants.kIntakeKillDelay) {
+        m_operatorController.setRumble(RumbleType.kBothRumble, 1);
+      } else {
+        m_operatorController.setRumble(RumbleType.kBothRumble, 0);
+      }
+    } else {
+      m_operatorController.setRumble(RumbleType.kBothRumble, 0);
     }
 
     double rightTrigger = m_rightTrigger.get();

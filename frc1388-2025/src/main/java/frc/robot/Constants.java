@@ -88,6 +88,7 @@ public final class Constants {
     public static final double kInchesPerMillimeters = 1 / 25.4;
 //    public static final int    kShooterMaxCurrent = 20;   // Amps
     public static final int    kShooterMaxCurrent = 40;   // Amps
+    public static final int kIntakeRumbleKillDelay = 2;
   }
 
   public static class EndEffectorCommandConstants {
