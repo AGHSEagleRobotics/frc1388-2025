@@ -17,15 +17,15 @@ public class AutoAllignLeft extends Command {
   private final DriveTrainSubsystem m_driveTrain;
 
   // i was 0.015
-  private final PIDController m_xController = new PIDController(2.5, 0, 0);
+  private final PIDController m_xController = new PIDController(2.6, 0, 0);
   private double m_lastXSpeed = 0;
   private final SlewRateLimiter m_xAccLimiter = new SlewRateLimiter(0.2);
 
-  private final PIDController m_yController = new PIDController(2.5, 0, 0);
+  private final PIDController m_yController = new PIDController(2.6, 0, 0);
   private double m_lastYSpeed = 0;
   private final SlewRateLimiter m_yAccLimiter = new SlewRateLimiter(0.2);
 
-  private PIDController m_rotationController = new PIDController(0.04, 0, 0);
+  private PIDController m_rotationController = new PIDController(0.0375, 0, 0);
 
 
   /** Creates a new AutoMove. */

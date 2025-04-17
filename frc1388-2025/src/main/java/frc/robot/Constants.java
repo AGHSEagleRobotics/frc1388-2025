@@ -223,7 +223,7 @@ public final class Constants {
     public static final Pose2d CORAL_STATION_LEFT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - CORAL_STATION_LEFT_BLUE.getX(), FieldLayout.FIELD_WIDTH - CORAL_STATION_LEFT_BLUE.getY(), new Rotation2d(Math.toRadians(126)));
     public static final Pose2d CORAL_STATION_RIGHT_RED = new Pose2d(FieldLayout.FIELD_LENGTH - CORAL_STATION_RIGHT_BLUE.getX(), FieldLayout.FIELD_WIDTH - CORAL_STATION_RIGHT_BLUE.getY(), new Rotation2d(Math.toRadians(234)));
 
-    public static final Pose2d[] SETPOINTS_RIGHT = new Pose2d[16];
+    public static final Pose2d[] SETPOINTS_RIGHT = new Pose2d[22];
 
     static {
     //blue side
@@ -246,6 +246,14 @@ public final class Constants {
     SETPOINTS_RIGHT[13] = CORAL_STATION_LEFT_BLUE;
     SETPOINTS_RIGHT[14] = CORAL_STATION_RIGHT_RED;
     SETPOINTS_RIGHT[15] = CORAL_STATION_LEFT_RED;
+
+    
+    SETPOINTS_RIGHT[16] = CLIMBER_POSITION_LEFT_BLUE;
+    SETPOINTS_RIGHT[17] = CLIMBER_POSITION_MIDDLE_BLUE;
+    SETPOINTS_RIGHT[18] = CLIMBER_POSITION_RIGHT_BLUE;
+    SETPOINTS_RIGHT[19] = CLIMBER_POSITION_LEFT_RED;
+    SETPOINTS_RIGHT[20] = CLIMBER_POSITION_MIDDLE_RED;
+    SETPOINTS_RIGHT[21] = CLIMBER_POSITION_RIGHT_RED;
     }
 
     public static final Pose2d[] SETPOINTS_LEFT = new Pose2d[12];
@@ -268,7 +276,7 @@ public final class Constants {
       SETPOINTS_LEFT[11] = SCORING_POSITION_6_LEFT_RED;
     }
 
-    public static final Pose2d[] SETPOINTS_L1 = new Pose2d[30];
+    public static final Pose2d[] SETPOINTS_L1 = new Pose2d[24];
     
     static {
       //blue
@@ -299,12 +307,6 @@ public final class Constants {
       SETPOINTS_L1[22] = L1_POSITION_6_LEFT_RED;
       SETPOINTS_L1[23] = L1_POSITION_6_RIGHT_RED;
 
-      SETPOINTS_L1[24] = CLIMBER_POSITION_LEFT_BLUE;
-      SETPOINTS_L1[25] = CLIMBER_POSITION_MIDDLE_BLUE;
-      SETPOINTS_L1[26] = CLIMBER_POSITION_RIGHT_BLUE;
-      SETPOINTS_L1[27] = CLIMBER_POSITION_LEFT_RED;
-      SETPOINTS_L1[28] = CLIMBER_POSITION_MIDDLE_RED;
-      SETPOINTS_L1[29] = CLIMBER_POSITION_RIGHT_RED;
     }
 
     public enum Objective {
