@@ -335,6 +335,8 @@ public final class Constants {
         return m_dashboardDescript;
       }
     }
+
+    public static final double kAutoDelayB4Shoot = 0.25;
   }
 
   public static final class RobotContainerConstants {

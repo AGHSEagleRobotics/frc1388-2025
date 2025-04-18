@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.FieldLayout;
@@ -322,11 +323,14 @@ public class AutoMethod extends SubsystemBase {
 
   public Command ThreeScoreLeft() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(AutoConstants.SCORING_POSITION_5_RIGHT_BLUE.getX(),
+      return 
+          // drive to reef while rasing elefator, wait some, then score
+          new AutoGoToPoint(AutoConstants.SCORING_POSITION_5_RIGHT_BLUE.getX(),
           AutoConstants.SCORING_POSITION_5_RIGHT_BLUE.getY(),
           AutoConstants.SCORING_POSITION_5_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
@@ -340,6 +344,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_6_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
           .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
@@ -353,6 +358,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_6_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
           .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     } else {
       return new AutoGoToPoint(AutoConstants.SCORING_POSITION_5_RIGHT_RED.getX(),
@@ -360,6 +366,7 @@ public class AutoMethod extends SubsystemBase {
           AutoConstants.SCORING_POSITION_5_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
@@ -373,6 +380,7 @@ public class AutoMethod extends SubsystemBase {
                   AutoConstants.SCORING_POSITION_6_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
                   .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
@@ -386,6 +394,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_6_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))          
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     }
   }
@@ -397,6 +406,7 @@ public class AutoMethod extends SubsystemBase {
           AutoConstants.SCORING_POSITION_3_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
@@ -410,6 +420,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_2_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
@@ -423,6 +434,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_2_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
           .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     } else {
       return new AutoGoToPoint(AutoConstants.SCORING_POSITION_3_RIGHT_RED.getX(),
@@ -430,6 +442,7 @@ public class AutoMethod extends SubsystemBase {
       AutoConstants.SCORING_POSITION_3_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
       .alongWith(
           new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+      .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
       .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
       
       // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
@@ -443,6 +456,7 @@ public class AutoMethod extends SubsystemBase {
           AutoConstants.SCORING_POSITION_2_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
           .withTimeout(2)
       .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+      .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
       .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
      
       // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
@@ -456,6 +470,7 @@ public class AutoMethod extends SubsystemBase {
           AutoConstants.SCORING_POSITION_2_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
           .withTimeout(2)
       .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+      .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
       .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     }
   }
@@ -467,6 +482,7 @@ public class AutoMethod extends SubsystemBase {
           AutoConstants.SCORING_POSITION_5_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
@@ -480,6 +496,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_6_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
           .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
@@ -493,6 +510,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_6_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
           .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           //drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
@@ -506,6 +524,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_1_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     } else {
       return new AutoGoToPoint(AutoConstants.SCORING_POSITION_5_RIGHT_RED.getX(),
@@ -513,6 +532,7 @@ public class AutoMethod extends SubsystemBase {
           AutoConstants.SCORING_POSITION_5_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2.5)
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
@@ -526,6 +546,7 @@ public class AutoMethod extends SubsystemBase {
                   AutoConstants.SCORING_POSITION_6_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
                   .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
@@ -539,6 +560,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_6_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           //drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
@@ -552,6 +574,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_1_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     }
   }
@@ -563,6 +586,7 @@ public class AutoMethod extends SubsystemBase {
           AutoConstants.SCORING_POSITION_3_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))    
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from reef to coral station, drop elevator, wait for coral or timeout
@@ -579,6 +603,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_2_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from coral station to reef, drop elevator, wait for reef or timeout
@@ -595,6 +620,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_2_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot)) 
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
           // drive from coral station to reef, drop elevator, wait for reef or timeout
@@ -611,6 +637,7 @@ public class AutoMethod extends SubsystemBase {
               AutoConstants.SCORING_POSITION_1_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem)
               .withTimeout(2)
               .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+          .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     } else {
       return new AutoGoToPoint(AutoConstants.SCORING_POSITION_3_RIGHT_RED.getX(),
@@ -618,6 +645,7 @@ public class AutoMethod extends SubsystemBase {
       AutoConstants.SCORING_POSITION_3_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
       .alongWith(
           new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
+      .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
       .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
       
       // drive from reef to coral station, drop elevator, wait for coral or timeout after 4 seconds
@@ -631,6 +659,7 @@ public class AutoMethod extends SubsystemBase {
           AutoConstants.SCORING_POSITION_2_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
           .withTimeout(2)
       .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+      .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
       .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
      
       // drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
@@ -644,6 +673,7 @@ public class AutoMethod extends SubsystemBase {
           AutoConstants.SCORING_POSITION_2_LEFT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
           .withTimeout(2)
       .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+      .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
       .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
 
       //drive from coral station to reef, drop elevator, wait for reef or timeout after 4 seconds
@@ -657,6 +687,7 @@ public class AutoMethod extends SubsystemBase {
       AutoConstants.SCORING_POSITION_1_RIGHT_RED.getRotation().getDegrees(), m_driveTrainSubsystem)
       .withTimeout(2)
       .alongWith(new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1)))
+  .andThen(new WaitCommand(AutoConstants.kAutoDelayB4Shoot))
   .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1));
     }
   }
