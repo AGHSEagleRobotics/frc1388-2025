@@ -54,6 +54,10 @@ public class EndEffectorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double rightTrigger = m_rightTrigger.get();
+    boolean rightBumper = m_rightBumper.get();
+    double rightTriggerOperator = m_rightTriggerOperator.get();
+
     if (m_endEffectorSubsystem.isCoralDetected() == true) {
       //only run this 1st time coral is detected
       if (m_coralIsDetected == false) {
@@ -77,6 +81,7 @@ public class EndEffectorCommand extends Command {
       //   SmartDashboard.putNumber("Timer", m_endEffectorTimer.get());
       //   // System.out.println("Intake Kill Delay");
       // }
+      if (rightTrigger < EndEffectorCommandConstants.kRightTriggerPressed)
       m_endEffectorSubsystem.ShootCoral(0);
       if (m_endEffectorTimer.get() < EndEffectorCommandConstants.kIntakeRumbleKillDelay) {
         m_operatorController.setRumble(RumbleType.kBothRumble, 1);
@@ -87,9 +92,6 @@ public class EndEffectorCommand extends Command {
       m_operatorController.setRumble(RumbleType.kBothRumble, 0);
     }
 
-    double rightTrigger = m_rightTrigger.get();
-    boolean rightBumper = m_rightBumper.get();
-    double rightTriggerOperator = m_rightTriggerOperator.get();
     if (rightTrigger > EndEffectorCommandConstants.kRightTriggerPressed) {
       m_endEffectorSubsystem.ShootCoral(EndEffectorCommandConstants.kShootCoralPower);
       m_rightTriggerWasPressed = true;
