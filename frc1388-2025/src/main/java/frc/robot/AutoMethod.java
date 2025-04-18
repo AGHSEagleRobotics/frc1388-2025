@@ -392,9 +392,9 @@ public class AutoMethod extends SubsystemBase {
 
   public Command ThreeScoreRight() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(AutoConstants.SCORING_POSITION_3_RIGHT_BLUE.getX(),
-          AutoConstants.SCORING_POSITION_3_RIGHT_BLUE.getY(),
-          AutoConstants.SCORING_POSITION_3_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
+      return new AutoGoToPoint(AutoConstants.SCORING_POSITION_3_LEFT_BLUE.getX(),
+          AutoConstants.SCORING_POSITION_3_LEFT_BLUE.getY(),
+          AutoConstants.SCORING_POSITION_3_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))
@@ -558,9 +558,9 @@ public class AutoMethod extends SubsystemBase {
 
   public Command FourScoreRight() {
     if (Alliance.Blue == DriverStation.getAlliance().get()) {
-      return new AutoGoToPoint(AutoConstants.SCORING_POSITION_3_RIGHT_BLUE.getX(),
-          AutoConstants.SCORING_POSITION_3_RIGHT_BLUE.getY(),
-          AutoConstants.SCORING_POSITION_3_RIGHT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
+      return new AutoGoToPoint(AutoConstants.SCORING_POSITION_3_LEFT_BLUE.getX(),
+          AutoConstants.SCORING_POSITION_3_LEFT_BLUE.getY(),
+          AutoConstants.SCORING_POSITION_3_LEFT_BLUE.getRotation().getDegrees(), m_driveTrainSubsystem).withTimeout(2)
           .alongWith(
               new ElevatorSetpointCommand(m_elevatorSubsystem, true).withTimeout(1))
           .andThen(new EndEffectorShoot(m_endEffectorSubsystem).withTimeout(1))

@@ -30,7 +30,7 @@ public class AutoGoToPoint extends Command {
   private double m_lastYSpeed = 0;
   private final SlewRateLimiter m_yAccLimiter = new SlewRateLimiter(0.2);
 
-  private PIDController m_rotationController = new PIDController(0.04, 0, 0);
+  private PIDController m_rotationController = new PIDController(0.0375, 0, 0);
 
 
   /** Creates a new AutoMove. */
