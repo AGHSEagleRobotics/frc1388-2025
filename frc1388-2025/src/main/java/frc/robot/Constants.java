@@ -88,9 +88,8 @@ public final class Constants {
     public static final double kInchesPerMillimeters = 1 / 25.4;
 //    public static final int    kShooterMaxCurrent = 20;   // Amps
     public static final int    kShooterMaxCurrent = 40;   // Amps
-    public static final int kIntakeRumbleKillDelay = 2;
   }
-
+  
   public static class EndEffectorCommandConstants {
     public static final double kRightTriggerPressed = 0.1;
     public static final double kIntakeCoralPower = 0.6;
@@ -105,8 +104,9 @@ public final class Constants {
     public static final double kCarriageInchesPerMotorRotation = kChainInchesPerMotorRotation * 2;  // carriage moves twice the rate of the chain
 
     public static final int    kEndCount = 25;
+    public static final int kIntakeRumbleKillDelay = 2;
   }
-
+  
   public static class RobotConstants { 
     public static final double ROBOT_WIDTH = 0.5981; // 0.9114
     public static final double ROBOT_LENGTH = 0.5981;

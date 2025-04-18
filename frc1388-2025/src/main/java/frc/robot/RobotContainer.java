@@ -151,8 +151,9 @@ public class RobotContainer {
         // () -> m_driverController.getHID().getLeftBumperButton(), 
         () -> m_driverController.getHID().getRightTriggerAxis(),
         () -> m_driverController.getHID().getRightBumperButton(),
-        () -> m_operatorController.getHID().getRightTriggerAxis());
-    m_endEffectorSubsystem.setDefaultCommand(m_endEffectorCommand);
+        () -> m_operatorController.getHID().getRightTriggerAxis(),
+        m_operatorController);
+        m_endEffectorSubsystem.setDefaultCommand(m_endEffectorCommand);
 
 setBrakeMode(true);
 

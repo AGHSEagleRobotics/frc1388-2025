@@ -33,7 +33,7 @@ public class EndEffectorCommand extends Command {
   /** Creates a new EndEffectorCommand. */
   // Supplier<Double> leftTrigger, Supplier<Boolean> leftBumper,
   public EndEffectorCommand(EndEffectorSubsystem endEffectorSubsystem, Supplier<Double> rightTrigger,
-      Supplier<Boolean> rightBumper, Supplier<Double> rightTriggerOperator) {
+      Supplier<Boolean> rightBumper, Supplier<Double> rightTriggerOperator, CommandXboxController operatorController) {
     m_endEffectorSubsystem = endEffectorSubsystem;
     m_rightTrigger = rightTrigger;
     m_rightBumper = rightBumper;
@@ -42,21 +42,9 @@ public class EndEffectorCommand extends Command {
     // m_leftTrigger = leftTrigger;
     // m_leftBumper = leftBumper;
     // Use addRequirements() here to declare subsystem dependencies.
-  }
-  
-  //this constructor used for controller rumble
-  public EndEffectorCommand(EndEffectorSubsystem endEffectorSubsystem, Supplier<Double> rightTrigger,
-  Supplier<Boolean> rightBumper, Supplier<Double> rightTriggerOperator, CommandXboxController operatorController) {
-    this(endEffectorSubsystem,
-         rightTrigger, 
-         rightBumper, 
-         rightTriggerOperator);
     m_operatorController = operatorController;
   }
-
-
-
-
+  
 //TODO all left trigger and left bumper stuff is for algae intaking
   // Called when the command is initially scheduled.
   @Override
@@ -69,7 +57,9 @@ public class EndEffectorCommand extends Command {
     if (m_endEffectorSubsystem.isCoralDetected() == true) {
       //only run this 1st time coral is detected
       if (m_coralIsDetected == false) {
-        m_endEffectorTimer.reset();
+        // m_endEffectorTimer.reset();
+        // m_endEffectorTimer.start();
+        m_endEffectorTimer.restart();
         m_coralIsDetected = true;
         System.out.println("Coral Detected First Time");
       }
@@ -88,7 +78,7 @@ public class EndEffectorCommand extends Command {
       //   // System.out.println("Intake Kill Delay");
       // }
       m_endEffectorSubsystem.ShootCoral(0);
-      if (m_endEffectorTimer.get() < EndEffectorCommandConstants.kIntakeKillDelay) {
+      if (m_endEffectorTimer.get() < EndEffectorCommandConstants.kIntakeRumbleKillDelay) {
         m_operatorController.setRumble(RumbleType.kBothRumble, 1);
       } else {
         m_operatorController.setRumble(RumbleType.kBothRumble, 0);
@@ -132,8 +122,9 @@ public class EndEffectorCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_endEffectorSubsystem.ShootCoral(0);
+    m_operatorController.setRumble(RumbleType.kBothRumble, 0);
   }
-
+  
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
