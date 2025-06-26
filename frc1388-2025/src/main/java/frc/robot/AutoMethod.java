@@ -25,6 +25,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.FieldLayout;
 import frc.robot.commands.AutoAllignRight;
 import frc.robot.commands.AutoGoToPoint;
+import frc.robot.commands.AutoTurn;
+import frc.robot.commands.DriveStraight;
 import frc.robot.commands.ElevatorSetpointCommand;
 import frc.robot.commands.EndEffectorCommand;
 import frc.robot.commands.EndEffectorIntake;
@@ -71,6 +73,10 @@ public class AutoMethod extends SubsystemBase {
 
         // Schedule the selected auto during the autonomous period
         // RobotModeTriggers.autonomous().whileTrue(OneScoreCenter());
+  }
+
+  public Command LearningCommands() {
+    return new DriveStraight(0, m_driveTrainSubsystem);
   }
 
   public Command SitStillLookPretty(){
@@ -674,51 +680,51 @@ public class AutoMethod extends SubsystemBase {
     AutoConstants.Objective objective = m_dashboard.getObjective();
     DataLogManager.log("####### objective:" + objective);
 
-    if (objective == null) {
-      return null;
-    }
+    // if (objective == null) {
+    //   return null;
+    // }
 
-    switch (objective) {
+    // switch (objective) {
 
-      // case LAYINGEGGSBOTTOM:
-      //   return LayingEggsBottom();
+    //   // case LAYINGEGGSBOTTOM:
+    //   //   return LayingEggsBottom();
 
-      // case LAYINGEGGSTOP:
-      //   return LayingEggsTop();
+    //   // case LAYINGEGGSTOP:
+    //   //   return LayingEggsTop();
 
-      case TWOSCORELEFT:
-        return TwoScoreLeft();
+    //   case TWOSCORELEFT:
+    //     return TwoScoreLeft();
 
-      case TWOSCORERIGHT:
-        return TwoScoreRight();
+    //   case TWOSCORERIGHT:
+    //     return TwoScoreRight();
 
-      case LEAVE:
-        return Leave();
+    //   case LEAVE:
+    //     return Leave();
 
-      case ONESCORECENTER:
-        return OneScoreCenter();
+    //   case ONESCORECENTER:
+    //     return OneScoreCenter();
       
-      case ONESCORELEFT:
-        return OneScoreLeft();
+    //   case ONESCORELEFT:
+    //     return OneScoreLeft();
       
-      case ONESCORERIGHT:
-        return OneScoreRight();
+    //   case ONESCORERIGHT:
+    //     return OneScoreRight();
 
-      case THREESCORELEFT:
-        return ThreeScoreLeft();
+    //   case THREESCORELEFT:
+    //     return ThreeScoreLeft();
 
-      case THREESCORERIGHT:
-        return ThreeScoreRight();
+    //   case THREESCORERIGHT:
+    //     return ThreeScoreRight();
 
-      case FOURSCORELEFT:
-        return FourScoreLeft();
+    //   case FOURSCORELEFT:
+    //     return FourScoreLeft();
 
-      case FOURSCORERIGHT:
-        return FourScoreRight();
+    //   case FOURSCORERIGHT:
+    //     return FourScoreRight();
 
-      // case CHOREOAUTOROUTINE:
-      //   return ChoreoAutoRoutine();
-    }
-    return null;
+    //   // case CHOREOAUTOROUTINE:
+    //   //   return ChoreoAutoRoutine();
+    // }
+    return LearningCommands();
   }
 }
