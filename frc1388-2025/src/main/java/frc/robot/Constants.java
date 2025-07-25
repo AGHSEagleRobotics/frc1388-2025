@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.SPI.Mode;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -348,7 +347,7 @@ public final class Constants {
     public static final int kClimberMotorCANID = 40;
     public static final int kClimberAbsoluteEncoderDIO = 6;
 
-    public static final Mode kSimMode = Mode.SIM; 
+    // public static final Mode kSimMode = Mode.kmo
   }
 
  

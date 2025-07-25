@@ -14,7 +14,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public interface DriveInterface extends Subsystem {
+public interface SwerveDriveInterface extends Subsystem {
   void drive(ChassisSpeeds speeds, boolean fieldRelative, boolean isOpenLoop);
 
   void setModuleStates(SwerveModuleState[] desiredStates);

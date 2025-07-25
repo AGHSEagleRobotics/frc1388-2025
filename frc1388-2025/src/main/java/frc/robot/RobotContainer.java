@@ -29,6 +29,8 @@ import frc.robot.commands.AutoAllignLeft;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.SwerveDriveInterface;
+import frc.robot.subsystems.SwerveDriveSim;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import com.revrobotics.spark.SparkFlex;
 import frc.robot.vision.Limelight;
@@ -113,13 +115,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */ 
   public RobotContainer() {
+    
+  
+  SwerveDriveInterface drive;
 
-    if (Robot.isReal()) {
-      this.drive = new TalonSwerve(); // Real implementation
-  }
-  else {
-      this.drive = new MapleSimSwerve(); // Simulation implementation
-  }
+  drive = new SwerveDriveSim();
 
     // Commands
     m_autoMethod = new AutoMethod(m_driveTrain, m_elevatorSubsystem, m_endEffectorSubsystem, m_dashboard);
