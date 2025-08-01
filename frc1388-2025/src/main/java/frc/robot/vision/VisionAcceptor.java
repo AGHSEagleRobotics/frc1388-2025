@@ -15,10 +15,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveTrainConstants;
 
-/** Add your docs here. */
+/** VisionAcceptor is a class that accepts vision data from the robot's camera.
+ * It checks if the current position of the robot is valid based on the last known position,
+ * the robot's velocity, and the angle between the robot's direction and the camera's position change.
+ * It also checks if the robot is within the field boundaries and if the robot is moving too fast for the camera to update.
+ * The class provides methods to determine if the vision data should be accepted and if the gyro should be reset.
+ * It also calculates the norm of the robot's velocity to determine if the robot is moving.
+ * This class is used to ensure that the robot's position is accurate and reliable before using it for navigation or other tasks.
+ * It is designed to work with the MegaTag2 vision system, but can be adapted for other systems as well.
+ * It is important to note that this class is not responsible for processing the vision data itself,
+ * but rather for validating the data before it is used by other parts of the robot's software.
+ */
 public class VisionAcceptor {
+    
+    // Constants for the robot's margin of error when checking position
     public static final double robotMargin = 0.5;
     
+    // Variables to store the last known position and velocity of the robot
     ChassisSpeeds m_robotVelocity = new ChassisSpeeds(0, 0, 0);
     int m_jumpCount = 0;
     int m_jumpCountMax = 0;
@@ -30,14 +43,17 @@ public class VisionAcceptor {
         m_isMegaTag2 = isMegaTag2;
     }
 
+    // This method checks if the current position of the robot is valid based on the last known position,
     public boolean shouldAccept(Pose2d currentPosition, Pose2d lastPosition, ChassisSpeeds robotVelocity) {
 
+        // first checks seeing if the robot velocity and current position are not null (otherwise the code will crash)
         if(m_robotVelocity == null || currentPosition == null) {
              System.out.println("null check");
             return false;
         }
         m_robotVelocity = robotVelocity;
 
+        // checks if the current position is at the origin (0,0), which is not a valid position for the robot (means that limelight is not connected)
         if(currentPosition.getX() == 0 && currentPosition.getY() == 0) {
             return false;
         }
@@ -52,6 +68,7 @@ public class VisionAcceptor {
         SmartDashboard.putNumber("difference of x", Math.abs(currentPosition.getX() - lastPosition.getX()));
         SmartDashboard.putNumber("difference of y", Math.abs(currentPosition.getY() - lastPosition.getY()));
 
+        // checks if the current position is within the robot's margin of error from the last known position
         double velocityPerTick =  DriveTrainConstants.DISTANCE_PER_TICK;
 
         double velocityPerTickClamped = MathUtil.clamp(velocityPerTick, 0.05, velocityPerTick);
@@ -81,6 +98,7 @@ public class VisionAcceptor {
         //     m_jumpCount = 0;
         // }
 
+        // If the current position is too far from the last position, return false (could adjust these values based on robot max speed)
         if(currentPosition.getTranslation().getDistance(lastPosition.getTranslation()) > DriveTrainConstants.ROBOT_MAX_SPEED * DriveTrainConstants.DT_SECONDS) {
             return false;
         }
@@ -92,6 +110,8 @@ public class VisionAcceptor {
           || currentPosition.getY() > Constants.FieldLayout.FIELD_WIDTH + robotMargin) {
             return false;
         }
+
+        // checks if the angle between the robot's direction and the camera's position change is within a certain threshold
         if (norm() > 0) {
             double differenceOfPositionX = currentPosition.getX() - lastPosition.getX();
             double differenceOfPositionY = currentPosition.getY() - lastPosition.getY();
@@ -120,6 +140,9 @@ public class VisionAcceptor {
         }
 
         // checks if robot is moving too fast for camera to update
+
+        // TODO - this is a temporary fix, need to find a better way to determine if the robot is moving too fast for the camera to update 
+        // TODO - might already be fixed and might be not needed, but keeping it here for now
         if (norm() > 2.5) { //changed from 4
             return false;
         }

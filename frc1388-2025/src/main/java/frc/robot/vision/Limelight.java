@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.LimelightConstants;
 
-/** Add your docs here. */
+// This class provides an interface to interact with the Limelight vision system. (all the getter methods use Limelight Helpers Instead, dont need to create this class)
 public class Limelight {
     private static NetworkTable m_placerSideTable;
     private static NetworkTable m_intakeSideTable;

@@ -47,6 +47,8 @@ import frc.robot.vision.LimelightHelpers.PoseEstimate;
 
 public class DriveTrainSubsystem extends SubsystemBase {
 
+  // These are all publishers which upload our 2d Pose onto advantage scope for comapring different limelight data and pose
+
   StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose2d.struct).publish();
   StructPublisher<Pose2d> publishPose1 = NetworkTableInstance.getDefault().getStructTopic("pose/pose1", Pose2d.struct).publish();
   StructPublisher<Pose2d> publishPose2 = NetworkTableInstance.getDefault().getStructTopic("pose/pose2", Pose2d.struct).publish();
@@ -59,6 +61,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   private ChassisSpeeds m_robotRelativeSpeeds = new ChassisSpeeds();
 
+  // These are the swerve modules that make up the drivetrain
   private final SwerveModule m_frontRight, m_frontLeft, m_backLeft, m_backRight;
 
   /** The distance in <strong>meters</strong> from the center of rotation of the front wheel to the center of rotation of the back wheel */
@@ -86,12 +89,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_backRightTranslation
   };
 
+  // These are the standard deviations for the state and vision measurements
    private static final Vector<N3> stateStdDevs = VecBuilder.fill(Math.pow(0.05, 1), Math.pow(0.05, 1),
       Units.degreesToRadians(5));
 
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(Math.pow(0.02, 1), Math.pow(0.02, 1),
       Units.degreesToRadians(10));
 
+      // Vision acceptors for the different vision targets
   VisionAcceptor visionAcceptorGyroFront = new VisionAcceptor(false);
   VisionAcceptor visionAcceptorGyroBack = new VisionAcceptor(false);
   VisionAcceptor visionAcceptorGyroFrontLeft = new VisionAcceptor(false); // ask alex
@@ -100,7 +105,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   VisionAcceptor visionAcceptorMegaTag2Back = new VisionAcceptor(true);
   VisionAcceptor visionAcceptor = new VisionAcceptor(false);
 
-  
+  // These are the previous positions of the robot, used for vision measurements (default 0 until it gets updated)
   Pose2d previousPosition1 = new Pose2d(0, 0, new Rotation2d(0));
   Pose2d previousPosition2 = new Pose2d(0, 0, new Rotation2d(0));
   Pose2d previousPosition3 = new Pose2d(0, 0, new Rotation2d(0));
@@ -319,6 +324,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
   }
 
 
+   /**
+   * Calculates the distance from the robot to a given pose.
+   * 
+   * @param distancePose The pose to calculate the distance to.
+   * @return The distance from the robot to the given pose.
+   */
   public double calculateDistancePose(Pose2d distancePose) {
     double rX = getPose().getX();
     double tX = distancePose.getX();
@@ -329,6 +340,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
     return distanceFromPose;
   }
 
+
+  // these calculate the closest poses from the right face to the left face (reefscape reef)
   public Pose2d getClosestTargetPoseRight() {
 
     Pose2d[] SETPOINTS = AutoConstants.SETPOINTS_RIGHT;
@@ -395,6 +408,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     return closestPose;
   }
 
+  // returns target position for scoring L1S
   public Pose2d getClosestTargetPoseL1() {
 
     Pose2d[] SETPOINTS = AutoConstants.SETPOINTS_L1;
@@ -428,6 +442,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     return closestPose;
   }
 
+  // these are for driving to cloesest target pose isntead of making a command, can be done better, if someone wants to fix this TODO
   public double getXVelocityAuto(double xSetpoint, PIDController goToPointController, SlewRateLimiter xAccLimiter) {
     double m_lastXSpeed = 0;
     double xSpeed = goToPointController.calculate(getPose().getX(), xSetpoint);
@@ -573,6 +588,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     // Field2d fieldPose1 = new Field2d();
 
+    // Always do these to set robot orientation makes sure the limelight name is right
     LimelightHelpers.SetRobotOrientation("limelight-front", getAngle(), 0, 0, 0, 0, 0);
     // LimelightHelpers.SetRobotOrientation("limelight-back", getAngle(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetRobotOrientation("limelight-left", getAngle(), 0, 0, 0, 0, 0);
@@ -581,15 +597,20 @@ public class DriveTrainSubsystem extends SubsystemBase {
     // PoseEstimate botPoseBack = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-back");
     // PoseEstimate botPoseFrontLeft = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-left");
 
+    // these get the raw pose estimates from the limelight, these are not filtered or anything, just raw data
     PoseEstimate odomTag2Front = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
     // PoseEstimate odomTag2Back = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
     PoseEstimate odomTag2FrontLeft = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-left");
 
+
+    // checks if the limelight gets a weird value and returns null to avoid a null pointer expection
     if (m_odometry != null && odomTag2Front != null && odomTag2FrontLeft != null) {
       if (m_robotRelativeSpeeds != null) {
           // acceptPoseFront = visionAcceptor.shouldAccept(botPoseFront.pose, previousPosition1, m_robotRelativeSpeeds);
           // previousPosition1 = botPoseFront.pose;
+        
 
+          // does the should accept passing through the boolean true or false
           acceptMegaTag2Front = visionAcceptorMegaTag2Front.shouldAccept(odomTag2Front.pose,
               previousMegaTag2Front, m_robotRelativeSpeeds);
           // acceptGyroFront = visionAcceptorGyroFront.shouldResetGyro();
@@ -620,6 +641,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
         //   limelightResetGyroFrontLeft();
         // }
 
+        // checks if the limelight is connected and if the acceptMegaTag2Front is true, then it adds the vision measurement to the odometry (make sure it sees a valid apriltag target)
         if (acceptMegaTag2Front && LimelightHelpers.getTV("limelight-front")) {
           m_odometry.addVisionMeasurement(odomTag2Front.pose, odomTag2Front.timestampSeconds);
         }
@@ -639,6 +661,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
       //         m_backLeft.getPosition(),
       //         m_backRight.getPosition()
       //     });
+      // updates the odometry with the gyro heading and the swerve module positions
       m_odometry.update(
           getGyroHeading(),
           new SwerveModulePosition[] {
