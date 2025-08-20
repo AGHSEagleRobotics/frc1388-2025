@@ -66,7 +66,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
 
   public double getCoralHeight() {
-  return (m_laserCAN.getMeasurement().distance_mm * EndEffectorSubsystemConstants.kInchesPerMillimeters); //converting to inches
+    return 0;
+  // return (m_laserCAN.getMeasurement().distance_mm * EndEffectorSubsystemConstants.kInchesPerMillimeters); //converting to inches
   }
 
   public boolean isCoralDetected() {

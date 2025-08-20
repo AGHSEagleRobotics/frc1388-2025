@@ -5,10 +5,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorSubsystemConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -16,6 +20,8 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.sim.SparkFlexSim;
+
 import au.grapplerobotics.LaserCan;
 
 
@@ -30,12 +36,27 @@ public class ElevatorSubsystem extends SubsystemBase {
   private boolean m_autoMode = false;
   private double m_manualPower = 0;
 
+  // private SparkFlexSim m_elevatorMotorSim = SparkFlex.get(m_motor)
+
   // private final PIDController m_elevatorController = new PIDController(ElevatorSubsystemConstants.kElevatorPIDP, ElevatorSubsystemConstants.kElevatorPIDI, 0.0015);
   private final PIDController m_elevatorController = 
    new PIDController(
    ElevatorSubsystemConstants.kElevatorPIDP,
    ElevatorSubsystemConstants.kElevatorPIDI, 
    ElevatorSubsystemConstants.kElevatorPIDD);
+
+    //  private final ElevatorSim m_elevatorSim =
+    //   new ElevatorSim(
+    //       m_elevatorGearbox,
+    //       Constants.kElevatorGearing,
+    //       Constants.kCarriageMass,
+    //       Constants.kElevatorDrumRadius,
+    //       Constants.kMinElevatorHeightMeters,
+    //       Constants.kMaxElevatorHeightMeters,
+    //       true,
+    //       0,
+    //       0.01,
+    //       0.0);
 
   public enum ElevatorSetPoints {
     // LEVEL1(18),
