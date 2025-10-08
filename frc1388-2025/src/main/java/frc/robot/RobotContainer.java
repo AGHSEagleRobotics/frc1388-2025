@@ -102,7 +102,7 @@ public class RobotContainer {
 
   DriveCommand m_driveCommand;
   ElevatorCommand m_elevatorCommand;
-  ClimberCommand m_climberCommand;
+  ClimberCommand m_climberCommand; 
   EndEffectorCommand m_endEffectorCommand;
 
   private final AutoMethod m_autoMethod;
@@ -112,6 +112,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */ 
   public RobotContainer() {
+
+    if (Robot.isReal()) {
+      ElevatorSubsystem = new ElevatorSubsystem(null, null, null)
+    }
+
 
     // Commands
     m_autoMethod = new AutoMethod(m_driveTrain, m_elevatorSubsystem, m_endEffectorSubsystem, m_dashboard);
