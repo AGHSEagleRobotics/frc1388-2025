@@ -5,8 +5,10 @@
 package frc.robot;
 
 
+import com.ctre.phoenix6.configs.LEDConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -15,6 +17,7 @@ import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.EndEffectorCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LightBarSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -22,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriveTrainConstants;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.RobotContainerConstants;
 import frc.robot.commands.AutoAllignRight;
 import frc.robot.commands.AutoAllignL1;
@@ -101,6 +105,11 @@ public class RobotContainer {
       new LaserCan(RobotContainerConstants.kLaserCanCANID));
 
   LightBarSubsystem m_lightBarSubsystem = new LightBarSubsystem(new PowerDistribution());
+
+  // create the physical devices used by the LEDSubsystem
+  private final CANdle m_candle = new CANdle(LEDConstants.CANDLE_CANID);
+  // create the LEDSubsystem
+  private final LEDSubsystem m_ledSubsystem = new LEDSubsystem(m_candle);
 
   DriveCommand m_driveCommand;
   ElevatorCommand m_elevatorCommand;

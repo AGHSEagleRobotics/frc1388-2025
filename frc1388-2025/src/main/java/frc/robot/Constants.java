@@ -404,4 +404,15 @@ public final class Constants {
       public static double FIELD_LENGTH = Units.inchesToMeters(690.875);
       public static double FIELD_WIDTH = Units.inchesToMeters(317);
     }
-}
+
+
+    public static class LEDConstants {
+      // public static final double RAINBOW = -0.99;
+      // public static final double RED_STROBE = -0.11;
+      // public static final double BLUE_STROBE = -0.09;
+      // public static final double RED_SOLID = 0.61;
+      // public static final double BLUE_SOLID = 0.87;
+      public static final int CANDLE_CANID = 42;
+    }
+  }
+
