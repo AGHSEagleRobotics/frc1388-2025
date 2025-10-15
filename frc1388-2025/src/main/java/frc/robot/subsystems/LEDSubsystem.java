@@ -19,7 +19,8 @@ public class LEDSubsystem extends SubsystemBase {
 
   private static final int kSlotStart = 8;
   private static final int kSlotEnd = 46;
-  
+  CANdleConfiguration configOn;
+  CANdleConfiguration configOff;
 
   /** Creates a new LEDSubsystem. */  
   public LEDSubsystem(CANdle candle) {
@@ -28,20 +29,30 @@ public class LEDSubsystem extends SubsystemBase {
 
     // m_isOnRed = (DriverStation.getAlliance().get() == Alliance.Red);
 
-    CANdleConfiguration config = new CANdleConfiguration();
-    config.withLED(new LEDConfigs().withStripType(StripTypeValue.RGB).withBrightnessScalar(1));
-    m_candle.getConfigurator().apply(config);
+    configOn = new CANdleConfiguration();
+    configOn.withLED(new LEDConfigs().withStripType(StripTypeValue.RGB).withBrightnessScalar(2));
     
-    setSolidWhite();
+
+    configOff = new CANdleConfiguration();
+    configOff.withLED(new LEDConfigs().withStripType(StripTypeValue.RGB).withBrightnessScalar(0));
+    
+
+    // setSolidWhite();
 
   } // end LEDSubsystem() constructor
 
   public void setSolidWhite(){
+    m_candle.getConfigurator().apply(configOn);
     m_candle.setControl(
         new SolidColor(kSlotStart, kSlotEnd)
           .withColor(new RGBWColor(Color.kWhite).scaleBrightness(1))
           );
   }
+
+  public void turnOffSolidWhite(){
+    m_candle.getConfigurator().apply(configOff);
+  } 
+
 
   // public void setFireAnimation(){
   //   // Fire animation

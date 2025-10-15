@@ -107,9 +107,9 @@ public class RobotContainer {
   LightBarSubsystem m_lightBarSubsystem = new LightBarSubsystem(new PowerDistribution());
 
   // create the physical devices used by the LEDSubsystem
-  private final CANdle m_candle = new CANdle(LEDConstants.CANDLE_CANID);
+  final CANdle m_candle = new CANdle(LEDConstants.CANDLE_CANID);
   // create the LEDSubsystem
-  private final LEDSubsystem m_ledSubsystem = new LEDSubsystem(m_candle);
+  final LEDSubsystem m_ledSubsystem = new LEDSubsystem(m_candle);
 
   DriveCommand m_driveCommand;
   ElevatorCommand m_elevatorCommand;
