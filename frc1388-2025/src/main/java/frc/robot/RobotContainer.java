@@ -5,7 +5,7 @@
 package frc.robot;
 
 
-import com.ctre.phoenix6.configs.LEDConfigs;
+// import com.ctre.phoenix6.configs.LEDConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.CANdle;
@@ -45,7 +45,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+// import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 
 /**

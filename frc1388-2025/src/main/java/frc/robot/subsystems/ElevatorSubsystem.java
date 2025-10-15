@@ -16,7 +16,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
-import au.grapplerobotics.LaserCan;
+// import au.grapplerobotics.LaserCan;
 
 
 public class ElevatorSubsystem extends SubsystemBase {
