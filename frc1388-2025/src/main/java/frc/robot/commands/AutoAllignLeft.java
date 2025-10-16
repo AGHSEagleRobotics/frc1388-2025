@@ -9,6 +9,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DriveTrainSubsystem;
 
 /** this command moves the robot to an x, y location */
@@ -17,15 +18,15 @@ public class AutoAllignLeft extends Command {
   private final DriveTrainSubsystem m_driveTrain;
 
   // i was 0.015
-  private final PIDController m_xController = new PIDController(2.6, 0, 0);
+  private final PIDController m_xController = new PIDController(AutoConstants.AUTO_ALIGN_P, AutoConstants.AUTO_ALIGN_I, AutoConstants.AUTO_ALIGN_D);
   private double m_lastXSpeed = 0;
   private final SlewRateLimiter m_xAccLimiter = new SlewRateLimiter(0.2);
 
-  private final PIDController m_yController = new PIDController(2.6, 0, 0);
+  private final PIDController m_yController = new PIDController(AutoConstants.AUTO_ALIGN_P, AutoConstants.AUTO_ALIGN_I, AutoConstants.AUTO_ALIGN_D);
   private double m_lastYSpeed = 0;
   private final SlewRateLimiter m_yAccLimiter = new SlewRateLimiter(0.2);
 
-  private PIDController m_rotationController = new PIDController(0.0375, 0, 0);
+  private PIDController m_rotationController = new PIDController(AutoConstants.ROTATION_P, 0, 0);
 
 
   /** Creates a new AutoMove. */
@@ -46,6 +47,8 @@ public class AutoAllignLeft extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_xController.setIZone(AutoConstants.I_ZONE); 
+    m_yController.setIZone(AutoConstants.I_ZONE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -74,7 +77,7 @@ public class AutoAllignLeft extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_xController.atSetpoint() && m_yController.atSetpoint() && m_rotationController.atSetpoint();
-    // return false;
+    // return m_xController.atSetpoint() && m_yController.atSetpoint() && m_rotationController.atSetpoint();
+    return false;
   }
 }

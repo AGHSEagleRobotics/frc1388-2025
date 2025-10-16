@@ -151,6 +151,12 @@ public final class Constants {
 
   public class AutoConstants {
 
+    public static final double AUTO_ALIGN_P = 2.8;
+    public static final double AUTO_ALIGN_I = 0.1;
+    public static final double AUTO_ALIGN_D = 0;
+    public static final double ROTATION_P = 0.055;
+    public static final double I_ZONE = 0.5; // in meters
+
     // blue side
     public static final Pose2d SCORING_POSITION_1_RIGHT_BLUE = new Pose2d(3.2004, 3.8616, new Rotation2d(0));
     public static final Pose2d SCORING_POSITION_1_LEFT_BLUE = new Pose2d(3.2004, 4.1902, new Rotation2d(0));
