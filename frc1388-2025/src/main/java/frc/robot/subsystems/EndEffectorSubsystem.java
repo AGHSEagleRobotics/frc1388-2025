@@ -69,11 +69,23 @@ public class EndEffectorSubsystem extends SubsystemBase {
   return (m_laserCAN.getMeasurement().distance_mm * EndEffectorSubsystemConstants.kInchesPerMillimeters); //converting to inches
   }
 
+  public double getEndEffectorPower() {
+  return m_endEffectorMotor.getOutputCurrent(); //returns motor controller amps
+  }
+
   public boolean isCoralDetected() {
     if (getCoralHeight() > EndEffectorSubsystemConstants.kCoralDetectionHeight) {
       return false;
     } else {
       return true;
+    }
+  }
+
+  public boolean isShooting() {
+    if (getEndEffectorPower() > 0) {
+      return true;
+    } else {
+      return false;
     }
   }
 

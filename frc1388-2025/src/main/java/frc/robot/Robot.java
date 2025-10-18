@@ -181,7 +181,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    if (m_endeffectorSubs)
+    
 
     m_robotContainer.m_lightBarSubsystem.SetLightBar(true);
     m_robotContainer.m_LEDSubsystem.setSolidWhite();
