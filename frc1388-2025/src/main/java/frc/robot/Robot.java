@@ -160,7 +160,7 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.m_lightBarSubsystem.SetLightBar(true);
-
+    m_robotContainer.m_ledSubsystem.setSolidWhite();
   }
 
   /** This function is called periodically during autonomous. */
