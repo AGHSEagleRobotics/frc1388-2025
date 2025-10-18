@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.resetSubsystemsAndCommands();
 
     m_robotContainer.m_lightBarSubsystem.SetLightBar(false);
-    m_robotContainer.m_LEDSubsystem.turnOffSolidWhite();
+    m_robotContainer.m_LEDSubsystem.turnOffLEDS();
   }
 
   @Override
@@ -180,6 +180,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    if (m_endeffectorSubs)
 
     m_robotContainer.m_lightBarSubsystem.SetLightBar(true);
     m_robotContainer.m_LEDSubsystem.setSolidWhite();

@@ -56,7 +56,7 @@ public class LEDSubsystem extends SubsystemBase {
       m_candle.setControl(shooterStrobe);
     }
 
-  public void turnOffSolidWhite(){
+  public void turnOffLEDS(){
     m_candle.getConfigurator().apply(configOff);
   } 
 
