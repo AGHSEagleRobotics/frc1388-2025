@@ -342,7 +342,7 @@ public final class Constants {
       }
     }
 
-    public static final double kAutoDelayB4Shoot = 0.5;
+    public static final double kAutoDelayB4Shoot = 0.3;
   }
 
   public static final class RobotContainerConstants {
