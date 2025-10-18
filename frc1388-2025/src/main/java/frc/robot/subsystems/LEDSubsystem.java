@@ -17,7 +17,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   // LED Constants
 
-  private static final int kSlotStart = 8;
+  private static final int kSlotStart = 16;
   private static final int kSlotEnd = 46;
   CANdleConfiguration configOn;
   CANdleConfiguration configOff;
@@ -30,7 +30,7 @@ public class LEDSubsystem extends SubsystemBase {
     // m_isOnRed = (DriverStation.getAlliance().get() == Alliance.Red);
 
     configOn = new CANdleConfiguration();
-    configOn.withLED(new LEDConfigs().withStripType(StripTypeValue.RGB).withBrightnessScalar(2));
+    configOn.withLED(new LEDConfigs().withStripType(StripTypeValue.RGB).withBrightnessScalar(0.7));
     
 
     configOff = new CANdleConfiguration();
