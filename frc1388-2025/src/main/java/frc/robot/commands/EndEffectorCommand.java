@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.EndEffectorCommandConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class EndEffectorCommand extends Command {
   private final EndEffectorSubsystem m_endEffectorSubsystem;
+  private final LEDSubsystem m_LEDSubsystem;
   // private final Supplier<Double> m_leftTrigger;
   // private final Supplier<Boolean> m_leftBumper;
   private final Supplier<Double> m_rightTrigger;
@@ -32,9 +34,10 @@ public class EndEffectorCommand extends Command {
 
   /** Creates a new EndEffectorCommand. */
   // Supplier<Double> leftTrigger, Supplier<Boolean> leftBumper,
-  public EndEffectorCommand(EndEffectorSubsystem endEffectorSubsystem, Supplier<Double> rightTrigger,
+  public EndEffectorCommand(EndEffectorSubsystem endEffectorSubsystem, LEDSubsystem LEDSubsystem, Supplier<Double> rightTrigger,
       Supplier<Boolean> rightBumper, Supplier<Double> rightTriggerOperator, CommandXboxController operatorController) {
     m_endEffectorSubsystem = endEffectorSubsystem;
+    m_LEDSubsystem = LEDSubsystem;
     m_rightTrigger = rightTrigger;
     m_rightBumper = rightBumper;
     m_rightTriggerOperator = rightTriggerOperator;
@@ -94,6 +97,7 @@ public class EndEffectorCommand extends Command {
 
     if (rightTrigger > EndEffectorCommandConstants.kRightTriggerPressed) {
       m_endEffectorSubsystem.ShootCoral(EndEffectorCommandConstants.kShootCoralPower);
+      m_LEDSubsystem.setShooterStrobe();
       m_rightTriggerWasPressed = true;
       System.out.println("Right Trigger Pressed");
     } 

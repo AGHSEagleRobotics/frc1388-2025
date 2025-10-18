@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.configs.CANdleConfiguration;
 import com.ctre.phoenix6.configs.LEDConfigs;
 import com.ctre.phoenix6.controls.SolidColor;
+import com.ctre.phoenix6.controls.StrobeAnimation;
 import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.signals.RGBWColor;
 import com.ctre.phoenix6.signals.StripTypeValue;
@@ -48,6 +49,12 @@ public class LEDSubsystem extends SubsystemBase {
           .withColor(new RGBWColor(Color.kWhite).scaleBrightness(1))
           );
   }
+
+  public void setShooterStrobe(){
+      StrobeAnimation shooterStrobe = new StrobeAnimation(kSlotStart, kSlotEnd).withSlot(kSlotStart)
+          .withColor(new RGBWColor(255, 255, 255, 255).scaleBrightness(.7)).withFrameRate(0.2);
+      m_candle.setControl(shooterStrobe);
+    }
 
   public void turnOffSolidWhite(){
     m_candle.getConfigurator().apply(configOff);

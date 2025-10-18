@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.resetSubsystemsAndCommands();
 
     m_robotContainer.m_lightBarSubsystem.SetLightBar(false);
-    m_robotContainer.m_ledSubsystem.turnOffSolidWhite();
+    m_robotContainer.m_LEDSubsystem.turnOffSolidWhite();
   }
 
   @Override
@@ -160,7 +160,7 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.m_lightBarSubsystem.SetLightBar(true);
-    m_robotContainer.m_ledSubsystem.setSolidWhite();
+    m_robotContainer.m_LEDSubsystem.setSolidWhite();
   }
 
   /** This function is called periodically during autonomous. */
@@ -182,7 +182,7 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.m_lightBarSubsystem.SetLightBar(true);
-    m_robotContainer.m_ledSubsystem.setSolidWhite();
+    m_robotContainer.m_LEDSubsystem.setSolidWhite();
     // m_robotContainer.setBrakeMode(true);
   }
 

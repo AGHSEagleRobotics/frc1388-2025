@@ -109,7 +109,7 @@ public class RobotContainer {
   // create the physical devices used by the LEDSubsystem
   final CANdle m_candle = new CANdle(LEDConstants.CANDLE_CANID);
   // create the LEDSubsystem
-  final LEDSubsystem m_ledSubsystem = new LEDSubsystem(m_candle);
+  final LEDSubsystem m_LEDSubsystem = new LEDSubsystem(m_candle);
 
   DriveCommand m_driveCommand;
   ElevatorCommand m_elevatorCommand;
@@ -156,6 +156,7 @@ public class RobotContainer {
 
     m_endEffectorCommand = new EndEffectorCommand(
         m_endEffectorSubsystem,
+        m_LEDSubsystem,
         // () -> m_driverController.getHID().getLeftTriggerAxis(),
         // () -> m_driverController.getHID().getLeftBumperButton(), 
         () -> m_driverController.getHID().getRightTriggerAxis(),
