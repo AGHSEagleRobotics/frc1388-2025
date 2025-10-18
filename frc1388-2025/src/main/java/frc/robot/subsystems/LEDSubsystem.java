@@ -18,7 +18,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   // LED Constants
 
-  private static final int kSlotStart = 8;
+  private static final int kSlotStart = 16;
   private static final int kSlotEnd = 46;
   CANdleConfiguration configOn;
   CANdleConfiguration configOff;

@@ -184,7 +184,13 @@ public class Robot extends TimedRobot {
     
 
     m_robotContainer.m_lightBarSubsystem.SetLightBar(true);
-    m_robotContainer.m_LEDSubsystem.setSolidWhite();
+    // m_robotContainer.m_LEDSubsystem.setSolidWhite();
+
+    if (m_robotContainer.m_endEffectorSubsystem.isShooting() == true) {
+      m_robotContainer.m_LEDSubsystem.setShooterStrobe(); 
+    } else {
+      m_robotContainer.m_LEDSubsystem.setSolidWhite();
+    }
     // m_robotContainer.setBrakeMode(true);
   }
 
