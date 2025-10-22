@@ -46,13 +46,13 @@ public class LEDSubsystem extends SubsystemBase {
     m_candle.getConfigurator().apply(configOn);
     m_candle.setControl(
         new SolidColor(kSlotStart, kSlotEnd)
-          .withColor(new RGBWColor(Color.kWhite).scaleBrightness(1))
+          .withColor(new RGBWColor(Color.kWhite).scaleBrightness(0.7))
           );
   }
 
   public void setShooterStrobe(){
       StrobeAnimation shooterStrobe = new StrobeAnimation(kSlotStart, kSlotEnd).withSlot(kSlotStart)
-          .withColor(new RGBWColor(255, 255, 255, 255).scaleBrightness(.7)).withFrameRate(0.2);
+          .withColor(new RGBWColor(Color.kWhite).scaleBrightness(0.7)).withSlot(1).withFrameRate(3);
       m_candle.setControl(shooterStrobe);
     }
 
