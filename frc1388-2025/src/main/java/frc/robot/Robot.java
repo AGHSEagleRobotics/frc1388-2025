@@ -47,9 +47,9 @@ public class Robot extends TimedRobot {
    public void robotInit() {
      DataLogManager.start();
      DataLogManager.log("####### RobotInit");
-     DataLogManager.log("Git version: " + BuildInfo.GIT_VERSION + " (branch: " + BuildInfo.GIT_BRANCH + " "
-         + BuildInfo.GIT_STATUS + ")");
-     DataLogManager.log("      Built: " + BuildInfo.BUILD_DATE + "  " + BuildInfo.BUILD_TIME);
+     //DataLogManager.log("Git version: " + BuildInfo.GIT_VERSION + " (branch: " + BuildInfo.GIT_BRANCH + " "
+     //    + BuildInfo.GIT_STATUS + ")");
+     //DataLogManager.log("      Built: " + BuildInfo.BUILD_DATE + "  " + BuildInfo.BUILD_TIME);
 
      // logs everytime a command starts / stops
      CommandScheduler.getInstance()

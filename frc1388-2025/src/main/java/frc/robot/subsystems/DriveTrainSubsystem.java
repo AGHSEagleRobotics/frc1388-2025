@@ -7,17 +7,14 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import choreo.trajectory.SwerveSample;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -26,24 +23,18 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.Robot;
 import frc.robot.SwerveModule;
 import frc.robot.vision.Limelight;
 import frc.robot.vision.LimelightHelpers;
-import frc.robot.vision.VisionAcceptor;
-import frc.robot.vision.LimelightHelpers.PoseEstimate; 
+import frc.robot.vision.LimelightHelpers.PoseEstimate;
+import frc.robot.vision.VisionAcceptor; 
 
 public class DriveTrainSubsystem extends SubsystemBase {
 
@@ -249,6 +240,18 @@ public class DriveTrainSubsystem extends SubsystemBase {
     return m_robotRelativeSpeeds;
   }
 
+  public SwerveModuleState[] getSwerveModuleStates(){
+    ChassisSpeeds speed = getRobotRelativeSpeeds();
+    return m_kinematics.toSwerveModuleStates(speed);
+    
+  }
+  public void setAllSwerveModuleStates(SwerveModuleState[] states) {
+      m_frontRight.setSwerveModuleStates(states[0]);
+      m_frontLeft.setSwerveModuleStates(states[1]);
+      m_backLeft.setSwerveModuleStates(states[2]);
+      m_backRight.setSwerveModuleStates(states[3]);
+  }
+  
   public void driveRobotRelative(ChassisSpeeds speeds) {
     // speeds.vxMetersPerSecond = -speeds.vxMetersPerSecond;
     // speeds.vyMetersPerSecond = -speeds.vyMetersPerSecond;

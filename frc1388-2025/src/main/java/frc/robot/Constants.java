@@ -110,10 +110,14 @@ public final class Constants {
   public static class RobotConstants { 
     public static final double ROBOT_WIDTH = 0.5981; // 0.9114
     public static final double ROBOT_LENGTH = 0.5981;
+    public static final double ROBOT_WEIGHT = 56.7; //kg
   }
 
   public static class DriveTrainConstants {
     public static final double ROBOT_MAX_SPEED = Units.feetToMeters(18.9); // 5.76 l3+ meters per second
+    public static final double GRAVITY_CONSTANT = 9.81; //Earth
+    public static final double ROBOT_ACCELERATION = 0.5;
+    
     public static final double DT_SECONDS = 0.02; // 20ms per tick
     public static final double DISTANCE_PER_TICK = ROBOT_MAX_SPEED * DT_SECONDS; // 20ms per tick
 
@@ -147,6 +151,8 @@ public final class Constants {
     public static final double RIGHT_STICK_SCALE = 5;
 
     public static final int PIGEON_CANID = 13;
+
+    
   }
 
   public class AutoConstants {
@@ -421,4 +427,3 @@ public final class Constants {
       public static final int CANDLE_CANID = 42;
     }
   }
-

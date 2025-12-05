@@ -65,7 +65,6 @@ public class SwerveModule {
     inputState.optimize(rotation);
     setDriveSpeed(inputState.speedMetersPerSecond);
     setRotationPosition(inputState.angle.getDegrees());
-
   }
 
   public SwerveModulePosition getPosition() {

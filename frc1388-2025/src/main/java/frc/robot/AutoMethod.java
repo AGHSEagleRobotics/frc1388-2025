@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import choreo.Choreo;
 import choreo.auto.AutoChooser;
@@ -12,17 +15,33 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.Constants.FieldLayout;
 import frc.robot.commands.AutoAllignRight;
 import frc.robot.commands.AutoGoToPoint;
@@ -700,15 +719,88 @@ public class AutoMethod extends SubsystemBase {
     }
   }
 
+  public Command AutoSplineCurve(List<Translation2d> transitionaryPoints, Pose2d destinationPoint) {
+
+    Trajectory m_trajectory;
+    SwerveDriveKinematics m_kinematics;
+
+    PIDController m_xController = new PIDController(AutoConstants.AUTO_ALIGN_P, AutoConstants.AUTO_ALIGN_I, AutoConstants.AUTO_ALIGN_D);
+    PIDController m_yController = new PIDController(AutoConstants.AUTO_ALIGN_P, AutoConstants.AUTO_ALIGN_I, AutoConstants.AUTO_ALIGN_D);
+    ProfiledPIDController m_rotationController = new ProfiledPIDController(1, 0, 0, new TrapezoidProfile.Constraints(DriveTrainConstants.ROBOT_MAX_SPEED, DriveTrainConstants.ROBOT_ACCELERATION));
+
+    m_rotationController.enableContinuousInput(0, 360);
+    m_xController.setTolerance(0.02);
+    m_yController.setTolerance(0.02);
+        
+    Pose2d startPoint = m_driveTrainSubsystem.getPose();
+        
+    m_kinematics = m_driveTrainSubsystem.getKinematics();
+        
+    SwerveDriveKinematicsConstraint voltageConstraint = new SwerveDriveKinematicsConstraint(m_kinematics, DriveTrainConstants.ROBOT_MAX_SPEED);
+        
+    TrajectoryConfig config = new TrajectoryConfig(
+      DriveTrainConstants.ROBOT_MAX_SPEED,
+      DriveTrainConstants.ROBOT_ACCELERATION
+    ).setKinematics(m_kinematics).addConstraint(voltageConstraint);
+        
+    m_trajectory = TrajectoryGenerator.generateTrajectory(
+      startPoint,
+      transitionaryPoints, // interior waypoints
+      destinationPoint,
+      config
+    );
+
+    SwerveModuleState[] swerveModuleState = m_driveTrainSubsystem.getSwerveModuleStates();
+
+    //Wrapping SwerveModuleStates in a Consumer
+    //#see https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj2/command/SwerveControllerCommand.html
+    Consumer<SwerveModuleState[]> outputSwerveModuleConsumer = outputStates -> {
+      m_driveTrainSubsystem.setAllSwerveModuleStates(outputStates);
+    };
+
+    outputSwerveModuleConsumer.accept(swerveModuleState);
+
+    //Wrapping getPose in a Supplier
+    Supplier<Pose2d> Pose2dSupplier = () -> m_driveTrainSubsystem.getPose();
+
+    SwerveControllerCommand swerveCommand = new SwerveControllerCommand(  
+      m_trajectory,
+      Pose2dSupplier,  // Supplies Current Robot Position
+      m_kinematics,
+      m_xController,
+      m_yController,
+      m_rotationController,
+      outputSwerveModuleConsumer, // Method that sets module speeds
+      m_driveTrainSubsystem
+    );
+
+
+    Command runAuto = new SequentialCommandGroup(
+      new InstantCommand(() -> m_driveTrainSubsystem.resetPose(m_trajectory.getInitialPose())),
+      swerveCommand);
+      // new InstantCommand(() -> m_driveTrainSubsystem.drive(0, 0, 0)));
+
+    return runAuto;
+
+}
+
+public Command coolAuto() {
+  DataLogManager.log("in CoolAuto");
+  m_driveTrainSubsystem.resetPose(new Pose2d(2, 1, new Rotation2d(0)));
+  return AutoSplineCurve(List.of(new Translation2d(2.7, 2), new Translation2d(3, 1.8)), new Pose2d(4.3, 1.5, new Rotation2d(3)));
+}
+
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    AutoConstants.Objective objective = m_dashboard.getObjective();
-    DataLogManager.log("####### objective:" + objective);
+    // AutoConstants.Objective objective = m_dashboard.getObjective();
+    // DataLogManager.log("####### objective:" + objective);
 
-    if (objective == null) {
-      return null;
-    }
+    // if (objective == null) {
+    //   return null;
+    // }
 
+    return coolAuto();
+/* TEMP BRACKETS TO TEST AUTOSPLINE
     switch (objective) {
 
       // case LAYINGEGGSBOTTOM:
@@ -751,5 +843,7 @@ public class AutoMethod extends SubsystemBase {
       //   return ChoreoAutoRoutine();
     }
     return null;
+    */
   }
+
 }
